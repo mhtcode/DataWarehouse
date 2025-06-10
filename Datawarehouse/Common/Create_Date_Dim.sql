@@ -22,6 +22,5 @@ CREATE TABLE [DW].[DateDim] (
   [PersianCalendarYear] int,
   [CalendarSemester] int,
   [PersianCalendarSemester] int,
---   [Business_Day_YN] BIT,
 )
 GO
