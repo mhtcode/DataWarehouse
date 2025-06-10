@@ -1,5 +1,5 @@
 -- Airline (10 خط)
-INSERT INTO Airline (AirlineID, Name, Country, FoundedDate, HeadquartersNumber, FleetSize, Website) VALUES
+INSERT INTO Source.Airline (AirlineID, Name, Country, FoundedDate, HeadquartersNumber, FleetSize, Website) VALUES
 (1, 'Emirates', 'UAE', '1985-03-25', '+97143179999', 269, 'www.emirates.com'),
 (2, 'Lufthansa', 'Germany', '1953-01-06', '+496922960', 316, 'www.lufthansa.com'),
 (3, 'British Airways', 'UK', '1974-04-01', '+44344800780', 281, 'www.britishairways.com'),
@@ -12,7 +12,7 @@ INSERT INTO Airline (AirlineID, Name, Country, FoundedDate, HeadquartersNumber, 
 (10, 'Qantas', 'Australia', '1920-11-16', '+61296919691', 126, 'www.qantas.com');
 
 -- Airport (15 خط)
-INSERT INTO Airport (AirportID, City, Country, IATACode, ElevationMeter, TimeZone, NumberOfTerminals, AnnualPassengerTraffic, Latitude, Longitude, ManagerName) VALUES
+INSERT INTO Source.Airport (AirportID, City, Country, IATACode, ElevationMeter, TimeZone, NumberOfTerminals, AnnualPassengerTraffic, Latitude, Longitude, ManagerName) VALUES
 (1, 'Dubai', 'UAE', 'DXB', 19, 'GMT+4', 3, 86390000, 25.252778, 55.364444, 'Paul Griffiths'),
 (2, 'London', 'UK', 'LHR', 25, 'GMT+0', 5, 80500000, 51.477500, -0.461389, 'John Holland-Kaye'),
 (3, 'New York', 'USA', 'JFK', 4, 'GMT-5', 6, 61900000, 40.639722, -73.778889, 'Rick Cotton'),
@@ -30,7 +30,7 @@ INSERT INTO Airport (AirportID, City, Country, IATACode, ElevationMeter, TimeZon
 (15, 'Rome', 'Italy', 'FCO', 15, 'GMT+1', 3, 43200000, 41.804475, 12.250797, 'Marco Troncone');
 
 -- Person (20 خط)
-INSERT INTO Person (PersonID, NatCode, Name, Phone, Email, Address, City, Country, DateOfBirth, Gender, PostalCode) VALUES
+INSERT INTO Source.Person (PersonID, NatCode, Name, Phone, Email, Address, City, Country, DateOfBirth, Gender, PostalCode) VALUES
 (1, 'A123456', 'John Smith', '+447700123456', 'john.smith@email.com', '123 Oxford St', 'London', 'UK', '1985-07-15', 'Male', 'W1D 1AB'),
 (2, 'B789012', 'Emma Johnson', '+14165551234', 'emma.j@email.com', '456 5th Ave', 'New York', 'USA', '1990-12-22', 'Female', '10018'),
 (3, 'C345678', 'Mohammed Ali', '+971501234567', 'm.ali@email.com', '789 Sheikh Zayed Rd', 'Dubai', 'UAE', '1978-03-10', 'Male', '12345'),
@@ -53,21 +53,21 @@ INSERT INTO Person (PersonID, NatCode, Name, Phone, Email, Address, City, Countr
 (20, 'T334455', 'Isabella Rossi', '+390612345678', 'i.rossi@email.com', '888 Via Veneto', 'Rome', 'Italy', '1993-06-30', 'Female', '00187');
 
 -- LoyaltyTier (4 خط)
-INSERT INTO LoyaltyTier (LoyaltyTierID, Name, MinPoints, Benefits) VALUES
+INSERT INTO Source.LoyaltyTier (LoyaltyTierID, Name, MinPoints, Benefits) VALUES
 (1, 'Blue', 0, 'Basic benefits'),
 (2, 'Silver', 10000, 'Priority boarding, free seat selection'),
 (3, 'Gold', 50000, 'Lounge access, extra baggage'),
 (4, 'Platinum', 100000, 'First class upgrades, personal assistant');
 
 -- TravelClass (4 خط)
-INSERT INTO TravelClass (TravelClassID, Name, Capacity, Cost) VALUES
+INSERT INTO Source.TravelClass (TravelClassID, Name, Capacity, Cost) VALUES
 (1, 'Economy', 300, 1000.00),
 (2, 'Premium Economy', 50, 2000.00),
 (3, 'Business', 30, 5000.00),
 (4, 'First Class', 10, 10000.00);
 
 -- Aircraft (12 خط)
-INSERT INTO Aircraft (AircraftID, Model, Type, ManufacturerDate, Capacity, Price, AirlineID) VALUES
+INSERT INTO Source.Aircraft (AircraftID, Model, Type, ManufacturerDate, Capacity, Price, AirlineID) VALUES
 (1, 'Boeing 777-300ER', 'Wide-body', '2015-01-15', 396, 320000000.00, 1),
 (2, 'Airbus A380', 'Wide-body', '2014-03-20', 517, 445000000.00, 1),
 (3, 'Boeing 747-8', 'Wide-body', '2016-05-10', 364, 379000000.00, 2),
@@ -82,7 +82,7 @@ INSERT INTO Aircraft (AircraftID, Model, Type, ManufacturerDate, Capacity, Price
 (12, 'Boeing 787-10', 'Wide-body', '2020-06-15', 330, 338000000.00, 1);
 
 -- Passenger (15 خط)
-INSERT INTO Passenger (PassengerID, PersonID, PassportNumber) VALUES
+INSERT INTO Source.Passenger (PassengerID, PersonID, PassportNumber) VALUES
 (1, 1, 'P12345678'),
 (2, 2, 'P87654321'),
 (3, 3, 'P11223344'),
@@ -100,7 +100,7 @@ INSERT INTO Passenger (PassengerID, PersonID, PassportNumber) VALUES
 (15, 15, 'P55544433');
 
 -- Account (15 خط)
-INSERT INTO Account (AccountID, PassengerID, RegistrationDate, LoyaltyTierID) VALUES
+INSERT INTO Source.Account (AccountID, PassengerID, RegistrationDate, LoyaltyTierID) VALUES
 (1, 1, '2020-01-15', 1),
 (2, 2, '2019-05-20', 2),
 (3, 3, '2021-03-10', 3),
@@ -118,7 +118,7 @@ INSERT INTO Account (AccountID, PassengerID, RegistrationDate, LoyaltyTierID) VA
 (15, 15, '2021-05-27', 3);
 
 -- Points (15 خط)
-INSERT INTO Points (PointsID, AccountID, PointsBalance, EffectiveDate) VALUES
+INSERT INTO Source.Points (PointsID, AccountID, PointsBalance, EffectiveDate) VALUES
 (1, 1, 5000.00, '2023-01-01'),
 (2, 2, 15000.00, '2023-01-01'),
 (3, 3, 75000.00, '2023-01-01'),
@@ -136,7 +136,7 @@ INSERT INTO Points (PointsID, AccountID, PointsBalance, EffectiveDate) VALUES
 (15, 15, 85000.00, '2023-01-01');
 
 -- ServiceOffering (10 خط)
-INSERT INTO ServiceOffering (ServiceOfferingID, TravelClassID, Name, Cost) VALUES
+INSERT INTO Source.ServiceOffering (ServiceOfferingID, TravelClassID, Name, Cost) VALUES
 (1, 1, 'Standard Meal', 15.00),
 (2, 2, 'Premium Meal', 30.00),
 (3, 3, 'Gourmet Meal', 60.00),
@@ -149,7 +149,7 @@ INSERT INTO ServiceOffering (ServiceOfferingID, TravelClassID, Name, Cost) VALUE
 (10, 3, 'Flat Bed Setup', 0.00);
 
 -- FlightDetail (15 خط)
-INSERT INTO FlightDetail (FlightDetailID, DepartureAirportID, DestinationAirportID, DepartureDateTime, ArrivalDateTime, AircraftID, FlightCapacity, TotalCost) VALUES
+INSERT INTO Source.FlightDetail (FlightDetailID, DepartureAirportID, DestinationAirportID, DepartureDateTime, ArrivalDateTime, AircraftID, FlightCapacity, TotalCost) VALUES
 (1, 1, 2, '2023-06-01 08:00:00', '2023-06-01 12:00:00', 1, 396, 50000.00),
 (2, 2, 3, '2023-06-01 14:00:00', '2023-06-01 18:30:00', 3, 364, 45000.00),
 (3, 3, 4, '2023-06-02 09:00:00', '2023-06-02 15:00:00', 5, 290, 48000.00),
@@ -167,7 +167,7 @@ INSERT INTO FlightDetail (FlightDetailID, DepartureAirportID, DestinationAirport
 (15, 15, 11, '2023-06-08 10:15:00', '2023-06-08 14:30:00', 5, 290, 39000.00);
 
 -- SeatDetail (20 خط)
-INSERT INTO SeatDetail (SeatDetailID, AircraftID, SeatNo, SeatType, TravelClassID, ReservationID) VALUES
+INSERT INTO Source.SeatDetail (SeatDetailID, AircraftID, SeatNo, SeatType, TravelClassID, ReservationID) VALUES
 (1, 1, 1, 'Window', 1, NULL),
 (2, 1, 2, 'Aisle', 1, NULL),
 (3, 1, 3, 'Window', 2, NULL),
@@ -190,7 +190,7 @@ INSERT INTO SeatDetail (SeatDetailID, AircraftID, SeatNo, SeatType, TravelClassI
 (20, 11, 1, 'Window', 1, NULL);
 
 -- Reservation (15 خط)
-INSERT INTO Reservation (ReservationID, PassengerID, FlightDetailID, ReservationDate, SeatDetailID, Status) VALUES
+INSERT INTO Source.Reservation (ReservationID, PassengerID, FlightDetailID, ReservationDate, SeatDetailID, Status) VALUES
 (1, 1, 1, '2023-05-01', 1, 'Booked'),
 (2, 2, 1, '2023-05-02', 2, 'Booked'),
 (3, 3, 2, '2023-05-03', 11, 'Booked'),
@@ -208,7 +208,7 @@ INSERT INTO Reservation (ReservationID, PassengerID, FlightDetailID, Reservation
 (15, 15, 14, '2023-05-15', 6, 'Booked');
 
 -- Payment (15 خط)
-INSERT INTO Payment (PaymentID, ReservationID, Status, Amount, RealPrice, Discount, Method, PaymentDateTime) VALUES
+INSERT INTO Source.Payment (PaymentID, ReservationID, Status, Amount, RealPrice, Discount, Method, PaymentDateTime) VALUES
 (1, 1, 'Completed', 450.00, 500.00, 50.00, 'Credit Card', '2023-05-01 10:30:00'),
 (2, 2, 'Completed', 850.00, 850.00, 0.00, 'PayPal', '2023-05-02 11:15:00'),
 (3, 3, 'Completed', 1200.00, 1200.00, 0.00, 'Credit Card', '2023-05-03 14:20:00'),
@@ -226,7 +226,7 @@ INSERT INTO Payment (PaymentID, ReservationID, Status, Amount, RealPrice, Discou
 (15, 15, 'Completed', 1700.00, 1700.00, 0.00, 'Credit Card', '2023-05-15 16:45:00');
 
 -- PointsTransaction (20 خط)
-INSERT INTO PointsTransaction (TransactionID, AccountID, TransactionDate, TransactionType, PointsChange, Description, ServiceOfferingID) VALUES
+INSERT INTO Source.PointsTransaction (TransactionID, AccountID, TransactionDate, TransactionType, PointsChange, Description, ServiceOfferingID) VALUES
 (1, 1, '2023-05-01', 'Earn', 500.00, 'Flight Booking', 1),
 (2, 2, '2023-05-02', 'Earn', 850.00, 'Flight Booking', 2),
 (3, 3, '2023-05-03', 'Earn', 1200.00, 'Flight Booking', 3),
@@ -249,7 +249,7 @@ INSERT INTO PointsTransaction (TransactionID, AccountID, TransactionDate, Transa
 (20, 5, '2023-05-20', 'Expire', -100.00, 'Points Expiration', NULL);
 
 -- AccountTierHistory (15 خط)
-INSERT INTO AccountTierHistory (HistoryID, AccountID, LoyaltyTierID, EffectiveFrom, EffectiveTo, CurrentFlag) VALUES
+INSERT INTO Source.AccountTierHistory (HistoryID, AccountID, LoyaltyTierID, EffectiveFrom, EffectiveTo, CurrentFlag) VALUES
 (1, 1, 1, '2020-01-15', '2021-12-31', 0),
 (2, 1, 2, '2022-01-01', '2022-12-31', 0),
 (3, 1, 1, '2023-01-01', NULL, 1),
@@ -267,7 +267,7 @@ INSERT INTO AccountTierHistory (HistoryID, AccountID, LoyaltyTierID, EffectiveFr
 (15, 9, 2, '2017-09-25', NULL, 1);
 
 -- CrewMember (10 خط)
-INSERT INTO CrewMember (CrewMemberID, PersonID, Role) VALUES
+INSERT INTO Source.CrewMember (CrewMemberID, PersonID, Role) VALUES
 (1, 16, 'Pilot'),
 (2, 17, 'Co-Pilot'),
 (3, 18, 'Senior Flight Attendant'),
@@ -280,7 +280,7 @@ INSERT INTO CrewMember (CrewMemberID, PersonID, Role) VALUES
 (10, 15, 'Senior Flight Attendant');
 
 -- CrewAssignment (15 خط)
-INSERT INTO CrewAssignment (CrewAssignmentID, FlightDetailID, CrewMemberID) VALUES
+INSERT INTO Source.CrewAssignment (CrewAssignmentID, FlightDetailID, CrewMemberID) VALUES
 (1, 1, 1),
 (2, 1, 2),
 (3, 1, 3),
@@ -298,7 +298,7 @@ INSERT INTO CrewAssignment (CrewAssignmentID, FlightDetailID, CrewMemberID) VALU
 (15, 11, 5);
 
 -- FlightOperation (15 خط)
-INSERT INTO FlightOperation (FlightOperationID, FlightDetailID, ActualDepartureDateTime, ActualArrivalDateTime, DelayMinutes, CancelFlag) VALUES
+INSERT INTO Source.FlightOperation (FlightOperationID, FlightDetailID, ActualDepartureDateTime, ActualArrivalDateTime, DelayMinutes, CancelFlag) VALUES
 (1, 1, '2023-06-01 08:15:00', '2023-06-01 12:10:00', 15, 0),
 (2, 2, '2023-06-01 14:00:00', '2023-06-01 18:20:00', 0, 0),
 (3, 3, '2023-06-02 09:30:00', '2023-06-02 15:45:00', 30, 0),
@@ -315,7 +315,3 @@ INSERT INTO FlightOperation (FlightOperationID, FlightDetailID, ActualDepartureD
 (14, 14, '2023-06-07 11:30:00', '2023-06-07 16:45:00', 45, 0),
 (15, 15, '2023-06-08 10:15:00', '2023-06-08 14:30:00', 0, 0);
 
-
-
-
-select * from PointsTransaction

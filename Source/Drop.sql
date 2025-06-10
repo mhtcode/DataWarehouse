@@ -1,20 +1,20 @@
 -- Drop tables in reverse dependency order
-DROP TABLE IF EXISTS [PointsTransaction];
-DROP TABLE IF EXISTS [Points];
-DROP TABLE IF EXISTS [AccountTierHistory];
-DROP TABLE IF EXISTS [Payment];
-DROP TABLE IF EXISTS [CrewAssignment];
-DROP TABLE IF EXISTS [FlightOperation];
-DROP TABLE IF EXISTS [Reservation];
-DROP TABLE IF EXISTS [SeatDetail];
-DROP TABLE IF EXISTS [ServiceOffering];  -- Must drop before TravelClass
-DROP TABLE IF EXISTS [CrewMember];
-DROP TABLE IF EXISTS [Account];
-DROP TABLE IF EXISTS [Passenger];
-DROP TABLE IF EXISTS [FlightDetail];
-DROP TABLE IF EXISTS [Aircraft];
-DROP TABLE IF EXISTS [TravelClass];      -- Now safe to drop
-DROP TABLE IF EXISTS [LoyaltyTier];
-DROP TABLE IF EXISTS [Person];
-DROP TABLE IF EXISTS [Airport];
-DROP TABLE IF EXISTS [Airline];
+DROP TABLE IF EXISTS [Source].[PointsTransaction];
+DROP TABLE IF EXISTS [Source].[Points];
+DROP TABLE IF EXISTS [Source].[AccountTierHistory];
+DROP TABLE IF EXISTS [Source].[Payment];
+DROP TABLE IF EXISTS [Source].[CrewAssignment];
+DROP TABLE IF EXISTS [Source].[FlightOperation];
+DROP TABLE IF EXISTS [Source].[Reservation];
+DROP TABLE IF EXISTS [Source].[SeatDetail];
+DROP TABLE IF EXISTS [Source].[ServiceOffering];  -- Must drop before TravelClass
+DROP TABLE IF EXISTS [Source].[CrewMember];
+DROP TABLE IF EXISTS [Source].[Account];
+DROP TABLE IF EXISTS [Source].[Passenger];
+DROP TABLE IF EXISTS [Source].[FlightDetail];
+DROP TABLE IF EXISTS [Source].[Aircraft];
+DROP TABLE IF EXISTS [Source].[TravelClass];      -- Now safe to drop
+DROP TABLE IF EXISTS [Source].[LoyaltyTier];
+DROP TABLE IF EXISTS [Source].[Person];
+DROP TABLE IF EXISTS [Source].[Airport];
+DROP TABLE IF EXISTS [Source].[Airline];
