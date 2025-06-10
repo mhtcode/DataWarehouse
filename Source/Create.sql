@@ -1,3 +1,5 @@
+CREATE SCHEMA [Source]
+
 CREATE TABLE [Source].[Airline] (
   [AirlineID] integer PRIMARY KEY,
   [Name] varchar(100),
