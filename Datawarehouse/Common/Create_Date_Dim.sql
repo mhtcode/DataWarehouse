@@ -1,7 +1,7 @@
 CREATE TABLE [DW].[DateDim] (
   [DateKey] date PRIMARY KEY,
   [FullDateAlternateKey] date,
-  [PersianFullDateAlternateKey] date,
+  [PersianFullDateAlternateKey] nvarchar(12),
   [DayNumberOfWeek] int,
   [PersianDayNumberOfWeek] int,
   [EnglishDayNameOfWeek] nvarchar(255),
