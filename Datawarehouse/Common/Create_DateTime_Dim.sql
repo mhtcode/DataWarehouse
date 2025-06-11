@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [DW].[DateTimeDim] (
-  [DateKey] datetime PRIMARY KEY,
+  [DateTimeKey] datetime PRIMARY KEY,
   [FullDateAlternateKey] date,
-  [PersianFullDateAlternateKey] date,
+  [PersianFullDateAlternateKey] nvarchar(12),
   [DayNumberOfWeek] int,
   [PersianDayNumberOfWeek] int,
   [EnglishDayNameOfWeek] nvarchar(255),
@@ -22,7 +22,6 @@
   [PersianCalendarYear] int,
   [CalendarSemester] int,
   [PersianCalendarSemester] int,
-  [Business_Day_YN] BIT,
   [Time] time,
   [Hour] int,
   [Minute] int
