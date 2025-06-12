@@ -1,0 +1,5 @@
+CREATE OR ALTER PROCEDURE [SA].[Passenger]
+AS
+BEGIN
+	
+END
