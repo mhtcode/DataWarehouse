@@ -1,4 +1,6 @@
-CREATE TABLE [Airline] (
+CREATE SCHEMA [SA]
+
+CREATE TABLE [SA].[Airline] (
   [AirlineID] integer PRIMARY KEY,
   [Name] varchar(100),
   [Country] varchar(50),
@@ -9,7 +11,7 @@ CREATE TABLE [Airline] (
 )
 GO
 
-CREATE TABLE [Airport] (
+CREATE TABLE [SA].[Airport] (
   [AirportID] integer PRIMARY KEY,
   [City] varchar(50),
   [Country] varchar(50),
@@ -24,7 +26,7 @@ CREATE TABLE [Airport] (
 )
 GO
 
-CREATE TABLE [Aircraft] (
+CREATE TABLE [SA].[Aircraft] (
   [AircraftID] integer PRIMARY KEY,
   [Model] varchar(50),
   [Type] varchar(50),
@@ -35,7 +37,7 @@ CREATE TABLE [Aircraft] (
 )
 GO
 
-CREATE TABLE [Person] (
+CREATE TABLE [SA].[Person] (
   [PersonID] integer PRIMARY KEY,
   [NatCode] varchar(20) NOT NULL,
   [Name] varchar(100) NOT NULL,
@@ -50,14 +52,14 @@ CREATE TABLE [Person] (
 )
 GO
 
-CREATE TABLE [Passenger] (
+CREATE TABLE [SA].[Passenger] (
   [PassengerID] integer PRIMARY KEY,
   [PersonID] integer NOT NULL,
   [PassportNumber] varchar(50) UNIQUE
 )
 GO
 
-CREATE TABLE [Account] (
+CREATE TABLE [SA].[Account] (
   [AccountID] integer PRIMARY KEY,
   [PassengerID] integer NOT NULL,
   [RegistrationDate] datetime,
@@ -65,7 +67,7 @@ CREATE TABLE [Account] (
 )
 GO
 
-CREATE TABLE [Points] (
+CREATE TABLE [SA].[Points] (
   [PointsID] integer PRIMARY KEY,
   [AccountID] integer NOT NULL,
   [PointsBalance] decimal(18,2) DEFAULT (0),
@@ -73,7 +75,7 @@ CREATE TABLE [Points] (
 )
 GO
 
-CREATE TABLE [PointsTransaction] (
+CREATE TABLE [SA].[PointsTransaction] (
   [TransactionID] integer PRIMARY KEY,
   [AccountID] integer NOT NULL,
   [TransactionDate] datetime NOT NULL,
@@ -84,7 +86,7 @@ CREATE TABLE [PointsTransaction] (
 )
 GO
 
-CREATE TABLE [LoyaltyTier] (
+CREATE TABLE [SA].[LoyaltyTier] (
   [LoyaltyTierID] integer PRIMARY KEY,
   [Name] varchar(50) NOT NULL,
   [MinPoints] integer NOT NULL,
@@ -92,7 +94,7 @@ CREATE TABLE [LoyaltyTier] (
 )
 GO
 
-CREATE TABLE [AccountTierHistory] (
+CREATE TABLE [SA].[AccountTierHistory] (
   [HistoryID] integer PRIMARY KEY,
   [AccountID] integer NOT NULL,
   [LoyaltyTierID] integer NOT NULL,
@@ -102,14 +104,14 @@ CREATE TABLE [AccountTierHistory] (
 )
 GO
 
-CREATE TABLE [CrewMember] (
+CREATE TABLE [SA].[CrewMember] (
   [CrewMemberID] integer PRIMARY KEY,
   [PersonID] integer NOT NULL,
   [Role] varchar(50)
 )
 GO
 
-CREATE TABLE [FlightDetail] (
+CREATE TABLE [SA].[FlightDetail] (
   [FlightDetailID] integer PRIMARY KEY,
   [DepartureAirportID] integer NOT NULL,
   [DestinationAirportID] integer NOT NULL,
@@ -121,7 +123,7 @@ CREATE TABLE [FlightDetail] (
 )
 GO
 
-CREATE TABLE [TravelClass] (
+CREATE TABLE [SA].[TravelClass] (
   [TravelClassID] integer PRIMARY KEY,
   [Name] varchar(50) NOT NULL,
   [Capacity] integer,
@@ -129,7 +131,7 @@ CREATE TABLE [TravelClass] (
 )
 GO
 
-CREATE TABLE [ServiceOffering] (
+CREATE TABLE [SA].[ServiceOffering] (
   [ServiceOfferingID] integer PRIMARY KEY,
   [TravelClassID] integer,
   [Name] varchar(100),
@@ -137,7 +139,7 @@ CREATE TABLE [ServiceOffering] (
 )
 GO
 
-CREATE TABLE [SeatDetail] (
+CREATE TABLE [SA].[SeatDetail] (
   [SeatDetailID] integer PRIMARY KEY,
   [AircraftID] integer NOT NULL,
   [SeatNo] integer NOT NULL,
@@ -147,7 +149,7 @@ CREATE TABLE [SeatDetail] (
 )
 GO
 
-CREATE TABLE [Reservation] (
+CREATE TABLE [SA].[Reservation] (
   [ReservationID] integer PRIMARY KEY,
   [PassengerID] integer NOT NULL,
   [FlightDetailID] integer NOT NULL,
@@ -157,7 +159,7 @@ CREATE TABLE [Reservation] (
 )
 GO
 
-CREATE TABLE [Payment] (
+CREATE TABLE [SA].[Payment] (
   [PaymentID] integer PRIMARY KEY,
   [ReservationID] integer NOT NULL,
   [Status] varchar(20) DEFAULT 'Pending',
@@ -169,14 +171,14 @@ CREATE TABLE [Payment] (
 )
 GO
 
-CREATE TABLE [CrewAssignment] (
+CREATE TABLE [SA].[CrewAssignment] (
   [CrewAssignmentID] integer PRIMARY KEY,
   [FlightDetailID] integer NOT NULL,
   [CrewMemberID] integer NOT NULL
 )
 GO
 
-CREATE TABLE [FlightOperation] (
+CREATE TABLE [SA].[FlightOperation] (
   [FlightOperationID] integer PRIMARY KEY,
   [FlightDetailID] integer NOT NULL,
   [ActualDepartureDateTime] datetime,
