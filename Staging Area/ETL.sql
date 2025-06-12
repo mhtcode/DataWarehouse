@@ -1,0 +1,23 @@
+CREATE OR ALTER PROCEDURE [SA].[Main_ETL]
+AS
+BEGIN 
+    EXEC [SA].[ETL_Account]
+    EXEC [SA].[ETL_AccountTierHistory]
+    EXEC [SA].[ETL_Aircraft]
+    EXEC [SA].[ETL_Airline]
+    EXEC [SA].[ETL_Airport]
+    EXEC [SA].[ETL_CrewAssignment]
+    EXEC [SA].[ETL_CrewMember]
+    EXEC [SA].[ETL_FlightDetail]
+    EXEC [SA].[ETL_FlightOperation]
+    EXEC [SA].[ETL_LoyaltyTier]
+    EXEC [SA].[ETL_Passenger]
+    EXEC [SA].[ETL_Payment]
+    EXEC [SA].[ETL_Person]
+    EXEC [SA].[ETL_Points]
+    EXEC [SA].[ETL_PointsTransaction]
+    EXEC [SA].[ETL_Reservation]
+    EXEC [SA].[ETL_SeatDetail]
+    EXEC [SA].[ETL_ServiceOffering]
+    EXEC [SA].[ETL_TravelClass]
+END
