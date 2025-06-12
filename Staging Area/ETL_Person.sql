@@ -21,12 +21,13 @@ BEGIN
                 TARGET.Country = NULLIF(TRIM(SOURCE.Country), ''),
                 TARGET.DateOfBirth = SOURCE.DateOfBirth,
                 TARGET.Gender = NULLIF(TRIM(SOURCE.Gender), ''),
-                TARGET.PostalCode = NULLIF(TRIM(SOURCE.PostalCode), '')
-                -- TARGET.StagingLastUpdateTimestampUTC = GETUTCDATE()
+                TARGET.PostalCode = NULLIF(TRIM(SOURCE.PostalCode), ''),
+                TARGET.StagingLastUpdateTimestampUTC = GETUTCDATE()
         WHEN NOT MATCHED BY TARGET THEN
             INSERT(
                 PersonID, NatCode, Name, Phone, Email, Address, City, Country,
-                DateOfBirth, Gender, PostalCode
+                DateOfBirth, Gender, PostalCode,StagingLoadTimestampUTC,
+                SourceSystem
             )
             VALUES (
                 SOURCE.PersonID,
@@ -39,9 +40,9 @@ BEGIN
                 NULLIF(TRIM(SOURCE.Country), ''),
                 SOURCE.DateOfBirth,
                 NULLIF(TRIM(SOURCE.Gender), ''),
-                NULLIF(TRIM(SOURCE.PostalCode), '')
-                -- GETUTCDATE(), -- Set the initial load timestamp
-                -- 'OperationalDB'
+                NULLIF(TRIM(SOURCE.PostalCode), ''),
+                GETUTCDATE(),
+                'OperationalDB'
             );
 END
 
@@ -49,11 +50,15 @@ exec [SA].[ETL_Person]
 
 select * from [SA].[Person]
 
+select * from [Source].[Person]
+
 -- Change the phone number for Emma Johnson.
 -- Your MERGE procedure should UPDATE the Phone and StagingLastUpdateTimestampUTC columns.
 UPDATE [Source].[Person]
-SET Phone = '+14165559999'
+SET Phone = '+14165559990'
 WHERE PersonID = 2;
+
+
 
 -- Add a completely new person.
 -- Your MERGE procedure should INSERT this entire row into the staging table.

@@ -14,27 +14,24 @@ BEGIN
         ) THEN
             UPDATE SET
                 TARGET.PersonID = SOURCE.PersonID,
-                TARGET.PassportNumber = NULLIF(TRIM(SOURCE.PassportNumber), '')
-                -- TARGET.StagingLastUpdateTimestampUTC = GETUTCDATE()
+                TARGET.PassportNumber = NULLIF(TRIM(SOURCE.PassportNumber), ''),
+                TARGET.StagingLastUpdateTimestampUTC = GETUTCDATE()
 
         -- Action for new records
         WHEN NOT MATCHED BY TARGET THEN
             INSERT (
                 PassengerID,
                 PersonID,
-                PassportNumber
-                -- StagingLoadTimestampUTC,
-                -- SourceSystem
+                PassportNumber,
+                StagingLoadTimestampUTC,
+                SourceSystem
             )
             VALUES (
                 SOURCE.PassengerID,
                 SOURCE.PersonID,
-                NULLIF(TRIM(SOURCE.PassportNumber), '')
-                -- GETUTCDATE(),
-                -- 'OperationalDB'
+                NULLIF(TRIM(SOURCE.PassportNumber), ''),
+                GETUTCDATE(),
+                'OperationalDB'
             ); -- Mandatory Semicolon
 
 END
-
-
-exec [SA].[ETL_Passenger]

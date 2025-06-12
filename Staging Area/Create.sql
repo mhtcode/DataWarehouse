@@ -7,7 +7,10 @@ CREATE TABLE [SA].[Airline] (
   [FoundedDate] date,
   [HeadquartersNumber] varchar(50),
   [FleetSize] integer,
-  [Website] varchar(200)
+  [Website] varchar(200),
+  StagingLoadTimestampUTC datetime,
+  StagingLastUpdateTimestampUTC datetime,
+  SourceSystem varchar(200)
 )
 GO
 
@@ -22,7 +25,10 @@ CREATE TABLE [SA].[Airport] (
   [AnnualPassengerTraffic] bigint,
   [Latitude] decimal(9,6),
   [Longitude] decimal(9,6),
-  [ManagerName] varchar(100)
+  [ManagerName] varchar(100),
+  StagingLoadTimestampUTC datetime,
+  StagingLastUpdateTimestampUTC datetime,
+  SourceSystem varchar(200)
 )
 GO
 
@@ -33,7 +39,10 @@ CREATE TABLE [SA].[Aircraft] (
   [ManufacturerDate] date,
   [Capacity] integer,
   [Price] decimal(18,2),
-  [AirlineID] integer NOT NULL
+  [AirlineID] integer NOT NULL,
+  StagingLoadTimestampUTC datetime,
+  StagingLastUpdateTimestampUTC datetime,
+  SourceSystem varchar(200)
 )
 GO
 
@@ -48,14 +57,20 @@ CREATE TABLE [SA].[Person] (
   [Country] varchar(50),
   [DateOfBirth] date,
   [Gender] varchar(10),
-  [PostalCode] varchar(20)
+  [PostalCode] varchar(20),
+  StagingLoadTimestampUTC datetime,
+  StagingLastUpdateTimestampUTC datetime,
+  SourceSystem varchar(200)
 )
 GO
 
 CREATE TABLE [SA].[Passenger] (
   [PassengerID] integer PRIMARY KEY,
   [PersonID] integer NOT NULL,
-  [PassportNumber] varchar(50) UNIQUE
+  [PassportNumber] varchar(50) UNIQUE,
+  StagingLoadTimestampUTC datetime,
+  StagingLastUpdateTimestampUTC datetime,
+  SourceSystem varchar(200)
 )
 GO
 
@@ -63,7 +78,10 @@ CREATE TABLE [SA].[Account] (
   [AccountID] integer PRIMARY KEY,
   [PassengerID] integer NOT NULL,
   [RegistrationDate] datetime,
-  [LoyaltyTierID] integer NOT NULL
+  [LoyaltyTierID] integer NOT NULL,
+  StagingLoadTimestampUTC datetime,
+  StagingLastUpdateTimestampUTC datetime,
+  SourceSystem varchar(200)
 )
 GO
 
@@ -71,7 +89,10 @@ CREATE TABLE [SA].[Points] (
   [PointsID] integer PRIMARY KEY,
   [AccountID] integer NOT NULL,
   [PointsBalance] decimal(18,2) DEFAULT (0),
-  [EffectiveDate] datetime NOT NULL
+  [EffectiveDate] datetime NOT NULL,
+  StagingLoadTimestampUTC datetime,
+  StagingLastUpdateTimestampUTC datetime,
+  SourceSystem varchar(200)
 )
 GO
 
@@ -82,7 +103,10 @@ CREATE TABLE [SA].[PointsTransaction] (
   [TransactionType] varchar(10) NOT NULL,
   [PointsChange] decimal(18,2) NOT NULL,
   [Description] varchar(200),
-  [ServiceOfferingID] integer
+  [ServiceOfferingID] integer,
+  StagingLoadTimestampUTC datetime,
+  StagingLastUpdateTimestampUTC datetime,
+  SourceSystem varchar(200)
 )
 GO
 
@@ -90,7 +114,10 @@ CREATE TABLE [SA].[LoyaltyTier] (
   [LoyaltyTierID] integer PRIMARY KEY,
   [Name] varchar(50) NOT NULL,
   [MinPoints] integer NOT NULL,
-  [Benefits] varchar(200)
+  [Benefits] varchar(200),
+  StagingLoadTimestampUTC datetime,
+  StagingLastUpdateTimestampUTC datetime,
+  SourceSystem varchar(200)
 )
 GO
 
@@ -100,14 +127,20 @@ CREATE TABLE [SA].[AccountTierHistory] (
   [LoyaltyTierID] integer NOT NULL,
   [EffectiveFrom] datetime NOT NULL,
   [EffectiveTo] datetime,
-  [CurrentFlag] bit DEFAULT (1)
+  [CurrentFlag] bit DEFAULT (1),
+  StagingLoadTimestampUTC datetime,
+  StagingLastUpdateTimestampUTC datetime,
+  SourceSystem varchar(200)
 )
 GO
 
 CREATE TABLE [SA].[CrewMember] (
   [CrewMemberID] integer PRIMARY KEY,
   [PersonID] integer NOT NULL,
-  [Role] varchar(50)
+  [Role] varchar(50),
+  StagingLoadTimestampUTC datetime,
+  StagingLastUpdateTimestampUTC datetime,
+  SourceSystem varchar(200)
 )
 GO
 
@@ -119,7 +152,10 @@ CREATE TABLE [SA].[FlightDetail] (
   [ArrivalDateTime] datetime NOT NULL,
   [AircraftID] integer,
   [FlightCapacity] integer NOT NULL,
-  [TotalCost] decimal(18,2)
+  [TotalCost] decimal(18,2),
+  StagingLoadTimestampUTC datetime,
+  StagingLastUpdateTimestampUTC datetime,
+  SourceSystem varchar(200)
 )
 GO
 
@@ -127,7 +163,10 @@ CREATE TABLE [SA].[TravelClass] (
   [TravelClassID] integer PRIMARY KEY,
   [Name] varchar(50) NOT NULL,
   [Capacity] integer,
-  [Cost] decimal(18,2)
+  [Cost] decimal(18,2),
+  StagingLoadTimestampUTC datetime,
+  StagingLastUpdateTimestampUTC datetime,
+  SourceSystem varchar(200)
 )
 GO
 
@@ -135,7 +174,10 @@ CREATE TABLE [SA].[ServiceOffering] (
   [ServiceOfferingID] integer PRIMARY KEY,
   [TravelClassID] integer,
   [Name] varchar(100),
-  [Cost] decimal(18,2)
+  [Cost] decimal(18,2),
+  StagingLoadTimestampUTC datetime,
+  StagingLastUpdateTimestampUTC datetime,
+  SourceSystem varchar(200)
 )
 GO
 
@@ -145,7 +187,10 @@ CREATE TABLE [SA].[SeatDetail] (
   [SeatNo] integer NOT NULL,
   [SeatType] varchar(20),
   [TravelClassID] integer,
-  [ReservationID] integer
+  [ReservationID] integer,
+  StagingLoadTimestampUTC datetime,
+  StagingLastUpdateTimestampUTC datetime,
+  SourceSystem varchar(200)
 )
 GO
 
@@ -155,7 +200,10 @@ CREATE TABLE [SA].[Reservation] (
   [FlightDetailID] integer NOT NULL,
   [ReservationDate] datetime,
   [SeatDetailID] integer,
-  [Status] varchar(20) DEFAULT 'Booked'
+  [Status] varchar(20) DEFAULT 'Booked',
+  StagingLoadTimestampUTC datetime,
+  StagingLastUpdateTimestampUTC datetime,
+  SourceSystem varchar(200)
 )
 GO
 
@@ -167,14 +215,20 @@ CREATE TABLE [SA].[Payment] (
   [RealPrice] decimal(18,2),
   [Discount] decimal(18,2) DEFAULT (0),
   [Method] varchar(50),
-  [PaymentDateTime] datetime
+  [PaymentDateTime] datetime,
+  StagingLoadTimestampUTC datetime,
+  StagingLastUpdateTimestampUTC datetime,
+  SourceSystem varchar(200)
 )
 GO
 
 CREATE TABLE [SA].[CrewAssignment] (
   [CrewAssignmentID] integer PRIMARY KEY,
   [FlightDetailID] integer NOT NULL,
-  [CrewMemberID] integer NOT NULL
+  [CrewMemberID] integer NOT NULL,
+  StagingLoadTimestampUTC datetime,
+  StagingLastUpdateTimestampUTC datetime,
+  SourceSystem varchar(200)
 )
 GO
 
@@ -184,7 +238,10 @@ CREATE TABLE [SA].[FlightOperation] (
   [ActualDepartureDateTime] datetime,
   [ActualArrivalDateTime] datetime,
   [DelayMinutes] integer DEFAULT (0),
-  [CancelFlag] bit DEFAULT (0)
+  [CancelFlag] bit DEFAULT (0),
+  StagingLoadTimestampUTC datetime,
+  StagingLastUpdateTimestampUTC datetime,
+  SourceSystem varchar(200)
 )
 GO
 
