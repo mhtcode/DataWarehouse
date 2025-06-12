@@ -1,7 +1,7 @@
 CREATE OR ALTER PROCEDURE [SA].[ETL_Account]
 AS
 BEGIN       
-    MERGE [SA].[StagedAccount] AS TARGET
+    MERGE [SA].[Account] AS TARGET
     USING [Source].[Account] AS SOURCE
     ON (TARGET.AccountID = SOURCE.AccountID)
 
@@ -15,7 +15,7 @@ BEGIN
         UPDATE SET
             TARGET.PassengerID = SOURCE.PassengerID,
             TARGET.RegistrationDate = SOURCE.RegistrationDate,
-            TARGET.LoyaltyTierID = SOURCE.LoyaltyTierID
+            TARGET.LoyaltyTierID = SOURCE.LoyaltyTierID,
             TARGET.StagingLastUpdateTimestampUTC = GETUTCDATE()
 
     -- Action for new records
@@ -24,7 +24,7 @@ BEGIN
             AccountID,
             PassengerID,
             RegistrationDate,
-            LoyaltyTierID
+            LoyaltyTierID,
             StagingLoadTimestampUTC,
             SourceSystem
         )
@@ -32,8 +32,10 @@ BEGIN
             SOURCE.AccountID,
             SOURCE.PassengerID,
             SOURCE.RegistrationDate,
-            SOURCE.LoyaltyTierID
+            SOURCE.LoyaltyTierID,
             GETUTCDATE(),
             'OperationalDB'
         ); -- Mandatory Semicolon
 END
+
+exec [SA].[ETL_Account]
