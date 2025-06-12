@@ -1,0 +1,5 @@
+CREATE OR ALTER PROCEDURE [SA].[ETL_AccountTierHistory]
+AS
+BEGIN 
+
+END
