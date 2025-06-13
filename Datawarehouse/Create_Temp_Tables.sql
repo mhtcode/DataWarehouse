@@ -96,3 +96,38 @@ BEGIN
   );
 END;
 GO
+
+
+IF OBJECT_ID('[DW].[Temp_LoyaltyTier_table]', 'U') IS NULL
+BEGIN
+  CREATE TABLE [DW].[Temp_LoyaltyTier_table] (
+    LoyaltyTierID   INT           NOT NULL PRIMARY KEY,
+    Name            NVARCHAR(255) NULL,
+    MinPoints       INT           NULL,
+    Benefits        NVARCHAR(255) NULL
+  );
+END;
+GO
+
+
+IF OBJECT_ID('[DW].[Temp_LoyaltyTransactionType_table]', 'U') IS NULL
+BEGIN
+  CREATE TABLE [DW].[Temp_LoyaltyTransactionType_table] (
+    TransactionTypeName NVARCHAR(255) NOT NULL PRIMARY KEY
+  );
+END;
+GO
+
+
+IF OBJECT_ID('[DW].[Temp_Payment_table]', 'U') IS NULL
+BEGIN
+  CREATE TABLE [DW].[Temp_Payment_table] (
+    PaymentID        INT            NOT NULL PRIMARY KEY,
+    PaymentMethod    NVARCHAR(255)  NULL,
+    PaymentStatus    NVARCHAR(255)  NULL,
+    PaymentTimestamp DATETIME       NULL
+  );
+END;
+GO
+
+

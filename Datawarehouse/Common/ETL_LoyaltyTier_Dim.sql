@@ -1,0 +1,109 @@
+CREATE OR ALTER PROCEDURE [DW].[ETL_LoyaltyTier_Dim]
+AS
+BEGIN
+  SET NOCOUNT ON;
+
+  DECLARE
+    @StartTime      DATETIME2(3) = SYSUTCDATETIME(),
+    @LastRunTime    DATETIME2(3),
+    @RowsExpired    INT,
+    @RowsInserted   INT,
+    @LogID          BIGINT;
+
+  -- 1) Assume fatal: insert initial log entry
+  INSERT INTO DW.ETL_Log (
+    ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
+  ) VALUES (
+    'ETL_LoyaltyTier_Dim',
+    'DimLoyaltyTier',
+    'Procedure started - awaiting completion',
+    @StartTime,
+    'Fatal'
+  );
+  SET @LogID = SCOPE_IDENTITY();
+
+  BEGIN TRY
+    -- 2) Determine last successful run time
+    SELECT
+      @LastRunTime = COALESCE(
+        MAX(ActionTime),
+        '1900-01-01'
+      )
+    FROM DW.ETL_Log
+    WHERE ProcedureName = 'ETL_LoyaltyTier_Dim'
+      AND Status = 'Success';
+
+    -- 3) Truncate staging
+    TRUNCATE TABLE [DW].[Temp_LoyaltyTier_table];
+
+    -- 4) Populate staging with changed/new tiers
+    INSERT INTO [DW].[Temp_LoyaltyTier_table] (
+      LoyaltyTierID, Name, MinPoints, Benefits
+    )
+    SELECT
+      lt.LoyaltyTierID,
+      lt.Name,
+      lt.MinPoints,
+      lt.Benefits
+    FROM SA.LoyaltyTier AS lt
+    WHERE lt.StagingLastUpdateTimestampUTC > @LastRunTime;
+
+    -- 5) Expire old versions for changed keys
+    UPDATE d
+    SET
+      d.EffectiveTo      = @StartTime,
+      d.NameIsCurrent    = 0
+    FROM DW.DimLoyaltyTier AS d
+    JOIN DW.Temp_LoyaltyTier_table AS t
+      ON d.LoyaltyTierKey = t.LoyaltyTierID
+    WHERE d.NameIsCurrent = 1
+      AND (
+        ISNULL(d.Name,'')       <> ISNULL(t.Name,'')
+        OR ISNULL(d.MinPoints,0) <> ISNULL(t.MinPoints,0)
+        OR ISNULL(d.Benefits,'') <> ISNULL(t.Benefits,'')
+      );
+    SET @RowsExpired = @@ROWCOUNT;
+
+    -- 6) Insert new SCD2 versions for changed/new keys
+    INSERT INTO DW.DimLoyaltyTier (
+      LoyaltyTierKey, Name, MinPoints, Benefits,
+      EffectiveFrom, EffectiveTo, NameIsCurrent
+    )
+    SELECT
+      t.LoyaltyTierID,
+      t.Name,
+      t.MinPoints,
+      t.Benefits,
+      @StartTime,
+      NULL,
+      1
+    FROM DW.Temp_LoyaltyTier_table AS t;
+    SET @RowsInserted = @@ROWCOUNT;
+
+    -- 7) Update log entry to Success
+    UPDATE DW.ETL_Log
+    SET
+      ChangeDescription = CONCAT(
+        'Incremental SCD2 load complete: expired=', @RowsExpired,
+        ', inserted=', @RowsInserted
+      ),
+      RowsAffected      = @RowsExpired + @RowsInserted,
+      DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
+      Status            = 'Success'
+    WHERE LogID = @LogID;
+
+  END TRY
+  BEGIN CATCH
+    DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
+    -- 8) Update log entry to Error
+    UPDATE DW.ETL_Log
+    SET
+      ChangeDescription = 'Incremental SCD2 load failed',
+      DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
+      Status            = 'Error',
+      Message           = @ErrMsg
+    WHERE LogID = @LogID;
+    THROW;
+  END CATCH
+END;
+GO
