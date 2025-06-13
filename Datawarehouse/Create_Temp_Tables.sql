@@ -1,5 +1,3 @@
--- SQL script to create a single persistent temp table for DimPerson ETL
-
 -- Persistent staging table used for both full and incremental loads
 CREATE TABLE [DW].[Temp_Person_table] (
   [PersonID]       INT           NOT NULL PRIMARY KEY,
