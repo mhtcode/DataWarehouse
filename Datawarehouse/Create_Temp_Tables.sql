@@ -57,3 +57,42 @@ BEGIN
   );
 END;
 GO
+
+
+IF OBJECT_ID('[DW].[Temp_Airport_table]', 'U') IS NULL
+BEGIN
+  CREATE TABLE [DW].[Temp_Airport_table] (
+    AirportID               INT            NOT NULL PRIMARY KEY,
+    Name                    NVARCHAR(255)  NULL,
+    City                    NVARCHAR(255)  NULL,
+    Country                 NVARCHAR(255)  NULL,
+    IATACode                NVARCHAR(255)  NULL,
+    ElevationMeter          INT            NULL,
+    TimeZone                NVARCHAR(255)  NULL,
+    NumberOfTerminals       INT            NULL,
+    AnnualPassengerTraffic  BIGINT         NULL,
+    Latitude                DECIMAL(18,6)  NULL,
+    Longitude               DECIMAL(18,6)  NULL
+  );
+END;
+GO
+
+
+IF OBJECT_ID('[DW].[Temp_Crew_table]', 'U') IS NULL
+BEGIN
+  CREATE TABLE [DW].[Temp_Crew_table] (
+    Crew_ID        INT             NOT NULL PRIMARY KEY,
+    NAT_CODE       NVARCHAR(255)   NULL,
+    Name           NVARCHAR(255)   NULL,
+    Phone          NVARCHAR(255)   NULL,
+    Email          NVARCHAR(255)   NULL,
+    Address        NVARCHAR(255)   NULL,
+    City           NVARCHAR(255)   NULL,
+    Country        NVARCHAR(255)   NULL,
+    Date_Of_Birth  DATE            NULL,
+    Gender         NVARCHAR(255)   NULL,
+    Postal_Code    NVARCHAR(255)   NULL,
+    Role           NVARCHAR(255)   NULL
+  );
+END;
+GO
