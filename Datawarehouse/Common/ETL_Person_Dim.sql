@@ -64,11 +64,11 @@ BEGIN
     -- 5) Expire current dimension rows for those keys
     UPDATE d
     SET
-      d.IsCurrent   = 0,
+      d.PassportNumberIsCurrent   = 0,
       d.EffectiveTo = @StartTime
     FROM DW.DimPerson AS d
     WHERE
-      d.IsCurrent = 1
+      d.PassportNumberIsCurrent = 1
       AND EXISTS (
         SELECT 1 FROM DW.Temp_Person_table AS t
         WHERE t.PersonID = d.PersonKey
@@ -80,7 +80,7 @@ BEGIN
       PersonKey, NationalCode, PassportNumber, Name,
       Gender, DateOfBirth, City, Country,
       Email, Phone, Address, PostalCode,
-      EffectiveFrom, EffectiveTo, IsCurrent
+      EffectiveFrom, EffectiveTo, PassportNumberIsCurrent
     )
     SELECT
       t.PersonID, t.NationalCode, t.PassportNumber, t.Name,

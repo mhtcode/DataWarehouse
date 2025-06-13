@@ -52,7 +52,7 @@ BEGIN
       PersonKey, NationalCode, PassportNumber, Name,
       Gender, DateOfBirth, City, Country,
       Email, Phone, Address, PostalCode,
-      EffectiveFrom, EffectiveTo, IsCurrent
+      EffectiveFrom, EffectiveTo, PassportNumberIsCurrent
     )
     SELECT
       t.PersonID, t.NationalCode, t.PassportNumber, t.Name,
