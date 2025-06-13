@@ -43,3 +43,17 @@ BEGIN
   );
 END;
 GO
+
+
+IF OBJECT_ID('[DW].[Temp_Airline_table]', 'U') IS NULL
+BEGIN
+  CREATE TABLE [DW].[Temp_Airline_table] (
+    AirlineID     INT            NOT NULL PRIMARY KEY,
+    Name          NVARCHAR(255)  NULL,
+    Country       NVARCHAR(255)  NULL,
+    FoundedYear   INT            NULL,
+    FleetSize     INT            NULL,
+    Website       NVARCHAR(255)  NULL
+  );
+END;
+GO
