@@ -18,7 +18,7 @@ BEGIN
   )
   SELECT
     p.PersonID,
-    p.NationalCode,
+    p.NatCode,
     pas.PassportNumber,
     p.Name,
     p.Gender,
