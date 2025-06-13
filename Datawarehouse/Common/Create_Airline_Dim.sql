@@ -1,4 +1,4 @@
-CREATE TABLE [DimAirline] (
+CREATE TABLE [DW].[DimAirline] (
   [AirlineKey] int PRIMARY KEY,
   [Name] nvarchar(255),
   [Country] nvarchar(255),

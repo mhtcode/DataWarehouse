@@ -1,4 +1,4 @@
-CREATE TABLE [DimFlightOperationType] (
+CREATE TABLE [DW].[DimFlightOperationType] (
   [OperationTypeKey] int PRIMARY KEY,
   [OperationTypeName] nvarchar(255)
 )

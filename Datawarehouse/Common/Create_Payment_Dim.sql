@@ -1,4 +1,4 @@
-CREATE TABLE [DimPayment] (
+CREATE TABLE [DW].[DimPayment] (
   [PaymentKey] int PRIMARY KEY,
   [PaymentMethod] nvarchar(255),
   [PaymentStatus] nvarchar(255),

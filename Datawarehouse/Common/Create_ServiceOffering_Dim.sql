@@ -1,4 +1,4 @@
-CREATE TABLE [DimServiceOffering] (
+CREATE TABLE [DW].[DimServiceOffering] (
   [ServiceOfferingKey] int PRIMARY KEY,
   [Name] nvarchar(255),
   [TravelClass] nvarchar(255),
