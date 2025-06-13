@@ -13,6 +13,6 @@ CREATE TABLE [DW].[DimPerson] (
   [PostalCode] nvarchar(255),
   [EffectiveFrom] datetime,
   [EffectiveTo] datetime,
-  [IsCurrent] bit
+  [PassportNumberIsCurrent] bit
 )
 GO
