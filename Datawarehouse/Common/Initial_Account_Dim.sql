@@ -1,23 +1,19 @@
-CREATE OR ALTER PROCEDURE [DW].[Initial_Aircraft_Dim]
+CREATE OR ALTER PROCEDURE [DW].[Initial_Account_Dim]
 AS
 BEGIN
   SET NOCOUNT ON;
 
   DECLARE
-    @StartTime    DATETIME2(3) = SYSUTCDATETIME(),
-    @RowsInserted INT,
-    @LogID        BIGINT;
+    @StartTime     DATETIME2(3) = SYSUTCDATETIME(),
+    @RowsInserted  INT,
+    @LogID         BIGINT;
 
   -- 1) Assume fatal: insert initial log entry
   INSERT INTO DW.ETL_Log (
-    ProcedureName,
-    TargetTable,
-    ChangeDescription,
-    ActionTime,
-    Status
+    ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
-    'Initial_Aircraft_Dim',
-    'DimAircraft',
+    'Initial_Account_Dim',
+    'DimAccount',
     'Procedure started - awaiting completion',
     @StartTime,
     'Fatal'
@@ -25,27 +21,24 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2) Insert new aircraft into dimension directly (no staging table)
-    INSERT INTO DW.DimAircraft (
-      AircraftKey,
-      Model,
-      Type,
-      ManufacturerDate,
-      Capacity,
-      Price
+    -- 2) Insert all new accounts into dimension
+    INSERT INTO DW.DimAccount (
+      AccountKey,
+      AccountNumber,
+      AccountType,
+      CreatedDate,
+      IsActive
     )
     SELECT
-      a.AircraftID,
-      a.Model,
-      a.Type,
-      a.ManufacturerDate,
-      a.Capacity,
-      a.Price
-    FROM SA.Aircraft AS a
+      a.AccountID,
+      a.AccountNumber,
+      a.AccountType,
+      a.CreatedDate,
+      a.IsActive
+    FROM SA.Account AS a
     WHERE NOT EXISTS (
-      SELECT 1
-      FROM DW.DimAircraft AS d
-      WHERE d.AircraftKey = a.AircraftID
+      SELECT 1 FROM DW.DimAccount AS d
+      WHERE d.AccountKey = a.AccountID
     );
     SET @RowsInserted = @@ROWCOUNT;
 
@@ -71,5 +64,5 @@ BEGIN
     WHERE LogID = @LogID;
     THROW;
   END CATCH
-END
+END;
 GO

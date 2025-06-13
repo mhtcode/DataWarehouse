@@ -1,4 +1,3 @@
--- Persistent staging table used for both full and incremental loads
 IF OBJECT_ID('[DW].[Temp_Person_table]', 'U') IS NULL
 BEGIN
 	CREATE TABLE [DW].[Temp_Person_table] (
@@ -17,10 +16,6 @@ BEGIN
 	);
 	END;
 GO
--- Usage:
--- TRUNCATE TABLE [DW].[Temp_Person_table] before each ETL run
--- Populate with source data via INSERT ... SELECT
--- Then use this table for both initial and incremental SCD2 loads.
 
 
 IF OBJECT_ID('[DW].[Temp_Aircraft_table]', 'U') IS NULL
@@ -32,6 +27,19 @@ BEGIN
     [ManufacturerDate]  DATE          NULL,
     [Capacity]          INT           NULL,
     [Price]             DECIMAL(18,2) NULL
+  );
+END;
+GO
+
+
+IF OBJECT_ID('[DW].[Temp_Account_table]', 'U') IS NULL
+BEGIN
+  CREATE TABLE [DW].[Temp_Account_table] (
+    AccountID       INT             NOT NULL PRIMARY KEY,
+    AccountNumber   NVARCHAR(255)   NULL,
+    AccountType     NVARCHAR(255)   NULL,
+    CreatedDate     DATETIME        NULL,
+    IsActive        BIT             NULL
   );
 END;
 GO
