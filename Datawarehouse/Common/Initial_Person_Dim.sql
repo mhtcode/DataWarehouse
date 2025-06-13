@@ -2,16 +2,29 @@ CREATE OR ALTER PROCEDURE [DW].[Initial_Person_Dim]
 AS
 BEGIN
   SET NOCOUNT ON;
-  
+
   DECLARE
     @StartTime    DATETIME2(3) = SYSUTCDATETIME(),
-    @RowsInserted INT;
+    @RowsInserted INT,
+    @LogID        BIGINT;
+
+  -- 1) Insert initial "Fatal" log entry (assume worst-case fatal error)
+  INSERT INTO DW.ETL_Log (
+    ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
+  ) VALUES (
+    'Initial_Person_Dim',
+    'DimPerson',
+    'Procedure started - awaiting completion',
+    @StartTime,
+    'Fatal'
+  );
+  SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- clean staging
+    -- 2) Clean staging
     TRUNCATE TABLE [DW].[Temp_Person_table];
 
-    -- populate staging with all source rows
+    -- 3) Populate staging with all source rows
     INSERT INTO [DW].[Temp_Person_table] (
       PersonID, NationalCode, PassportNumber, Name,
       Gender, DateOfBirth, City, Country,
@@ -34,7 +47,7 @@ BEGIN
     LEFT JOIN SA.Passenger AS pas
       ON p.PersonID = pas.PersonID;
 
-    -- insert new keys into dimension
+    -- 4) Insert new keys into dimension
     INSERT INTO DW.DimPerson (
       PersonKey, NationalCode, PassportNumber, Name,
       Gender, DateOfBirth, City, Country,
@@ -48,43 +61,31 @@ BEGIN
       @StartTime, NULL, 1
     FROM DW.Temp_Person_table AS t
     WHERE NOT EXISTS (
-      SELECT 1 FROM DW.DimPerson AS d WHERE d.PersonKey = t.PersonID
+      SELECT 1 FROM DW.DimPerson AS d
+      WHERE d.PersonKey = t.PersonID
     );
-    
     SET @RowsInserted = @@ROWCOUNT;
-    
-    -- log success
-    INSERT INTO DW.ETL_Log (
-      ProcedureName, TargetTable, ChangeDescription,
-      RowsAffected, ActionTime, DurationSec, Status
-    )
-    VALUES (
-      'Initial_Person_Dim',
-      'DimPerson',
-      'Initial full load using Temp_Person_table',
-      @RowsInserted,
-      @StartTime,
-      DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
-      'Success'
-    );
+
+    -- 5) Update log entry to Success
+    UPDATE DW.ETL_Log
+    SET
+      ChangeDescription = 'Initial full load complete',
+      RowsAffected      = @RowsInserted,
+      DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
+      Status            = 'Success'
+    WHERE LogID = @LogID;
+
   END TRY
   BEGIN CATCH
-    DECLARE @ErrorMessage NVARCHAR(MAX) = ERROR_MESSAGE();
-    -- log error
-    INSERT INTO DW.ETL_Log (
-      ProcedureName, TargetTable, ChangeDescription,
-      RowsAffected, ActionTime, DurationSec, Status, Message
-    )
-    VALUES (
-      'Initial_Person_Dim',
-      'DimPerson',
-      'Initial full load using Temp_Person_table failed',
-      NULL,
-      @StartTime,
-      DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
-      'Error',
-      @ErrorMessage
-    );
+    DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
+    -- 6) Update log entry to Error
+    UPDATE DW.ETL_Log
+    SET
+      ChangeDescription = 'Initial full load failed',
+      DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
+      Status            = 'Error',
+      Message           = @ErrMsg
+    WHERE LogID = @LogID;
     THROW;
   END CATCH
 END
