@@ -131,3 +131,18 @@ END;
 GO
 
 
+IF OBJECT_ID('[DW].[Temp_Flight_table]', 'U') IS NULL
+BEGIN
+  CREATE TABLE [DW].[Temp_Flight_table] (
+  FlightID INT NOT NULL PRIMARY KEY,
+  DepartureDateTime DATETIME,
+  ArrivalDateTime DATETIME,
+  FlightDurationMinutes INT,
+  AircraftKey INT,
+  FlightCapacity INT,
+  TotalCost INT
+  );
+END;
+GO
+
+
