@@ -7,7 +7,10 @@ CREATE TABLE [Source].[Airline] (
   [FoundedDate] date,
   [HeadquartersNumber] varchar(50),
   [FleetSize] integer,
-  [Website] varchar(200)
+  [Website] varchar(200),
+  [Current_IATA_Code] varchar(3) NULL,  
+  [Previous_IATA_Code] varchar(3) NULL,
+  [IATA_Code_Changed_Date] date NULL
 )
 GO
 
@@ -188,3 +191,38 @@ CREATE TABLE [Source].[FlightOperation] (
 )
 GO
 
+CREATE TABLE [Source].[MaintenanceType] (
+  [ID]          integer PRIMARY KEY,
+  [Name]        varchar(100),
+  [Category]    varchar(50),
+  [Description] varchar(500)
+);
+GO
+
+CREATE TABLE [Source].[Technician] (
+  [Technician_ID]       integer PRIMARY KEY,
+  [Name]                varchar(100),
+  [Certification_Level] varchar(10),
+  [Employment_Type]     varchar(50),
+  [Active_Status]       bit
+);
+GO
+
+CREATE TABLE [Source].[MaintenanceLocation] (
+  [Location_NK]   varchar(100) PRIMARY KEY,
+  [Name]          varchar(100),
+  [City]          varchar(50),
+  [Country]       varchar(50),
+  [Inhouse_Flag]  bit
+);
+GO
+
+CREATE TABLE [Source].[Part] (
+  [ID]                     integer PRIMARY KEY,
+  [Name]                   varchar(100),
+  [PartNumber]             varchar(50),
+  [Manufacturer]           varchar(100),
+  [Warranty_Period_Months] int,
+  [Category]               varchar(50)
+);
+GO

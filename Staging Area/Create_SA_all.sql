@@ -8,6 +8,9 @@ CREATE TABLE [SA].[Airline] (
   [HeadquartersNumber] varchar(50),
   [FleetSize] integer,
   [Website] varchar(200),
+  [Current_IATA_Code] varchar(3) NULL,
+  [Previous_IATA_Code] varchar(3) NULL,
+  [IATA_Code_Changed_Date] date NULL,
   [StagingLoadTimestampUTC] datetime,
   [StagingLastUpdateTimestampUTC] datetime,
   [SourceSystem] varchar(200)
@@ -243,5 +246,53 @@ CREATE TABLE [SA].[FlightOperation] (
   [StagingLastUpdateTimestampUTC] datetime,
   [SourceSystem] varchar(200)
 )
+GO
+
+CREATE TABLE [SA].[MaintenanceType] (
+  [ID]          integer PRIMARY KEY,
+  [Name]        varchar(100),
+  [Category]    varchar(50),
+  [Description] varchar(500),
+  [StagingLoadTimestampUTC]      datetime,
+  [StagingLastUpdateTimestampUTC] datetime,
+  [SourceSystem]                 varchar(200)
+);
+GO
+
+CREATE TABLE [SA].[Technician] (
+  [Technician_ID]       integer PRIMARY KEY,
+  [Name]                varchar(100),
+  [Certification_Level] varchar(10),
+  [Employment_Type]     varchar(50),
+  [Active_Status]       bit,
+  [StagingLoadTimestampUTC]      datetime,
+  [StagingLastUpdateTimestampUTC] datetime,
+  [SourceSystem]                 varchar(200)
+);
+GO
+
+CREATE TABLE [SA].[MaintenanceLocation] (
+  [Location_NK]   varchar(100) PRIMARY KEY,
+  [Name]          varchar(100),
+  [City]          varchar(50),
+  [Country]       varchar(50),
+  [Inhouse_Flag]  bit,
+  [StagingLoadTimestampUTC]      datetime,
+  [StagingLastUpdateTimestampUTC] datetime,
+  [SourceSystem]                 varchar(200)
+);
+GO
+
+CREATE TABLE [SA].[Part] (
+  [ID]                     integer PRIMARY KEY,
+  [Name]                   varchar(100),
+  [PartNumber]             varchar(50),
+  [Manufacturer]           varchar(100),
+  [Warranty_Period_Months] int,
+  [Category]               varchar(50),
+  [StagingLoadTimestampUTC]      datetime,
+  [StagingLastUpdateTimestampUTC] datetime,
+  [SourceSystem]                 varchar(200)
+);
 GO
 

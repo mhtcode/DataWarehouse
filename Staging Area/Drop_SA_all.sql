@@ -24,3 +24,8 @@ DROP TABLE IF EXISTS [SA].[Person];
 DROP TABLE IF EXISTS [SA].[Aircraft];
 DROP TABLE IF EXISTS [SA].[Airport];
 DROP TABLE IF EXISTS [SA].[Airline];
+
+DROP TABLE IF EXISTS [SA].[MaintenanceType];
+DROP TABLE IF EXISTS [SA].[Technician];
+DROP TABLE IF EXISTS [SA].[MaintenanceLocation];
+DROP TABLE IF EXISTS [SA].[Part];
