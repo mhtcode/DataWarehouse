@@ -166,9 +166,10 @@ CREATE TABLE [Source].[Payment] (
   [PaymentID] integer PRIMARY KEY,
   [ReservationID] integer NOT NULL,
   [Status] varchar(20) DEFAULT 'Pending',
-  [Amount] decimal(18,2) NOT NULL,
   [RealPrice] decimal(18,2),
+  [TicketPrice] decimal(18,2) NOT NULL,
   [Discount] decimal(18,2) DEFAULT (0),
+  [Tax] decimal(18,2) DEFAULT (10),
   [Method] varchar(50),
   [PaymentDateTime] datetime
 )

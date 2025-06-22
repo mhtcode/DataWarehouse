@@ -8,16 +8,17 @@ BEGIN
     -- Action for existing records that have changed
     WHEN MATCHED AND EXISTS (
         -- This clause correctly compares all relevant columns for any changes.
-        SELECT SOURCE.ReservationID, SOURCE.Status, SOURCE.Amount, SOURCE.RealPrice, SOURCE.Discount, SOURCE.Method, SOURCE.PaymentDateTime
+        SELECT SOURCE.ReservationID, SOURCE.Status, SOURCE.TicketPrice, SOURCE.RealPrice, SOURCE.Discount, SOURCE.Tax, SOURCE.Method, SOURCE.PaymentDateTime
         EXCEPT
-        SELECT TARGET.ReservationID, TARGET.Status, TARGET.Amount, TARGET.RealPrice, TARGET.Discount, TARGET.Method, TARGET.PaymentDateTime
+        SELECT TARGET.ReservationID, TARGET.Status, TARGET.TicketPrice, TARGET.RealPrice, TARGET.Discount, TARGET.Tax, TARGET.Method, TARGET.PaymentDateTime
     ) THEN
         UPDATE SET
             TARGET.ReservationID = SOURCE.ReservationID,
             TARGET.Status = NULLIF(TRIM(SOURCE.Status), ''),
-            TARGET.Amount = SOURCE.Amount,
+            TARGET.TicketPrice = SOURCE.TicketPrice,
             TARGET.RealPrice = SOURCE.RealPrice,
             TARGET.Discount = SOURCE.Discount,
+            TARGET.Tax = SOURCE.Tax,
             TARGET.Method = NULLIF(TRIM(SOURCE.Method), ''),
             TARGET.PaymentDateTime = SOURCE.PaymentDateTime,
             TARGET.StagingLastUpdateTimestampUTC = GETUTCDATE()
@@ -28,9 +29,10 @@ BEGIN
             PaymentID,
             ReservationID,
             Status,
-            Amount,
+            TicketPrice,
             RealPrice,
             Discount,
+            Tax,
             Method,
             PaymentDateTime,
             StagingLoadTimestampUTC,
@@ -40,9 +42,10 @@ BEGIN
             SOURCE.PaymentID,
             SOURCE.ReservationID,
             NULLIF(TRIM(SOURCE.Status), ''),
-            SOURCE.Amount,
+            SOURCE.TicketPrice,
             SOURCE.RealPrice,
             SOURCE.Discount,
+            SOURCE.Tax,
             NULLIF(TRIM(SOURCE.Method), ''),
             SOURCE.PaymentDateTime,
             GETUTCDATE(),

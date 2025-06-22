@@ -208,22 +208,22 @@ INSERT INTO Source.Reservation (ReservationID, PassengerID, FlightDetailID, Rese
 (15, 15, 14, '2014-05-15', 6, 'Booked');
 
 -- Payment (15 خط)
-INSERT INTO Source.Payment (PaymentID, ReservationID, Status, Amount, RealPrice, Discount, Method, PaymentDateTime) VALUES
-(1, 1, 'Completed', 450.00, 500.00, 50.00, 'Credit Card', '2014-05-01 10:30:00'),
-(2, 2, 'Completed', 850.00, 850.00, 0.00, 'PayPal', '2014-05-02 11:15:00'),
-(3, 3, 'Completed', 1200.00, 1200.00, 0.00, 'Credit Card', '2014-05-03 14:20:00'),
-(4, 4, 'Completed', 780.00, 800.00, 20.00, 'Debit Card', '2014-05-04 09:45:00'),
-(5, 5, 'Refunded', 620.00, 650.00, 30.00, 'Credit Card', '2014-05-05 16:30:00'),
-(6, 6, 'Completed', 950.00, 1000.00, 50.00, 'PayPal', '2014-05-06 12:10:00'),
-(7, 7, 'Completed', 1100.00, 1100.00, 0.00, 'Credit Card', '2014-05-07 13:25:00'),
-(8, 8, 'Completed', 2200.00, 2200.00, 0.00, 'Bank Transfer', '2014-05-08 15:40:00'),
-(9, 9, 'Cancelled', 1500.00, 1500.00, 0.00, 'Credit Card', '2014-05-09 10:00:00'),
-(10, 10, 'Completed', 890.00, 900.00, 10.00, 'Debit Card', '2014-05-10 11:55:00'),
-(11, 11, 'Completed', 1300.00, 1300.00, 0.00, 'Credit Card', '2014-05-11 17:20:00'),
-(12, 12, 'Completed', 1050.00, 1100.00, 50.00, 'PayPal', '2014-05-12 14:35:00'),
-(13, 13, 'Completed', 1950.00, 2000.00, 50.00, 'Credit Card', '2014-05-13 09:10:00'),
-(14, 14, 'Pending', 800.00, 800.00, 0.00, NULL, NULL),
-(15, 15, 'Completed', 1700.00, 1700.00, 0.00, 'Credit Card', '2014-05-15 16:45:00');
+INSERT INTO Source.Payment (PaymentID, ReservationID, Status, TicketPrice, RealPrice, Discount, Tax, Method, PaymentDateTime) VALUES
+(1, 1, 'Completed', 450.00, 500.00, 50.00, 10 ,'Credit Card', '2014-05-01 10:30:00'),
+(2, 2, 'Completed', 850.00, 850.00, 0.00, 10 ,'PayPal', '2014-05-02 11:15:00'),
+(3, 3, 'Completed', 1200.00, 1200.00, 0.00, 10 ,'Credit Card', '2014-05-03 14:20:00'),
+(4, 4, 'Completed', 780.00, 800.00, 20.00, 10 ,'Debit Card', '2014-05-04 09:45:00'),
+(5, 5, 'Refunded', 620.00, 650.00, 30.00, 10 ,'Credit Card', '2014-05-05 16:30:00'),
+(6, 6, 'Completed', 950.00, 1000.00, 50.00, 10 ,'PayPal', '2014-05-06 12:10:00'),
+(7, 7, 'Completed', 1100.00, 1100.00, 0.00, 10 ,'Credit Card', '2014-05-07 13:25:00'),
+(8, 8, 'Completed', 2200.00, 2200.00, 0.00, 10 ,'Bank Transfer', '2014-05-08 15:40:00'),
+(9, 9, 'Cancelled', 1500.00, 1500.00, 0.00, 10 ,'Credit Card', '2014-05-09 10:00:00'),
+(10, 10, 'Completed', 890.00, 900.00, 10.00, 10 ,'Debit Card', '2014-05-10 11:55:00'),
+(11, 11, 'Completed', 1300.00, 1300.00, 0.00, 10 ,'Credit Card', '2014-05-11 17:20:00'),
+(12, 12, 'Completed', 1050.00, 1100.00, 50.00, 10 ,'PayPal', '2014-05-12 14:35:00'),
+(13, 13, 'Completed', 1950.00, 2000.00, 50.00, 10 ,'Credit Card', '2014-05-13 09:10:00'),
+(14, 14, 'Pending', 800.00, 800.00, 0.00, 10 ,NULL, NULL),
+(15, 15, 'Completed', 1700.00, 1700.00, 0.00, 10 ,'Credit Card', '2014-05-15 16:45:00');
 
 -- PointsTransaction (20 خط)
 INSERT INTO Source.PointsTransaction (TransactionID, AccountID, TransactionDate, TransactionType, PointsChange, Description, ServiceOfferingID) VALUES
