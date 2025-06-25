@@ -46,7 +46,3 @@ MERGE [SA].[Aircraft] AS TARGET
             'OperationalDB'
         );
 END
-
-exec [SA].[ETL_Aircraft]
-
-select * from [SA].[Aircraft]

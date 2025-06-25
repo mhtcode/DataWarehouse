@@ -64,5 +64,3 @@ BEGIN
 END;
 GO
 
-EXEC [SA].[ETL_AirlineAirportService];
-GO

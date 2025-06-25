@@ -45,22 +45,3 @@ BEGIN
                 'OperationalDB'
             );
 END
-
-exec [SA].[ETL_Person]
-
-select * from [SA].[Person]
-
-select * from [Source].[Person]
-
--- Change the phone number for Emma Johnson.
--- Your MERGE procedure should UPDATE the Phone and StagingLastUpdateTimestampUTC columns.
-UPDATE [Source].[Person]
-SET Phone = '+14165559990'
-WHERE PersonID = 2;
-
-
-
--- Add a completely new person.
--- Your MERGE procedure should INSERT this entire row into the staging table.
-INSERT INTO [Source].[Person] (PersonID, NatCode, Name, Phone, Email, Address, City, Country, DateOfBirth, Gender, PostalCode)
-VALUES (21, 'U445566', 'Lucas Novak', '+420777123456', 'l.novak@email.com', 'Old Town Square 1', 'Prague', 'Czech Republic', '1998-10-20', 'Male', '110 00');

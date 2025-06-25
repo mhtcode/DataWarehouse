@@ -32,7 +32,7 @@ BEGIN
         ) VALUES (
         'InitialFactPassengerTicket',
         'FactPassengerTicket_Transactional',
-        'Procedure started - awaiting for completion of ' + CONVERT(date, @CurrentDate, 101),
+        'Procedure started - awaiting for completion of ' + CONVERT(varchar, @CurrentDate, 101),
         @StartTime,
         'Fatal'
         );
@@ -58,7 +58,7 @@ BEGIN
         BEGIN
             UPDATE DW.ETL_Log
             SET
-                ChangeDescription = 'load complete DATE: ' + CONVERT(date, @CurrentDate, 101),
+                ChangeDescription = 'load complete DATE: ' + CONVERT(varchar, @CurrentDate, 101),
                 RowsAffected      = @RowCount,
                 DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
                 Status            = 'Success'
@@ -134,7 +134,7 @@ BEGIN
 
         UPDATE DW.ETL_Log
         SET
-            ChangeDescription = 'load complete DATE: ' + CONVERT(date, @CurrentDate, 101),
+            ChangeDescription = 'load complete DATE: ' + CONVERT(varchar, @CurrentDate, 101),
             RowsAffected      = @RowCount,
             DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
             Status            = 'Success'
@@ -145,7 +145,7 @@ BEGIN
         -- 4) Update log entry to Error
         UPDATE DW.ETL_Log
         SET
-            ChangeDescription = 'load failed DATE: ' + CONVERT(date, @CurrentDate, 101),
+            ChangeDescription = 'load failed DATE: ' + CONVERT(varchar, @CurrentDate, 101),
             DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
             Status            = 'Error',
             Message           = @ErrMsg

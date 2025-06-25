@@ -31,3 +31,4 @@ DROP TABLE IF EXISTS [SA].[MaintenanceLocation];
 DROP TABLE IF EXISTS [SA].[Part];
 
 DROP TABLE IF EXISTS [SA].[AirlineAirportService];
+DROP TABLE IF EXISTS [SA].[LoyaltyTier];
