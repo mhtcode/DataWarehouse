@@ -42,7 +42,7 @@ BEGIN
             SOURCE.FlightDetailID,
             SOURCE.DepartureAirportID,
             SOURCE.DestinationAirportID,
-            DistancKM,
+            SOURCE.DistanceKM,
             SOURCE.DepartureDateTime,
             SOURCE.ArrivalDateTime,
             SOURCE.AircraftID,

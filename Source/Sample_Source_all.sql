@@ -208,7 +208,7 @@ INSERT INTO Source.Reservation (ReservationID, PassengerID, FlightDetailID, Rese
 (15, 15, 14, '2014-05-15', 6, 'Booked');
 
 -- Payment (15 خط)
-INSERT INTO Source.Payment (PaymentID, ReservationID, Status, TicketPrice, RealPrice, Discount, Tax, Method, PaymentDateTime) VALUES
+INSERT INTO Source.Payment (PaymentID, ReservationID, BuyerID, Status, TicketPrice, RealPrice, Discount, Tax, Method, PaymentDateTime) VALUES
 (1, 1, 2, 'Completed', 450.00, 500.00, 50.00, 10 ,'Credit Card', '2014-05-01 10:30:00'),
 (2, 2, 3, 'Completed', 850.00, 850.00, 0.00, 10 ,'PayPal', '2014-05-02 11:15:00'),
 (3, 3, 4, 'Completed', 1200.00, 1200.00, 0.00, 10 ,'Credit Card', '2014-05-03 14:20:00'),
