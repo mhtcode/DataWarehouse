@@ -70,6 +70,72 @@ CREATE TABLE [Source].[Account] (
 )
 GO
 
+CREATE TABLE [Source].[LoyaltyTransactionType] (
+  [LoyaltyTransactionTypeID] INT PRIMARY KEY,
+  [TypeName] VARCHAR(50)
+)
+GO
+
+CREATE TABLE [Source].[PointConversionRate] (
+  [PointConversionRateID] INT PRIMARY KEY IDENTITY(1,1),
+  [EffectiveFrom] DATETIME NOT NULL,
+  [EffectiveTo] DATETIME,
+  [ConversionRate] DECIMAL(18,6) NOT NULL,
+  [CurrencyCode] VARCHAR(10) DEFAULT 'USD',
+  [IsCurrent] BIT DEFAULT 1
+)
+GO
+
+CREATE TABLE [Source].[PointsTransaction] (
+  [PointsTransactionID] INT PRIMARY KEY,
+  [AccountID] INT NOT NULL,
+  [TransactionDate] DATETIME NOT NULL,
+  [LoyaltyTransactionTypeID] INT NOT NULL,
+  [PointsChange] DECIMAL(18,2) NOT NULL,
+  [BalanceAfterTransaction] DECIMAL(18,2) NOT NULL,
+  [USDValue] DECIMAL(18,2),
+  [ConversionRate] DECIMAL(18,6),
+  [PointConversionRateID] INT,
+  [Description] VARCHAR(200),
+  [ServiceOfferingID] INT,
+  [FlightDetailID] INT
+)
+GO
+
+CREATE TABLE [Source].[TravelClass] (
+  [TravelClassID] INT PRIMARY KEY,
+  [ClassName] VARCHAR(50) NOT NULL,
+  [Capacity] INT,
+  [BaseCost] DECIMAL(18,2)
+)
+GO
+
+CREATE TABLE [Source].[Item] (
+  [ItemID] INT PRIMARY KEY,
+  [ItemName] VARCHAR(100),
+  [Description] VARCHAR(300),
+  [BasePrice] DECIMAL(18,2),
+  [IsLoyaltyRedeemable] BIT DEFAULT 0
+)
+GO
+
+CREATE TABLE [Source].[ServiceOffering] (
+  [ServiceOfferingID] INT PRIMARY KEY,
+  [TravelClassID] INT,
+  [OfferingName] VARCHAR(100),
+  [Description] VARCHAR(300),
+  [TotalCost] DECIMAL(18,2)
+)
+GO
+
+CREATE TABLE [Source].[ServiceOfferingItem] (
+  [ServiceOfferingID] INT,
+  [ItemID] INT,
+  [Quantity] INT,
+  PRIMARY KEY ([ServiceOfferingID], [ItemID])
+)
+GO
+
 CREATE TABLE [Source].[Points] (
   [PointsID] integer PRIMARY KEY,
   [AccountID] integer NOT NULL,
@@ -78,16 +144,6 @@ CREATE TABLE [Source].[Points] (
 )
 GO
 
-CREATE TABLE [Source].[PointsTransaction] (
-  [TransactionID] integer PRIMARY KEY,
-  [AccountID] integer NOT NULL,
-  [TransactionDate] datetime NOT NULL,
-  [TransactionType] varchar(10) NOT NULL,
-  [PointsChange] decimal(18,2) NOT NULL,
-  [Description] varchar(200),
-  [ServiceOfferingID] integer
-)
-GO
 
 CREATE TABLE [Source].[LoyaltyTier] (
   [LoyaltyTierID] integer PRIMARY KEY,
@@ -124,22 +180,6 @@ CREATE TABLE [Source].[FlightDetail] (
   [AircraftID] integer,
   [FlightCapacity] integer NOT NULL,
   [TotalCost] decimal(18,2)
-)
-GO
-
-CREATE TABLE [Source].[TravelClass] (
-  [TravelClassID] integer PRIMARY KEY,
-  [Name] varchar(50) NOT NULL,
-  [Capacity] integer,
-  [Cost] decimal(18,2)
-)
-GO
-
-CREATE TABLE [Source].[ServiceOffering] (
-  [ServiceOfferingID] integer PRIMARY KEY,
-  [TravelClassID] integer,
-  [Name] varchar(100),
-  [Cost] decimal(18,2)
 )
 GO
 
