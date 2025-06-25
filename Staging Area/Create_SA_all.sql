@@ -213,6 +213,7 @@ GO
 CREATE TABLE [SA].[Payment] (
   [PaymentID] integer PRIMARY KEY,
   [ReservationID] integer NOT NULL,
+  [BuyerID] integer NOT NULL,
   [Status] varchar(20) DEFAULT 'Pending',
   [Amount] decimal(18,2) NOT NULL,
   [RealPrice] decimal(18,2),
