@@ -52,19 +52,95 @@ INSERT INTO Source.Person (PersonID, NatCode, Name, Phone, Email, Address, City,
 (19, 'S001122', 'Benjamin Kim', '+82212345678', 'b.kim@email.com', '777 Gangnam-gu', 'Seoul', 'South Korea', '1986-09-17', 'Male', '06164'),
 (20, 'T334455', 'Isabella Rossi', '+390612345678', 'i.rossi@email.com', '888 Via Veneto', 'Rome', 'Italy', '1993-06-30', 'Female', '00187');
 
--- LoyaltyTier (4 خط)
 INSERT INTO Source.LoyaltyTier (LoyaltyTierID, Name, MinPoints, Benefits) VALUES
-(1, 'Blue', 0, 'Basic benefits'),
-(2, 'Silver', 10000, 'Priority boarding, free seat selection'),
+(1, 'Basic', 0, 'Basic services'),
+(2, 'Silver', 10000, 'Priority check-in, free seat selection'),
 (3, 'Gold', 50000, 'Lounge access, extra baggage'),
-(4, 'Platinum', 100000, 'First class upgrades, personal assistant');
+(4, 'Platinum', 100000, 'First class upgrades, dedicated support');
+
+
+INSERT INTO Source.Account (AccountID, PassengerID, RegistrationDate, LoyaltyTierID) VALUES
+(1, 1, '2009-04-10', 1),
+(2, 2, '2010-07-12', 2),
+(3, 3, '2011-05-20', 1),
+(4, 4, '2011-11-30', 1),
+(5, 5, '2012-02-10', 3),
+(6, 6, '2012-08-22', 2),
+(7, 7, '2013-04-15', 1),
+(8, 8, '2013-11-01', 4),
+(9, 9, '2014-03-12', 2),
+(10, 10, '2014-12-15', 1);
+
+
+INSERT INTO Source.AccountTierHistory (HistoryID, AccountID, LoyaltyTierID, EffectiveFrom, EffectiveTo, CurrentFlag) VALUES
+(1, 1, 1, '2009-04-10', NULL, 1),
+(2, 2, 1, '2010-07-12', '2012-08-01', 0),
+(3, 2, 2, '2012-08-02', NULL, 1),
+(4, 3, 1, '2011-05-20', NULL, 1),
+(5, 4, 1, '2011-11-30', NULL, 1),
+(6, 5, 1, '2012-02-10', '2012-10-15', 0),
+(7, 5, 3, '2012-10-16', NULL, 1),
+(8, 6, 2, '2012-08-22', NULL, 1),
+(9, 8, 4, '2013-11-01', NULL, 1),
+(10, 9, 2, '2014-03-12', NULL, 1);
+
+
+INSERT INTO Source.Points (PointsID, AccountID, PointsBalance, EffectiveDate) VALUES
+(1, 1, 2000, '2009-04-10'),
+(2, 2, 15000, '2012-08-02'),
+(3, 3, 700, '2011-05-20'),
+(4, 4, 1500, '2011-11-30'),
+(5, 5, 60000, '2012-10-16'),
+(6, 6, 20000, '2012-08-22'),
+(7, 7, 500, '2013-04-15'),
+(8, 8, 130000, '2013-11-01'),
+(9, 9, 17000, '2014-03-12'),
+(10, 10, 1000, '2014-12-15');
+
+
+INSERT INTO Source.LoyaltyTransactionType (LoyaltyTransactionTypeID, TypeName) VALUES
+(1, 'Earn'),
+(2, 'Redeem'),
+(3, 'Expire'),
+(4, 'Adjust'),
+(5, 'Bonus');
+
+INSERT INTO Source.PointConversionRate (EffectiveFrom, EffectiveTo, ConversionRate, CurrencyCode, IsCurrent) VALUES
+('2009-03-21', '2012-12-31', 0.010000, 'USD', 0),
+('2013-01-01', '2014-01-01', 0.012500, 'USD', 0),
+('2014-01-02', NULL, 0.013000, 'USD', 1);
+
+INSERT INTO [Source].[PointsTransaction]
+(PointsTransactionID, AccountID, TransactionDate, LoyaltyTransactionTypeID, PointsChange, BalanceAfterTransaction, USDValue, ConversionRate, PointConversionRateID, Description, ServiceOfferingID, FlightDetailID)
+VALUES
+(1, 1, '2014-05-01', 1, 500.00, 5500.00, 5.00, 0.01, NULL, 'Flight Booking', 1, 1),
+(2, 2, '2014-05-02', 1, 850.00, 15850.00, 8.50, 0.01, NULL, 'Flight Booking', 2, 1),
+(3, 3, '2014-05-03', 1, 1200.00, 76200.00, 12.00, 0.01, NULL, 'Flight Booking', 3, 2),
+(4, 4, '2014-05-04', 1, 780.00, 3780.00, 7.80, 0.01, NULL, 'Flight Booking', 1, 3),
+(5, 5, '2014-05-05', 2, -200.00, 24800.00, -2.00, 0.01, NULL, 'Seat Upgrade', 9, 4),
+(6, 6, '2014-05-06', 1, 950.00, 120950.00, 9.50, 0.01, NULL, 'Flight Booking', 4, 5),
+(7, 7, '2014-05-07', 1, 1100.00, 9100.00, 11.00, 0.01, NULL, 'Flight Booking', 5, 6),
+(8, 8, '2014-05-08', 1, 2200.00, 67200.00, 22.00, 0.01, NULL, 'Flight Booking', 6, 7),
+(9, 9, '2014-05-09', 3, -1500.00, 33500.00, -15.00, 0.01, NULL, 'Points Expiration', NULL, 8),
+(10, 10, '2014-05-10', 1, 890.00, 2890.00, 8.90, 0.01, NULL, 'Flight Booking', 7, 9),
+(11, 11, '2014-05-11', 1, 1300.00, 111300.00, 13.00, 0.01, NULL, 'Flight Booking', 8, 10),
+(12, 12, '2014-05-12', 1, 1050.00, 5050.00, 10.50, 0.01, NULL, 'Flight Booking', 9, 11),
+(13, 13, '2014-05-13', 1, 1950.00, 19950.00, 19.50, 0.01, NULL, 'Flight Booking', 10, 12),
+(14, 14, '2014-05-14', 2, -300.00, 6700.00, -3.00, 0.01, NULL, 'Extra Baggage', 4, 13),
+(15, 15, '2014-05-15', 1, 1700.00, 86700.00, 17.00, 0.01, NULL, 'Flight Booking', 1, 14),
+(16, 1, '2014-05-16', 2, -100.00, 5400.00, -1.00, 0.01, NULL, 'Meal Upgrade', 2, 1),
+(17, 2, '2014-05-17', 4, 50.00, 15900.00, 0.50, 0.01, NULL, 'Correction', NULL, 2),
+(18, 3, '2014-05-18', 2, -500.00, 75700.00, -5.00, 0.01, NULL, 'Lounge Access', 6, 3),
+(19, 4, '2014-05-19', 1, 200.00, 3980.00, 2.00, 0.01, NULL, 'Referral Bonus', NULL, 4),
+(20, 5, '2014-05-20', 3, -100.00, 24700.00, -1.00, 0.01, NULL, 'Points Expiration', NULL, 5);
 
 -- TravelClass (4 خط)
-INSERT INTO Source.TravelClass (TravelClassID, Name, Capacity, Cost) VALUES
-(1, 'Economy', 300, 1000.00),
-(2, 'Premium Economy', 50, 2000.00),
-(3, 'Business', 30, 5000.00),
-(4, 'First Class', 10, 10000.00);
+INSERT INTO [Source].[TravelClass] (TravelClassID, ClassName, Capacity, BaseCost) VALUES
+(1, 'Economy', 300, 150.00),
+(2, 'Premium Economy', 60, 400.00),
+(3, 'Business', 40, 1200.00),
+(4, 'First Class', 12, 4000.00);
+
 
 -- Aircraft (12 خط)
 INSERT INTO Source.Aircraft (AircraftID, Model, Type, ManufacturerDate, Capacity, Price, AirlineID) VALUES
@@ -136,17 +212,43 @@ INSERT INTO Source.Points (PointsID, AccountID, PointsBalance, EffectiveDate) VA
 (15, 15, 85000.00, '2014-01-01');
 
 -- ServiceOffering (10 خط)
-INSERT INTO Source.ServiceOffering (ServiceOfferingID, TravelClassID, Name, Cost) VALUES
-(1, 1, 'Standard Meal', 15.00),
-(2, 2, 'Premium Meal', 30.00),
-(3, 3, 'Gourmet Meal', 60.00),
-(4, NULL, 'Extra Baggage (23kg)', 50.00),
-(5, NULL, 'Priority Boarding', 20.00),
-(6, NULL, 'Airport Lounge Access', 60.00),
-(7, 4, 'Chauffeur Service', 100.00),
-(8, 1, 'Seat Selection', 10.00),
-(9, 2, 'Advanced Seat Selection', 25.00),
-(10, 3, 'Flat Bed Setup', 0.00);
+INSERT INTO Source.ServiceOffering (ServiceOfferingID, TravelClassID, OfferingName, Description, TotalCost) VALUES
+(1, 1, 'Standard Meal', 'Basic meal for Economy Class', 15.00),
+(2, 2, 'Premium Meal', 'Premium meal for Premium Economy', 30.00),
+(3, 3, 'Gourmet Meal', 'Gourmet meal for Business Class', 60.00),
+(4, NULL, 'Extra Baggage (23kg)', 'Add-on baggage for all classes', 50.00),
+(5, NULL, 'Priority Boarding', 'Skip the queue at boarding', 20.00),
+(6, NULL, 'Lounge Access', 'Access to business lounges', 60.00),
+(7, 4, 'Chauffeur Service', 'Limousine transfer for First Class', 100.00),
+(8, 1, 'Seat Selection', 'Preferred seat booking', 10.00),
+(9, 2, 'Advanced Seat Selection', 'Advanced seat for Premium Economy', 25.00),
+(10, 3, 'Flat Bed Setup', 'Business Class flat bed', 0.00);
+
+
+INSERT INTO Source.Item (ItemID, ItemName, Description, BasePrice, IsLoyaltyRedeemable) VALUES
+(1, 'Water Bottle', '500ml bottled water', 2.00, 1),
+(2, 'Snack Pack', 'Assorted snacks', 5.00, 1),
+(3, 'Headphones', 'Noise-cancelling headphones', 15.00, 0),
+(4, 'Blanket', 'Soft travel blanket', 10.00, 1),
+(5, 'Travel Pillow', 'Memory foam pillow', 12.00, 1),
+(6, 'Magazine', 'Travel magazine', 4.00, 0),
+(7, 'Wi-Fi Pass', 'In-flight internet', 20.00, 1),
+(8, 'Meal Upgrade', 'Premium meal upgrade', 25.00, 1),
+(9, 'Gift Voucher', 'Onboard gift voucher', 50.00, 1),
+(10, 'Kids Pack', 'Children’s entertainment kit', 8.00, 1);
+
+INSERT INTO Source.ServiceOfferingItem (ServiceOfferingID, ItemID, Quantity) VALUES
+(1, 1, 1),
+(1, 2, 1),
+(2, 1, 1),
+(2, 8, 1),
+(3, 1, 1),
+(3, 3, 1),
+(4, 4, 2),
+(5, 5, 1),
+(6, 6, 1),
+(7, 7, 1);
+
 
 -- FlightDetail (15 خط)
 INSERT INTO Source.FlightDetail (FlightDetailID, DepartureAirportID, DestinationAirportID, DistanceKM, DepartureDateTime, ArrivalDateTime, AircraftID, FlightCapacity, TotalCost) VALUES
@@ -225,30 +327,6 @@ INSERT INTO Source.Payment (PaymentID, ReservationID, BuyerID, Status, TicketPri
 (14, 14, 14,'Pending', 800.00, 800.00, 0.00, 10 ,NULL, NULL),
 (15, 15, 15,'Completed', 1700.00, 1700.00, 0.00, 10 ,'Credit Card', '2014-05-15 16:45:00');
 
--- PointsTransaction (20 خط)
-INSERT INTO Source.PointsTransaction (TransactionID, AccountID, TransactionDate, TransactionType, PointsChange, Description, ServiceOfferingID) VALUES
-(1, 1, '2014-05-01', 'Earn', 500.00, 'Flight Booking', 1),
-(2, 2, '2014-05-02', 'Earn', 850.00, 'Flight Booking', 2),
-(3, 3, '2014-05-03', 'Earn', 1200.00, 'Flight Booking', 3),
-(4, 4, '2014-05-04', 'Earn', 780.00, 'Flight Booking', 1),
-(5, 5, '2014-05-05', 'Redeem', -200.00, 'Seat Upgrade', 9),
-(6, 6, '2014-05-06', 'Earn', 950.00, 'Flight Booking', 4),
-(7, 7, '2014-05-07', 'Earn', 1100.00, 'Flight Booking', 5),
-(8, 8, '2014-05-08', 'Earn', 2200.00, 'Flight Booking', 6),
-(9, 9, '2014-05-09', 'Expire', -1500.00, 'Points Expiration', NULL),
-(10, 10, '2014-05-10', 'Earn', 890.00, 'Flight Booking', 7),
-(11, 11, '2014-05-11', 'Earn', 1300.00, 'Flight Booking', 8),
-(12, 12, '2014-05-12', 'Earn', 1050.00, 'Flight Booking', 9),
-(13, 13, '2014-05-13', 'Earn', 1950.00, 'Flight Booking', 10),
-(14, 14, '2014-05-14', 'Redeem', -300.00, 'Extra Baggage', 4),
-(15, 15, '2014-05-15', 'Earn', 1700.00, 'Flight Booking', 1),
-(16, 1, '2014-05-16', 'Redeem', -100.00, 'Meal Upgrade', 2),
-(17, 2, '2014-05-17', 'Adjust', 50.00, 'Correction', NULL),
-(18, 3, '2014-05-18', 'Redeem', -500.00, 'Lounge Access', 6),
-(19, 4, '2014-05-19', 'Earn', 200.00, 'Referral Bonus', NULL),
-(20, 5, '2014-05-20', 'Expire', -100.00, 'Points Expiration', NULL);
-
--- AccountTierHistory (15 خط)
 INSERT INTO Source.AccountTierHistory (HistoryID, AccountID, LoyaltyTierID, EffectiveFrom, EffectiveTo, CurrentFlag) VALUES
 (1, 1, 1, '2013-01-15', '2010-12-31', 0),
 (2, 1, 2, '2012-01-01', '2012-12-31', 0),
@@ -315,4 +393,4 @@ INSERT INTO Source.FlightOperation (FlightOperationID, FlightDetailID, ActualDep
 (14, 14, '2014-06-07 11:30:00', '2014-06-07 16:45:00', 45, 0),
 (15, 15, '2014-06-08 10:15:00', '2014-06-08 14:30:00', 0, 0);
 
-select * from Source.FlightOperation
+--select * from Source.FlightOperation
