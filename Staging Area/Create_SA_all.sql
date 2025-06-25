@@ -151,6 +151,7 @@ CREATE TABLE [SA].[FlightDetail] (
   [FlightDetailID] integer PRIMARY KEY,
   [DepartureAirportID] integer NOT NULL,
   [DestinationAirportID] integer NOT NULL,
+  [DistanceKM] integer NOT NULL,
   [DepartureDateTime] datetime NOT NULL,
   [ArrivalDateTime] datetime NOT NULL,
   [AircraftID] integer,

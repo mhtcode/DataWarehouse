@@ -17,7 +17,7 @@ CREATE TABLE [FactPassengerTicket_Transactional] (
   [FlightCost] decimal(18,2),  -- Allocated flight cost for this ticket (TotalCost ÷ Capacity) should be fetch from FlightDetail
   [FlightClassPrice] decimal(18,2), -- attributed to class type of the ticket (can match TravelClass.Cost)
   [FlightRevenue] decimal(18,2),  -- Total revenue from this ticket (class + ticket - cost)
-  [MilesFlown] decimal(18,2)  -- Distance flown (calculated from airport coordinates)
+  [kilometersFlown] decimal(18,2)  -- Distance flown (from FlightDetail.DistanceKM)
 )
 GO
 

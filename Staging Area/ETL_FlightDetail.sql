@@ -8,13 +8,14 @@ BEGIN
     -- Action for existing records that have changed
     WHEN MATCHED AND EXISTS (
         -- This clause correctly compares all relevant columns for any changes.
-        SELECT SOURCE.DepartureAirportID, SOURCE.DestinationAirportID, SOURCE.DepartureDateTime, SOURCE.ArrivalDateTime, SOURCE.AircraftID, SOURCE.FlightCapacity, SOURCE.TotalCost
+        SELECT SOURCE.DepartureAirportID, SOURCE.DestinationAirportID, SOURCE.DistanceKM, SOURCE.DepartureDateTime, SOURCE.ArrivalDateTime, SOURCE.AircraftID, SOURCE.FlightCapacity, SOURCE.TotalCost
         EXCEPT
-        SELECT TARGET.DepartureAirportID, TARGET.DestinationAirportID, TARGET.DepartureDateTime, TARGET.ArrivalDateTime, TARGET.AircraftID, TARGET.FlightCapacity, TARGET.TotalCost
+        SELECT TARGET.DepartureAirportID, TARGET.DestinationAirportID, TARGET.DistanceKM, TARGET.DepartureDateTime, TARGET.ArrivalDateTime, TARGET.AircraftID, TARGET.FlightCapacity, TARGET.TotalCost
     ) THEN
         UPDATE SET
             TARGET.DepartureAirportID = SOURCE.DepartureAirportID,
             TARGET.DestinationAirportID = SOURCE.DestinationAirportID,
+            TARGET.DistanceKM = SOURCE.DistanceKM,
             TARGET.DepartureDateTime = SOURCE.DepartureDateTime,
             TARGET.ArrivalDateTime = SOURCE.ArrivalDateTime,
             TARGET.AircraftID = SOURCE.AircraftID,
@@ -28,6 +29,7 @@ BEGIN
             FlightDetailID,
             DepartureAirportID,
             DestinationAirportID,
+            DistanceKM,
             DepartureDateTime,
             ArrivalDateTime,
             AircraftID,
@@ -40,6 +42,7 @@ BEGIN
             SOURCE.FlightDetailID,
             SOURCE.DepartureAirportID,
             SOURCE.DestinationAirportID,
+            DistancKM,
             SOURCE.DepartureDateTime,
             SOURCE.ArrivalDateTime,
             SOURCE.AircraftID,
