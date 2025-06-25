@@ -150,7 +150,7 @@ BEGIN
         -- 4) Update log entry to Error
         UPDATE DW.ETL_Log
         SET
-            ChangeDescription = 'load failed DATE: ' + CONVERT(date, @CurrentDate, 101)
+            ChangeDescription = 'load failed DATE: ' + CONVERT(date, @CurrentDate, 101),
             DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
             Status            = 'Error',
             Message           = @ErrMsg
