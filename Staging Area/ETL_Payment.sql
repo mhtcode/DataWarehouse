@@ -8,12 +8,13 @@ BEGIN
     -- Action for existing records that have changed
     WHEN MATCHED AND EXISTS (
         -- This clause correctly compares all relevant columns for any changes.
-        SELECT SOURCE.ReservationID, SOURCE.Status, SOURCE.TicketPrice, SOURCE.RealPrice, SOURCE.Discount, SOURCE.Tax, SOURCE.Method, SOURCE.PaymentDateTime
+        SELECT SOURCE.ReservationID, SOURCE.BuyerID, SOURCE.Status, SOURCE.TicketPrice, SOURCE.RealPrice, SOURCE.Discount, SOURCE.Tax, SOURCE.Method, SOURCE.PaymentDateTime
         EXCEPT
-        SELECT TARGET.ReservationID, TARGET.Status, TARGET.TicketPrice, TARGET.RealPrice, TARGET.Discount, TARGET.Tax, TARGET.Method, TARGET.PaymentDateTime
+        SELECT TARGET.ReservationID, TARGET.BuyerID, TARGET.Status, TARGET.TicketPrice, TARGET.RealPrice, TARGET.Discount, TARGET.Tax, TARGET.Method, TARGET.PaymentDateTime
     ) THEN
         UPDATE SET
             TARGET.ReservationID = SOURCE.ReservationID,
+            TARGET.BuyerID = SOURCE.BuyerID,
             TARGET.Status = NULLIF(TRIM(SOURCE.Status), ''),
             TARGET.TicketPrice = SOURCE.TicketPrice,
             TARGET.RealPrice = SOURCE.RealPrice,
@@ -28,6 +29,7 @@ BEGIN
         INSERT (
             PaymentID,
             ReservationID,
+            BuyerID,
             Status,
             TicketPrice,
             RealPrice,
@@ -41,6 +43,7 @@ BEGIN
         VALUES (
             SOURCE.PaymentID,
             SOURCE.ReservationID,
+            SOURCE.BuyerID,
             NULLIF(TRIM(SOURCE.Status), ''),
             SOURCE.TicketPrice,
             SOURCE.RealPrice,

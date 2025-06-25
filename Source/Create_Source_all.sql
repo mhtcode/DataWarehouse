@@ -165,6 +165,7 @@ GO
 CREATE TABLE [Source].[Payment] (
   [PaymentID] integer PRIMARY KEY,
   [ReservationID] integer NOT NULL,
+  [BuyerID] integer NOT NULL,
   [Status] varchar(20) DEFAULT 'Pending',
   [RealPrice] decimal(18,2),
   [TicketPrice] decimal(18,2) NOT NULL,
