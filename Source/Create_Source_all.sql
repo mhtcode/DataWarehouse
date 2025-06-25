@@ -228,3 +228,16 @@ CREATE TABLE [Source].[Part] (
   [Category]               varchar(50)
 );
 GO
+
+CREATE TABLE [Source].[AirlineAirportService] (
+    [ServiceTypeCode] VARCHAR(50) NOT NULL,
+    [FlightTypeCode] VARCHAR(50) NOT NULL,
+    [ServiceTypeName] VARCHAR(100) NOT NULL,
+    [FlightTypeName] VARCHAR(100) NOT NULL,
+    [ContractStartDate] DATE NOT NULL,
+    [ContractEndDate] DATE,
+    [LandingFeeRate] DECIMAL(18,4),
+    [PassengerServiceRate] DECIMAL(18,4),
+    CONSTRAINT [PK_Source_AirlineAirportService] PRIMARY KEY ([ServiceTypeCode], [FlightTypeCode])
+);
+GO

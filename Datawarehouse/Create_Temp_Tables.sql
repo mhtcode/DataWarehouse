@@ -146,3 +146,18 @@ END;
 GO
 
 
+IF OBJECT_ID('[DW].[Temp_AirlineAirportService_table]', 'U') IS NULL
+BEGIN
+  CREATE TABLE [DW].[Temp_AirlineAirportService_table] (
+    [ServiceTypeCode] VARCHAR(50) NOT NULL,
+    [FlightTypeCode] VARCHAR(50) NOT NULL,
+    [ServiceTypeName] VARCHAR(100) NULL,
+    [FlightTypeName] VARCHAR(100) NULL,
+    [ContractStartDate] DATE NULL,
+    [ContractEndDate] DATE NULL,
+    [LandingFeeRate] DECIMAL(18,4) NULL,
+    [PassengerServiceRate] DECIMAL(18,4) NULL
+  );
+END;
+GO
+
