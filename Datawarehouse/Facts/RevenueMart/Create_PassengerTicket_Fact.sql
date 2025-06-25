@@ -1,4 +1,4 @@
-CREATE TABLE [FactPassengerTicket_Transactional] (
+CREATE TABLE [DW].[FactPassengerTicket_Transactional] (
   [PaymentDateKey] datetime,
   [FlightDateKey] datetime,
   [BuyerPersonKey] int,
