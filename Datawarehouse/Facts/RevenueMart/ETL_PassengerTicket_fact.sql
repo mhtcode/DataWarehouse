@@ -68,7 +68,7 @@ BEGIN
             DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
             Status            = 'Success'
         WHERE LogID = @LogID;
-        
+        CONTINUE;
         END
 
         ------------------------------------------------------------------------------------
