@@ -162,44 +162,45 @@ GO
 
 IF OBJECT_ID('[DW].[Temp_DailyPayments]', 'U') IS NULL
 BEGIN
-    CREATE TABLE [DW].[Temp_DailyPayments](
-        [PaymentID] [int] NOT NULL,
-        [ReservationID] [int] NOT NULL,
-        [BuyerID] [int] NOT NULL,
-        [Amount] [decimal](18, 2) NOT NULL,
-        [RealPrice] [decimal](18, 2) NULL,
-        [Discount] [decimal](18, 2) NULL,
-        [PaymentDateTime] [datetime] NULL,
-        [TicketHolderPassengerID] [int] NOT NULL,
-        [FlightDetailID] [int] NOT NULL,
-        [SeatDetailID] [int] NULL
-    );
+  CREATE TABLE [DW].[Temp_DailyPayments](
+    [PaymentID] [int] NOT NULL,
+    [ReservationID] [int] NOT NULL,
+    [BuyerID] [int] NOT NULL,
+    [RealPrice] [decimal](18, 2) NULL,
+    [TicketPrice] [decimal](18, 2) NOT NULL,
+    [Discount] [decimal](18, 2) NULL,
+    [Tax] [decimal](18, 2) NULL,
+    [PaymentDateTime] [datetime] NULL,
+    [TicketHolderPassengerID] [int] NOT NULL,
+    [FlightDetailID] [int] NOT NULL,
+    [SeatDetailID] [int] NULL
+  );
 END;
 GO
 
 IF OBJECT_ID('[DW].[Temp_EnrichedFlightData]', 'U') IS NULL
 BEGIN
-    CREATE TABLE [DW].[Temp_EnrichedFlightData](
-        [PaymentID] [int] NOT NULL,
-        [FlightDateKey] [datetime] NOT NULL,
-        [FlightKey] [int] NOT NULL,
-        [AircraftKey] [int] NULL,
-        [AirlineKey] [int] NOT NULL,
-        [SourceAirportKey] [int] NOT NULL,
-        [DestinationAirportKey] [int] NOT NULL,
-        [FlightClassPrice] [decimal](18, 2) NULL,
-        [FlightCost] [decimal](18, 2) NULL,
-        [KilometersFlown] [decimal](18, 2) NULL
-    );
+  CREATE TABLE [DW].[Temp_EnrichedFlightData](
+    [PaymentID] [int] NOT NULL,
+    [FlightDateKey] [datetime] NOT NULL,
+    [FlightKey] [int] NOT NULL,
+    [AircraftKey] [int] NULL,
+    [AirlineKey] [int] NOT NULL,
+    [SourceAirportKey] [int] NOT NULL,
+    [DestinationAirportKey] [int] NOT NULL,
+    [FlightClassPrice] [decimal](18, 2) NULL,
+    [FlightCost] [decimal](18, 2) NULL,
+    [KilometersFlown] [decimal](18, 2) NULL
+  );
 END;
 GO
 
 IF OBJECT_ID('[DW].[Temp_EnrichedPersonData]', 'U') IS NULL
 BEGIN
-    CREATE TABLE [DW].[Temp_EnrichedPersonData](
-        [PaymentID] [int] NOT NULL,
-        [BuyerPersonKey] [int] NOT NULL,
-        [TicketHolderPersonKey] [int] NOT NULL
-    );
+  CREATE TABLE [DW].[Temp_EnrichedPersonData](
+    [PaymentID] [int] NOT NULL,
+    [BuyerPersonKey] [int] NOT NULL,
+    [TicketHolderPersonKey] [int] NOT NULL
+  );
 END;
 GO
