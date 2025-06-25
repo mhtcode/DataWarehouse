@@ -21,3 +21,5 @@ BEGIN
     EXEC [SA].[ETL_ServiceOffering]
     EXEC [SA].[ETL_TravelClass]
 END
+
+exec [SA].[Main_ETL]

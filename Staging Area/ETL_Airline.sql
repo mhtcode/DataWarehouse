@@ -56,5 +56,3 @@ BEGIN
 
 END;
 GO
-
-EXEC [SA].[ETL_Airline];

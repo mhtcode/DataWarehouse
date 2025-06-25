@@ -315,3 +315,4 @@ INSERT INTO Source.FlightOperation (FlightOperationID, FlightDetailID, ActualDep
 (14, 14, '2014-06-07 11:30:00', '2014-06-07 16:45:00', 45, 0),
 (15, 15, '2014-06-08 10:15:00', '2014-06-08 14:30:00', 0, 0);
 
+select * from Source.FlightOperation

@@ -37,5 +37,3 @@ BEGIN
             'OperationalDB'
         ); -- Mandatory Semicolon
 END
-
-exec [SA].[ETL_Account]

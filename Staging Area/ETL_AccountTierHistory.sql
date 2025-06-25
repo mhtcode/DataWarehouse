@@ -13,7 +13,6 @@ BEGIN
         SELECT TARGET.HistoryID, TARGET.AccountID, TARGET.LoyaltyTierID, TARGET.EffectiveFrom, TARGET.EffectiveTo, TARGET.CurrentFlag
     ) THEN
         UPDATE SET
-            TARGET.PassengerID = SOURCE.PassengerID,
             TARGET.HistoryID = SOURCE.HistoryID,
             TARGET.AccountID = SOURCE.AccountID,
             TARGET.LoyaltyTierID = SOURCE.LoyaltyTierID,
@@ -24,8 +23,7 @@ BEGIN
 
     -- Action for new records
     WHEN NOT MATCHED BY TARGET THEN
-        INSERT (
-            PassengerID,
+        INSERT (    
             HistoryID,
             AccountID,
             LoyaltyTierID,
@@ -36,7 +34,6 @@ BEGIN
             SourceSystem
         )
         VALUES (
-            SOURCE.PassengerID,
             SOURCE.HistoryID,
             SOURCE.AccountID,
             SOURCE.LoyaltyTierID,
