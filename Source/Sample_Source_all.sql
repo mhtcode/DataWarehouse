@@ -59,45 +59,6 @@ INSERT INTO Source.LoyaltyTier (LoyaltyTierID, Name, MinPoints, Benefits) VALUES
 (4, 'Platinum', 100000, 'First class upgrades, dedicated support');
 
 
-INSERT INTO Source.Account (AccountID, PassengerID, RegistrationDate, LoyaltyTierID) VALUES
-(1, 1, '2009-04-10', 1),
-(2, 2, '2010-07-12', 2),
-(3, 3, '2011-05-20', 1),
-(4, 4, '2011-11-30', 1),
-(5, 5, '2012-02-10', 3),
-(6, 6, '2012-08-22', 2),
-(7, 7, '2013-04-15', 1),
-(8, 8, '2013-11-01', 4),
-(9, 9, '2014-03-12', 2),
-(10, 10, '2014-12-15', 1);
-
-
-INSERT INTO Source.AccountTierHistory (HistoryID, AccountID, LoyaltyTierID, EffectiveFrom, EffectiveTo, CurrentFlag) VALUES
-(1, 1, 1, '2009-04-10', NULL, 1),
-(2, 2, 1, '2010-07-12', '2012-08-01', 0),
-(3, 2, 2, '2012-08-02', NULL, 1),
-(4, 3, 1, '2011-05-20', NULL, 1),
-(5, 4, 1, '2011-11-30', NULL, 1),
-(6, 5, 1, '2012-02-10', '2012-10-15', 0),
-(7, 5, 3, '2012-10-16', NULL, 1),
-(8, 6, 2, '2012-08-22', NULL, 1),
-(9, 8, 4, '2013-11-01', NULL, 1),
-(10, 9, 2, '2014-03-12', NULL, 1);
-
-
-INSERT INTO Source.Points (PointsID, AccountID, PointsBalance, EffectiveDate) VALUES
-(1, 1, 2000, '2009-04-10'),
-(2, 2, 15000, '2012-08-02'),
-(3, 3, 700, '2011-05-20'),
-(4, 4, 1500, '2011-11-30'),
-(5, 5, 60000, '2012-10-16'),
-(6, 6, 20000, '2012-08-22'),
-(7, 7, 500, '2013-04-15'),
-(8, 8, 130000, '2013-11-01'),
-(9, 9, 17000, '2014-03-12'),
-(10, 10, 1000, '2014-12-15');
-
-
 INSERT INTO Source.LoyaltyTransactionType (LoyaltyTransactionTypeID, TypeName) VALUES
 (1, 'Earn'),
 (2, 'Redeem'),
@@ -174,6 +135,7 @@ INSERT INTO Source.Passenger (PassengerID, PersonID, PassportNumber) VALUES
 (13, 13, 'P23456789'),
 (14, 14, 'P98765432'),
 (15, 15, 'P55544433');
+
 
 -- Account (15 خط)
 INSERT INTO Source.Account (AccountID, PassengerID, RegistrationDate, LoyaltyTierID) VALUES
