@@ -29,3 +29,5 @@ DROP TABLE IF EXISTS [SA].[MaintenanceType];
 DROP TABLE IF EXISTS [SA].[Technician];
 DROP TABLE IF EXISTS [SA].[MaintenanceLocation];
 DROP TABLE IF EXISTS [SA].[Part];
+
+DROP TABLE IF EXISTS [SA].[AirlineAirportService];

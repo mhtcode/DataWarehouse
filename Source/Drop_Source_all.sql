@@ -22,3 +22,4 @@ DROP TABLE IF EXISTS [Source].[MaintenanceType];
 DROP TABLE IF EXISTS [Source].[Technician];
 DROP TABLE IF EXISTS [Source].[MaintenanceLocation];
 DROP TABLE IF EXISTS [Source].[Part];
+DROP TABLE IF EXISTS [Source].[AirlineAirportService];
