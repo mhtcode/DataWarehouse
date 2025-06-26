@@ -62,7 +62,7 @@
       "Datawarehouse/Dimensions/Initial_LoyaltyTransactionType_Dim.sql",
       "Datawarehouse/Dimensions/Create_MaintenanceLocation_Dim.sql",
       "Datawarehouse/Dimensions/Create_MaintenanceType_Dim.sql",
-      "Datawarehouse/Dimensions/Create_Parts_Dim.sql",
+      "Datawarehouse/Dimensions/Create_Part_Dim.sql",
       "Datawarehouse/Dimensions/Create_Payment_Dim.sql",
       "Datawarehouse/Dimensions/Initial_Payment_Dim.sql",
       "Datawarehouse/Dimensions/Create_Person_Dim.sql",
