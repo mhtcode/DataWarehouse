@@ -35,11 +35,10 @@ GO
 IF OBJECT_ID('[DW].[Temp_Account_table]', 'U') IS NULL
 BEGIN
   CREATE TABLE [DW].[Temp_Account_table] (
-    AccountID       INT             NOT NULL PRIMARY KEY,
-    AccountNumber   NVARCHAR(255)   NULL,
-    AccountType     NVARCHAR(255)   NULL,
-    CreatedDate     DATETIME        NULL,
-    IsActive        BIT             NULL
+    [AccountID] INT PRIMARY KEY,
+    [PassengerName] NVARCHAR(100),
+    [RegistrationDate] DATETIME,
+    [LoyaltyTierName] NVARCHAR(50)
   );
 END;
 GO
@@ -54,7 +53,7 @@ BEGIN
     FoundedYear   INT            NULL,
     FleetSize     INT            NULL,
     Website       NVARCHAR(255)  NULL,
-	Current_IATA_Code varchar(3) NULL,
+	  Current_IATA_Code varchar(3) NULL,
     Previous_IATA_Code varchar(3) NULL,
     IATA_Code_Changed_Date date NULL,
   );
@@ -227,20 +226,31 @@ IF OBJECT_ID('[DW].[Temp_EnrichedFlightPerformanceData]', 'U') IS NULL
 BEGIN
   CREATE TABLE [DW].[Temp_EnrichedFlightPerformanceData](
     [FlightOperationID] [int] PRIMARY KEY,
-      -- Timestamps
     [ScheduledDepartureDateTime] [datetime] NOT NULL,
     [ScheduledArrivalDateTime] [datetime] NOT NULL,
-      [ActualDepartureDateTime] [datetime] NULL,
+    [ActualDepartureDateTime] [datetime] NULL,
     [ActualArrivalDateTime] [datetime] NULL,
-      -- Dimension Keys
     [DepartureAirportID] [int] NOT NULL,
     [ArrivalAirportID] [int] NOT NULL,
     [AircraftID] [int] NULL,
     [AirlineID] [int] NOT NULL,
-      -- Measures from source
     [DelayMinutes] [int] NULL,
     [LoadFactor] [float] NULL,
     [DelaySeverityScore] [float] NULL
+    );
+END;
+GO
+
+
+IF OBJECT_ID('[DW].[Temp_ServiceOffering_table]', 'U') IS NULL
+BEGIN
+  CREATE TABLE [DW].[Temp_ServiceOffering_table] (
+    [ServiceOfferingID]    INT             NOT NULL,
+    [OfferingName]         NVARCHAR(100)   NULL,
+    [Description]          NVARCHAR(300)   NULL,
+    [TravelClassName]      NVARCHAR(50)    NULL,
+    [TotalCost]            DECIMAL(18,2)   NULL,
+    [ItemsSummary]         NVARCHAR(400)   NULL
   );
 END;
 GO

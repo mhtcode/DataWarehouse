@@ -8,7 +8,7 @@ BEGIN
     @RowsInserted INT,
     @LogID        BIGINT;
 
-  -- 1) Assume fatal: insert initial log entry
+  -- 1) Log procedure start
   INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
@@ -21,16 +21,25 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2) Insert new airports into dimension directly
+    -- 2) Truncate dimension table (optional: if you want a full reload)
+    TRUNCATE TABLE DW.DimAirport;
+
+    -- 3) Insert all airports from SA
     INSERT INTO DW.DimAirport (
-      AirportKey, Name, City, Country,
-      IATACode, ElevationMeter, TimeZone,
-      NumberOfTerminals, AnnualPassengerTraffic,
-      Latitude, Longitude
+      AirportID,
+      City,
+      Country,
+      IATACode,
+      ElevationMeter,
+      TimeZone,
+      NumberOfTerminals,
+      AnnualPassengerTraffic,
+      Latitude,
+      Longitude
+      -- , ManagerName
     )
     SELECT
       a.AirportID,
-      a.Name,
       a.City,
       a.Country,
       a.IATACode,
@@ -40,13 +49,12 @@ BEGIN
       a.AnnualPassengerTraffic,
       a.Latitude,
       a.Longitude
-    FROM SA.Airport AS a
-    WHERE NOT EXISTS (
-      SELECT 1 FROM DW.DimAirport AS d WHERE d.AirportKey = a.AirportID
-    );
+      -- , a.ManagerName
+    FROM SA.Airport AS a;
+
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 3) Update log entry to Success
+    -- 4) Mark log as success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Initial full load complete',
@@ -58,7 +66,7 @@ BEGIN
   END TRY
   BEGIN CATCH
     DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
-    -- 4) Update log entry to Error
+    -- 5) Log error
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Initial load failed',

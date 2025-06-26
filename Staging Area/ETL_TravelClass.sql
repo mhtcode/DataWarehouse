@@ -1,40 +1,48 @@
 CREATE OR ALTER PROCEDURE [SA].[ETL_TravelClass]
 AS
 BEGIN
+    SET NOCOUNT ON;
+
     MERGE [SA].[TravelClass] AS TARGET
     USING [Source].[TravelClass] AS SOURCE
     ON (TARGET.TravelClassID = SOURCE.TravelClassID)
 
-    -- Action for existing records that have changed
+    -- Update existing records if any field has changed (SCD1)
     WHEN MATCHED AND EXISTS (
-        -- This clause correctly compares all relevant columns for any changes.
-        SELECT SOURCE.Name, SOURCE.Capacity, SOURCE.Cost
+        SELECT
+            SOURCE.ClassName,
+            SOURCE.Capacity,
+            SOURCE.BaseCost
         EXCEPT
-        SELECT TARGET.Name, TARGET.Capacity, TARGET.Cost
+        SELECT
+            TARGET.ClassName,
+            TARGET.Capacity,
+            TARGET.BaseCost
     ) THEN
         UPDATE SET
-            TARGET.Name = NULLIF(TRIM(SOURCE.Name), ''),
+            TARGET.ClassName = NULLIF(LTRIM(RTRIM(SOURCE.ClassName)), ''),
             TARGET.Capacity = SOURCE.Capacity,
-            TARGET.Cost = SOURCE.Cost,
+            TARGET.BaseCost = SOURCE.BaseCost,
             TARGET.StagingLastUpdateTimestampUTC = GETUTCDATE()
 
-    -- Action for new records
+    -- Insert new records
     WHEN NOT MATCHED BY TARGET THEN
         INSERT (
             TravelClassID,
-            Name,
+            ClassName,
             Capacity,
-            Cost,
+            BaseCost,
             StagingLoadTimestampUTC,
             SourceSystem
         )
         VALUES (
             SOURCE.TravelClassID,
-            NULLIF(TRIM(SOURCE.Name), ''),
+            NULLIF(LTRIM(RTRIM(SOURCE.ClassName)), ''),
             SOURCE.Capacity,
-            SOURCE.Cost,
+            SOURCE.BaseCost,
             GETUTCDATE(),
             'OperationalDB'
-        ); -- Mandatory Semicolon
+        );
 
 END
+GO

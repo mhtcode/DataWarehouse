@@ -1,49 +1,88 @@
 CREATE OR ALTER PROCEDURE [SA].[ETL_PointsTransaction]
 AS
 BEGIN
+    SET NOCOUNT ON;
+
     MERGE [SA].[PointsTransaction] AS TARGET
     USING [Source].[PointsTransaction] AS SOURCE
-    ON (TARGET.TransactionID = SOURCE.TransactionID)
+        ON (TARGET.PointsTransactionID = SOURCE.PointsTransactionID)
 
-    -- Action for existing records that have changed
+    -- Update all changed columns (SCD1 logic)
     WHEN MATCHED AND EXISTS (
-        -- This clause correctly compares all relevant columns for any changes.
-        SELECT SOURCE.AccountID, SOURCE.TransactionDate, SOURCE.TransactionType, SOURCE.PointsChange, SOURCE.Description, SOURCE.ServiceOfferingID
+        SELECT
+            SOURCE.AccountID,
+            SOURCE.TransactionDate,
+            SOURCE.LoyaltyTransactionTypeID,
+            SOURCE.PointsChange,
+            SOURCE.BalanceAfterTransaction,
+            SOURCE.USDValue,
+            SOURCE.ConversionRate,
+            SOURCE.PointConversionRateID,
+            SOURCE.Description,
+            SOURCE.ServiceOfferingID,
+            SOURCE.FlightDetailID
         EXCEPT
-        SELECT TARGET.AccountID, TARGET.TransactionDate, TARGET.TransactionType, TARGET.PointsChange, TARGET.Description, TARGET.ServiceOfferingID
+        SELECT
+            TARGET.AccountID,
+            TARGET.TransactionDate,
+            TARGET.LoyaltyTransactionTypeID,
+            TARGET.PointsChange,
+            TARGET.BalanceAfterTransaction,
+            TARGET.USDValue,
+            TARGET.ConversionRate,
+            TARGET.PointConversionRateID,
+            TARGET.Description,
+            TARGET.ServiceOfferingID,
+            TARGET.FlightDetailID
     ) THEN
         UPDATE SET
             TARGET.AccountID = SOURCE.AccountID,
             TARGET.TransactionDate = SOURCE.TransactionDate,
-            TARGET.TransactionType = NULLIF(TRIM(SOURCE.TransactionType), ''),
+            TARGET.LoyaltyTransactionTypeID = SOURCE.LoyaltyTransactionTypeID,
             TARGET.PointsChange = SOURCE.PointsChange,
-            TARGET.Description = NULLIF(TRIM(SOURCE.Description), ''),
+            TARGET.BalanceAfterTransaction = SOURCE.BalanceAfterTransaction,
+            TARGET.USDValue = SOURCE.USDValue,
+            TARGET.ConversionRate = SOURCE.ConversionRate,
+            TARGET.PointConversionRateID = SOURCE.PointConversionRateID,
+            TARGET.Description = NULLIF(LTRIM(RTRIM(SOURCE.Description)), ''),
             TARGET.ServiceOfferingID = SOURCE.ServiceOfferingID,
+            TARGET.FlightDetailID = SOURCE.FlightDetailID,
             TARGET.StagingLastUpdateTimestampUTC = GETUTCDATE()
 
-    -- Action for new records
+    -- Insert new records
     WHEN NOT MATCHED BY TARGET THEN
         INSERT (
-            TransactionID,
+            PointsTransactionID,
             AccountID,
             TransactionDate,
-            TransactionType,
+            LoyaltyTransactionTypeID,
             PointsChange,
+            BalanceAfterTransaction,
+            USDValue,
+            ConversionRate,
+            PointConversionRateID,
             Description,
             ServiceOfferingID,
+            FlightDetailID,
             StagingLoadTimestampUTC,
             SourceSystem
         )
         VALUES (
-            SOURCE.TransactionID,
+            SOURCE.PointsTransactionID,
             SOURCE.AccountID,
             SOURCE.TransactionDate,
-            NULLIF(TRIM(SOURCE.TransactionType), ''),
+            SOURCE.LoyaltyTransactionTypeID,
             SOURCE.PointsChange,
-            NULLIF(TRIM(SOURCE.Description), ''),
+            SOURCE.BalanceAfterTransaction,
+            SOURCE.USDValue,
+            SOURCE.ConversionRate,
+            SOURCE.PointConversionRateID,
+            NULLIF(LTRIM(RTRIM(SOURCE.Description)), ''),
             SOURCE.ServiceOfferingID,
+            SOURCE.FlightDetailID,
             GETUTCDATE(),
             'OperationalDB'
-        ); -- Mandatory Semicolon
+        );
 
 END
+GO

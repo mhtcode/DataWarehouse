@@ -8,7 +8,7 @@ BEGIN
     @RowsInserted  INT,
     @LogID         BIGINT;
 
-  -- 1) Assume fatal: insert initial log entry
+  -- 1. Insert initial (fatal) log entry
   INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
@@ -21,28 +21,29 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2) Insert all new accounts into dimension
+    -- 2. Truncate dimension for full initial load
+    TRUNCATE TABLE DW.DimAccount;
+
+    -- 3. Insert all distinct accounts (with names and tier name)
     INSERT INTO DW.DimAccount (
-      AccountKey,
-      AccountNumber,
-      AccountType,
-      CreatedDate,
-      IsActive
+      AccountID,
+      PassengerName,
+      RegistrationDate,
+      LoyaltyTierName
     )
     SELECT
       a.AccountID,
-      a.AccountNumber,
-      a.AccountType,
-      a.CreatedDate,
-      a.IsActive
+      p.Name AS PassengerName,
+      a.RegistrationDate,
+      t.Name AS LoyaltyTierName
     FROM SA.Account AS a
-    WHERE NOT EXISTS (
-      SELECT 1 FROM DW.DimAccount AS d
-      WHERE d.AccountKey = a.AccountID
-    );
+      JOIN SA.Passenger ps ON a.PassengerID = ps.PassengerID
+      JOIN SA.Person p ON ps.PersonID = p.PersonID
+      JOIN SA.LoyaltyTier t ON a.LoyaltyTierID = t.LoyaltyTierID;
+
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 3) Update log entry to Success
+    -- 4. Update log entry to Success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Initial full load complete',
@@ -54,7 +55,7 @@ BEGIN
   END TRY
   BEGIN CATCH
     DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
-    -- 4) Update log entry to Error
+    -- 5. Update log entry to Error
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Initial load failed',
@@ -64,5 +65,5 @@ BEGIN
     WHERE LogID = @LogID;
     THROW;
   END CATCH
-END;
+END
 GO

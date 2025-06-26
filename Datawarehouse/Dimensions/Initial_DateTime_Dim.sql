@@ -2,7 +2,7 @@ CREATE OR ALTER PROCEDURE [DW].[Initial_DateTime_Dim]
 AS
 BEGIN
 	
-	TRUNCATE TABLE [DW].[DateTimeDim];
+	TRUNCATE TABLE [DW].[DimDateTime];
 
     WITH TimeCTE AS (
         SELECT CAST('00:00' AS TIME) AS TimeValue
@@ -35,7 +35,7 @@ BEGIN
         DECLARE @CurrentMonthEnd DATE = EOMONTH(@CurrentMonthStart);
 		PRINT 'Processing month starting: ' + CONVERT(varchar, @CurrentMonthStart, 120);
         
-        INSERT INTO [DW].[DateTimeDim] (
+        INSERT INTO [DW].[DimDateTime] (
             [DateTimeKey],
             [FullDateAlternateKey], [PersianFullDateAlternateKey], [DayNumberOfWeek], [PersianDayNumberOfWeek],
             [EnglishDayNameOfWeek], [PersianDayNameOfWeek], [DayNumberOfMonth], [PersianDayNumberOfMonth],
@@ -74,6 +74,6 @@ END;
 
 exec [DW].[Initial_DateTime_Dim]
 
-select * from [DW].[DateTimeDim]
+select * from [DW].[DimDateTime]
 
 select * from [DW].[DateDim]
