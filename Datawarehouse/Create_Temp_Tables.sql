@@ -207,3 +207,40 @@ BEGIN
   );
 END;
 GO
+
+
+IF OBJECT_ID('[DW].[Temp_DailyFlightOperations]', 'U') IS NULL
+BEGIN
+  CREATE TABLE [DW].[Temp_DailyFlightOperations](
+    [FlightOperationID] [int] PRIMARY KEY,
+    [FlightDetailID] [int] NOT NULL,
+    [ActualDepartureDateTime] [datetime] NULL,
+    [ActualArrivalDateTime] [datetime] NULL,
+    [DelayMinutes] [int] NULL,
+    [LoadFactor] [float] NULL,
+    [DelaySeverityScore] [float] NULL
+  );
+END;
+GO
+
+IF OBJECT_ID('[DW].[Temp_EnrichedFlightPerformanceData]', 'U') IS NULL
+BEGIN
+  CREATE TABLE [DW].[Temp_EnrichedFlightPerformanceData](
+    [FlightOperationID] [int] PRIMARY KEY,
+      -- Timestamps
+    [ScheduledDepartureDateTime] [datetime] NOT NULL,
+    [ScheduledArrivalDateTime] [datetime] NOT NULL,
+      [ActualDepartureDateTime] [datetime] NULL,
+    [ActualArrivalDateTime] [datetime] NULL,
+      -- Dimension Keys
+    [DepartureAirportID] [int] NOT NULL,
+    [ArrivalAirportID] [int] NOT NULL,
+    [AircraftID] [int] NULL,
+    [AirlineID] [int] NOT NULL,
+      -- Measures from source
+    [DelayMinutes] [int] NULL,
+    [LoadFactor] [float] NULL,
+    [DelaySeverityScore] [float] NULL
+  );
+END;
+GO
