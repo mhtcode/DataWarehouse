@@ -357,4 +357,45 @@ INSERT INTO Source.FlightOperation (FlightOperationID, FlightDetailID, ActualDep
 (14, 14, '2014-06-07 11:30:00', '2014-06-07 16:45:00', 45, 0),
 (15, 15, '2014-06-08 10:15:00', '2014-06-08 14:30:00', 0, 0);
 
---select * from Source.FlightOperation
+
+
+INSERT INTO [Source].[MaintenanceType] (ID, Name, Category, Description) VALUES
+(1, 'Engine Check', 'Routine', 'Regular engine maintenance and safety check'),
+(2, 'Landing Gear Inspection', 'Safety', 'Full check of landing gear systems'),
+(3, 'Cabin Systems Update', 'Update', 'Modernization of passenger cabin electronics'),
+(4, 'Avionics Overhaul', 'Major', 'Complete overhaul of avionics systems'),
+(5, 'Fuel System Inspection', 'Routine', 'Inspection for leaks or issues in fuel system');
+
+
+INSERT INTO [Source].[Technician] (Technician_ID, Name, Certification_Level, Employment_Type, Active_Status) VALUES
+(1, 'Michael Scott', 'A', 'Full-time', 1),
+(2, 'Pam Beesly', 'B', 'Contract', 1),
+(3, 'Jim Halpert', 'A', 'Full-time', 1),
+(4, 'Dwight Schrute', 'C', 'Full-time', 1),
+(5, 'Stanley Hudson', 'B', 'Part-time', 1);
+
+
+INSERT INTO [Source].[MaintenanceLocation] (Location_NK, Name, City, Country, Inhouse_Flag) VALUES
+('DXB-MX', 'Dubai Maintenance Hangar', 'Dubai', 'UAE', 1),
+('LHR-MX', 'Heathrow Service Bay', 'London', 'UK', 1),
+('JFK-MX', 'JFK Technical Center', 'New York', 'USA', 0),
+('CDG-MX', 'Charles de Gaulle Facility', 'Paris', 'France', 1),
+('HND-MX', 'Haneda Aero Services', 'Tokyo', 'Japan', 0);
+
+
+INSERT INTO [Source].[Part] (ID, Name, PartNumber, Manufacturer, Warranty_Period_Months, Category) VALUES
+(1, 'Turbofan Engine', 'ENG-777', 'Rolls-Royce', 120, 'Engine'),
+(2, 'Landing Gear Set', 'LG-320', 'Goodrich', 96, 'Landing Gear'),
+(3, 'Flight Computer', 'FC-900', 'Honeywell', 60, 'Avionics'),
+(4, 'Cabin Air Filter', 'CAF-101', 'Siemens', 36, 'Cabin'),
+(5, 'Fuel Pump', 'FP-220', 'Parker', 48, 'Fuel System');
+
+
+INSERT INTO [Source].[AirlineAirportService]
+(ServiceTypeCode, FlightTypeCode, ServiceTypeName, FlightTypeName, ContractStartDate, ContractEndDate, LandingFeeRate, PassengerServiceRate)
+VALUES
+('BASIC', 'INTL', 'Basic Handling', 'International', '2010-01-01', NULL, 500.00, 12.00),
+('VIP', 'DOM', 'VIP Lounge', 'Domestic', '2012-05-01', NULL, 800.00, 25.00),
+('CARGO', 'INTL', 'Cargo Handling', 'International', '2011-03-15', '2020-12-31', 1200.00, 30.00),
+('FUEL', 'DOM', 'Fuel Service', 'Domestic', '2014-06-01', NULL, 350.00, 7.50),
+('MAINT', 'INTL', 'Maintenance Support', 'International', '2013-10-10', NULL, 1500.00, 50.00);
