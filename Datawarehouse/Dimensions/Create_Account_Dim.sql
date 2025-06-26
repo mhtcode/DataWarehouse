@@ -1,8 +1,7 @@
 CREATE TABLE [DW].[DimAccount] (
-  [AccountKey] int PRIMARY KEY,
-  [AccountNumber] nvarchar(255),
-  [AccountType] nvarchar(255),
-  [CreatedDate] datetime,
-  [IsActive] bit
+  [AccountID] INT PRIMARY KEY,           -- Use AccountID from SA (business key)
+  [PassengerName] NVARCHAR(100),         -- From SA.Person (via SA.Passenger)
+  [RegistrationDate] DATETIME,           -- From SA.Account
+  [LoyaltyTierName] NVARCHAR(50)         -- From SA.LoyaltyTier
 )
 GO
