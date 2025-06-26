@@ -1,4 +1,4 @@
-CREATE TABLE [FactLoyaltyPointTransaction_Transactional] (
+CREATE TABLE [DW].[FactLoyaltyPointTransaction_Transactional] (
     -- Dimensional Surrogate Keys
     [TransactionDateKey] datetime NOT NULL,             -- From PointsTransaction.TransactionDate, FK to DimDateTime
     [PersonKey] int NOT NULL,                           -- Resolved via Account -> Passenger -> Person, FK to DimPerson
