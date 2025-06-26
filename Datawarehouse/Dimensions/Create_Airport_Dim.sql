@@ -1,14 +1,13 @@
 CREATE TABLE [DW].[DimAirport] (
-  [AirportKey] int PRIMARY KEY,
-  [Name] nvarchar(255),
-  [City] nvarchar(255),
-  [Country] nvarchar(255),
-  [IATACode] nvarchar(255),
-  [ElevationMeter] int,
-  [TimeZone] nvarchar(255),
-  [NumberOfTerminals] int,
-  [AnnualPassengerTraffic] bigint,
-  [Latitude] decimal,
-  [Longitude] decimal
-)
+  [AirportID] INT PRIMARY KEY,
+  [City] NVARCHAR(50),
+  [Country] NVARCHAR(50),
+  [IATACode] NVARCHAR(3),
+  [ElevationMeter] INT,
+  [TimeZone] NVARCHAR(50),
+  [NumberOfTerminals] INT,
+  [AnnualPassengerTraffic] BIGINT,
+  [Latitude] DECIMAL(9,6),
+  [Longitude] DECIMAL(9,6)
+);
 GO

@@ -1,3 +1,21 @@
+-- Temp table for staging
+IF OBJECT_ID('[DW].[Temp_Airport_table]', 'U') IS NULL
+BEGIN
+  CREATE TABLE [DW].[Temp_Airport_table] (
+    [AirportID] INT PRIMARY KEY,
+    [City] NVARCHAR(50),
+    [Country] NVARCHAR(50),
+    [IATACode] NVARCHAR(3),
+    [ElevationMeter] INT,
+    [TimeZone] NVARCHAR(50),
+    [NumberOfTerminals] INT,
+    [AnnualPassengerTraffic] BIGINT,
+    [Latitude] DECIMAL(9,6),
+    [Longitude] DECIMAL(9,6)
+  );
+END;
+GO
+
 CREATE OR ALTER PROCEDURE [DW].[ETL_Airport_Dim]
 AS
 BEGIN
@@ -6,11 +24,11 @@ BEGIN
   DECLARE
     @StartTime     DATETIME2(3) = SYSUTCDATETIME(),
     @LastRunTime   DATETIME2(3),
-    @RowsUpdated   INT,
-    @RowsInserted  INT,
+    @RowsUpdated   INT = 0,
+    @RowsInserted  INT = 0,
     @LogID         BIGINT;
 
-  -- 1) Assume fatal: insert initial log entry
+  -- Insert initial ETL log entry
   INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
@@ -23,29 +41,30 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2) Determine last successful run time
-    SELECT
-      @LastRunTime = COALESCE(
-        MAX(ActionTime),
-        '1900-01-01'
-      )
+    -- Find last successful run for incremental load
+    SELECT @LastRunTime = COALESCE(MAX(ActionTime), '1900-01-01')
     FROM DW.ETL_Log
     WHERE ProcedureName = 'ETL_Airport_Dim'
       AND Status = 'Success';
 
-    -- 3) Truncate staging
-    TRUNCATE TABLE [DW].[Temp_Airport_table];
+    -- Truncate staging
+    TRUNCATE TABLE DW.Temp_Airport_table;
 
-    -- 4) Populate staging with changed/new airports
-    INSERT INTO [DW].[Temp_Airport_table] (
-      AirportID, Name, City, Country,
-      IATACode, ElevationMeter, TimeZone,
-      NumberOfTerminals, AnnualPassengerTraffic,
-      Latitude, Longitude
+    -- Insert all new/changed airports since last run
+    INSERT INTO DW.Temp_Airport_table (
+      AirportID,
+      City,
+      Country,
+      IATACode,
+      ElevationMeter,
+      TimeZone,
+      NumberOfTerminals,
+      AnnualPassengerTraffic,
+      Latitude,
+      Longitude
     )
     SELECT
       a.AirportID,
-      a.Name,
       a.City,
       a.Country,
       a.IATACode,
@@ -58,34 +77,51 @@ BEGIN
     FROM SA.Airport AS a
     WHERE a.StagingLastUpdateTimestampUTC > @LastRunTime;
 
-    -- 5) Update existing airports in dimension
+    -- Update changed rows in the dimension (SCD1)
     UPDATE d
     SET
-      d.Name                   = t.Name,
-      d.City                   = t.City,
-      d.Country                = t.Country,
-      d.IATACode               = t.IATACode,
-      d.ElevationMeter         = t.ElevationMeter,
-      d.TimeZone               = t.TimeZone,
-      d.NumberOfTerminals      = t.NumberOfTerminals,
+      d.City = t.City,
+      d.Country = t.Country,
+      d.IATACode = t.IATACode,
+      d.ElevationMeter = t.ElevationMeter,
+      d.TimeZone = t.TimeZone,
+      d.NumberOfTerminals = t.NumberOfTerminals,
       d.AnnualPassengerTraffic = t.AnnualPassengerTraffic,
-      d.Latitude               = t.Latitude,
-      d.Longitude              = t.Longitude
+      d.Latitude = t.Latitude,
+      d.Longitude = t.Longitude
     FROM DW.DimAirport AS d
-    JOIN DW.Temp_Airport_table AS t
-      ON d.AirportKey = t.AirportID;
+    INNER JOIN DW.Temp_Airport_table AS t
+      ON d.AirportID = t.AirportID
+    WHERE
+      -- Compare all relevant columns for changes
+      (
+        ISNULL(d.City, '')                  <> ISNULL(t.City, '') OR
+        ISNULL(d.Country, '')               <> ISNULL(t.Country, '') OR
+        ISNULL(d.IATACode, '')              <> ISNULL(t.IATACode, '') OR
+        ISNULL(d.ElevationMeter, 0)         <> ISNULL(t.ElevationMeter, 0) OR
+        ISNULL(d.TimeZone, '')              <> ISNULL(t.TimeZone, '') OR
+        ISNULL(d.NumberOfTerminals, 0)      <> ISNULL(t.NumberOfTerminals, 0) OR
+        ISNULL(d.AnnualPassengerTraffic, 0) <> ISNULL(t.AnnualPassengerTraffic, 0) OR
+        ISNULL(d.Latitude, 0)               <> ISNULL(t.Latitude, 0) OR
+        ISNULL(d.Longitude, 0)              <> ISNULL(t.Longitude, 0)
+      );
     SET @RowsUpdated = @@ROWCOUNT;
 
-    -- 6) Insert new airports into dimension
+    -- Insert new rows not present in the DW
     INSERT INTO DW.DimAirport (
-      AirportKey, Name, City, Country,
-      IATACode, ElevationMeter, TimeZone,
-      NumberOfTerminals, AnnualPassengerTraffic,
-      Latitude, Longitude
+      AirportID,
+      City,
+      Country,
+      IATACode,
+      ElevationMeter,
+      TimeZone,
+      NumberOfTerminals,
+      AnnualPassengerTraffic,
+      Latitude,
+      Longitude
     )
     SELECT
       t.AirportID,
-      t.Name,
       t.City,
       t.Country,
       t.IATACode,
@@ -97,13 +133,11 @@ BEGIN
       t.Longitude
     FROM DW.Temp_Airport_table AS t
     WHERE NOT EXISTS (
-      SELECT 1
-      FROM DW.DimAirport AS d
-      WHERE d.AirportKey = t.AirportID
+      SELECT 1 FROM DW.DimAirport AS d WHERE d.AirportID = t.AirportID
     );
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 7) Update log to Success
+    -- Update ETL log as success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = CONCAT(
@@ -117,14 +151,13 @@ BEGIN
 
   END TRY
   BEGIN CATCH
-    DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
-    -- 8) Update log to Error
+    -- Log error
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Incremental load failed',
       DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
       Status            = 'Error',
-      Message           = @ErrMsg
+      Message           = ERROR_MESSAGE()
     WHERE LogID = @LogID;
     THROW;
   END CATCH
