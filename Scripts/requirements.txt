@@ -1,0 +1,9 @@
+pyodbc
+Faker
+tqdm
+
+# NOTE:
+# This project requires "ODBC Driver 18 for SQL Server" to be installed on your system.
+# Download it from: https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server
+
+# The default database name used in this project is: DB2_Project
