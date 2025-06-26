@@ -8,7 +8,7 @@ BEGIN
     @RowsInserted INT,
     @LogID        BIGINT;
 
-  -- 1) Assume fatal: insert initial log entry
+  -- 1. Insert fatal log entry
   INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
@@ -21,21 +21,22 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2) Insert all distinct transaction types with surrogate keys
+    -- 2. Truncate dim for initial full load
+    TRUNCATE TABLE DW.DimLoyaltyTransactionType;
+
+    -- 3. Load all transaction types from SA
     INSERT INTO DW.DimLoyaltyTransactionType (
-      TransactionTypeKey,
-      TransactionTypeName
+      LoyaltyTransactionTypeID,
+      TypeName
     )
     SELECT
-      ROW_NUMBER() OVER (ORDER BY t.TransactionType) AS TransactionTypeKey,
-      t.TransactionType
-    FROM (
-      SELECT DISTINCT TransactionType
-      FROM SA.PointsTransaction
-    ) AS t;
+      LoyaltyTransactionTypeID,
+      TypeName
+    FROM SA.LoyaltyTransactionType;
+
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 3) Update log to Success
+    -- 4. Mark log as success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Initial full load complete',
@@ -47,7 +48,7 @@ BEGIN
   END TRY
   BEGIN CATCH
     DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
-    -- 4) Update log to Error
+    -- 5. Mark log as error
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Initial full load failed',

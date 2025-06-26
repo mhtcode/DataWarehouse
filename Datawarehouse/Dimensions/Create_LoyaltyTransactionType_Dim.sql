@@ -1,5 +1,5 @@
 CREATE TABLE [DW].[DimLoyaltyTransactionType] (
-  [TransactionTypeKey] int PRIMARY KEY,
-  [TransactionTypeName] nvarchar(255)
-)
+  LoyaltyTransactionTypeID INT PRIMARY KEY,   -- Use business key, no need for a surrogate
+  TypeName NVARCHAR(250)
+);
 GO
