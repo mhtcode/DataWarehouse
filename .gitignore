@@ -1,0 +1,9 @@
+# Ignore all log files anywhere in the project
+*.log
+
+# Optionally, ignore a specific log file (e.g., in Scripts/)
+Scripts/makeDB.log
+Scripts/Smart table inserter/fillingTables.log
+# Ignore logs directory (uncomment if you have it)
+# logs/
+# log/

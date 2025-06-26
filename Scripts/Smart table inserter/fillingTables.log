@@ -1,9 +1,0 @@
-2025-06-26 05:44:07,193 - INFO - Filling Person: 1000 records.
-2025-06-26 05:44:08,052 - ERROR - Error in Person: ('23000', "[23000] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]Violation of UNIQUE KEY constraint 'UQ__Person__A9D10534A2344598'. Cannot insert duplicate key in object 'Source.Person'. The duplicate key value is (wwilliams@example.com). (2627) (SQLExecDirectW); [23000] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]The statement has been terminated. (3621)")
-2025-06-26 05:44:08,439 - ERROR - Error in Person: ('23000', "[23000] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]Violation of UNIQUE KEY constraint 'UQ__Person__A9D10534A2344598'. Cannot insert duplicate key in object 'Source.Person'. The duplicate key value is (james19@example.net). (2627) (SQLExecDirectW); [23000] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]The statement has been terminated. (3621)")
-2025-06-26 05:44:09,606 - INFO - Completed filling Person.
-2025-06-26 05:44:10,167 - INFO - Filling Passenger: 900 records.
-2025-06-26 05:44:10,656 - INFO - Completed filling Passenger.
-2025-06-26 05:44:11,130 - INFO - Filling Account: 900 records.
-2025-06-26 05:44:11,331 - INFO - Completed filling Account.
-2025-06-26 05:44:11,331 - INFO - All done.
