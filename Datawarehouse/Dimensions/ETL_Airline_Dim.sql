@@ -4,19 +4,15 @@ BEGIN
   SET NOCOUNT ON;
 
   DECLARE
-    @StartTime    DATETIME2(3) = SYSUTCDATETIME(),
-    @LastRunTime  DATETIME2(3),
-    @RowsUpdated  INT,
-    @RowsInserted INT,
-    @LogID        BIGINT;
+    @StartTime     DATETIME2(3) = SYSUTCDATETIME(),
+    @LastRunTime   DATETIME2(3),
+    @RowsUpdated   INT = 0,
+    @RowsInserted  INT = 0,
+    @LogID         BIGINT;
 
-  -- 1) Assume fatal: insert initial log entry
-  INSERT INTO [DW].[ETL_Log] (
-    ProcedureName,
-    TargetTable,
-    ChangeDescription,
-    ActionTime,
-    Status
+  -- 1. Insert initial (fatal) log entry
+  INSERT INTO DW.ETL_Log (
+    ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
     'ETL_Airline_Dim',
     'DimAirline',
@@ -27,18 +23,49 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2) Determine last successful run time
+    -- 2. Determine last successful run time
     SELECT
       @LastRunTime = COALESCE(MAX(ActionTime), '1900-01-01')
-    FROM [DW].[ETL_Log]
+    FROM DW.ETL_Log
     WHERE ProcedureName = 'ETL_Airline_Dim'
       AND Status = 'Success';
 
-    -- 3) Truncate staging
-    TRUNCATE TABLE [DW].[Temp_Airline_table];
+    -- 3. Update existing airlines for non-IATA attribute changes (Type 1 part)
+    UPDATE d
+    SET
+      d.Name         = s.Name,
+      d.Country      = s.Country,
+      d.FoundedYear  = YEAR(s.FoundedDate),
+      d.FleetSize    = s.FleetSize,
+      d.Website      = s.Website
+    FROM DW.DimAirline d
+    JOIN SA.Airline s ON d.AirlineID = s.AirlineID
+    WHERE
+      (d.Name        <> s.Name OR
+       d.Country     <> s.Country OR
+       d.FoundedYear <> YEAR(s.FoundedDate) OR
+       d.FleetSize   <> s.FleetSize OR
+       d.Website     <> s.Website)
+      AND s.StagingLastUpdateTimestampUTC > @LastRunTime;
 
-    -- 4) Populate staging with changed/new airlines
-    INSERT INTO [DW].[Temp_Airline_table] (
+    SET @RowsUpdated = @@ROWCOUNT;
+
+    -- 4. SCD Type 3: IATA code changes (track previous/current and date)
+    UPDATE d
+    SET
+      d.Previous_IATA_Code      = d.Current_IATA_Code,
+      d.Current_IATA_Code       = s.Current_IATA_Code,
+      d.IATA_Code_Changed_Date  = s.StagingLastUpdateTimestampUTC
+    FROM DW.DimAirline d
+    JOIN SA.Airline s ON d.AirlineID = s.AirlineID
+    WHERE
+      ISNULL(d.Current_IATA_Code,'') <> ISNULL(s.Current_IATA_Code,'')
+      AND s.StagingLastUpdateTimestampUTC > @LastRunTime;
+
+    SET @RowsUpdated = @RowsUpdated + @@ROWCOUNT;
+
+    -- 5. Insert new airlines
+    INSERT INTO DW.DimAirline (
       AirlineID,
       Name,
       Country,
@@ -50,97 +77,46 @@ BEGIN
       IATA_Code_Changed_Date
     )
     SELECT
-      a.AirlineID,
-      a.Name,
-      a.Country,
-      YEAR(a.FoundedDate),
-      a.FleetSize,
-      a.Website,
-      a.Current_IATA_Code,
-      a.Previous_IATA_Code,
-      a.IATA_Code_Changed_Date
-    FROM [SA].[Airline] AS a
-    WHERE a.StagingLastUpdateTimestampUTC > @LastRunTime;
+      s.AirlineID,
+      s.Name,
+      s.Country,
+      YEAR(s.FoundedDate),
+      s.FleetSize,
+      s.Website,
+      s.Current_IATA_Code,
+      NULL,
+      NULL
+    FROM SA.Airline s
+    LEFT JOIN DW.DimAirline d ON s.AirlineID = d.AirlineID
+    WHERE d.AirlineID IS NULL
+      AND s.StagingLastUpdateTimestampUTC > @LastRunTime;
+
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 5) Update existing rows when any source column changed
-    UPDATE d
-    SET
-      d.Name                   = t.Name,
-      d.Country                = t.Country,
-      d.FoundedYear            = t.FoundedYear,
-      d.FleetSize              = t.FleetSize,
-      d.Website                = t.Website,
-      d.Current_IATA_Code      = t.Current_IATA_Code,
-      d.Previous_IATA_Code     = t.Previous_IATA_Code,
-      d.IATA_Code_Changed_Date = t.IATA_Code_Changed_Date
-    FROM [DW].[DimAirline] AS d
-    JOIN [DW].[Temp_Airline_table] AS t
-      ON d.AirlineKey = t.AirlineID
-    WHERE EXISTS (
-      SELECT
-        t.Name, t.Country, t.FoundedYear, t.FleetSize, t.Website,
-        t.Current_IATA_Code, t.Previous_IATA_Code, t.IATA_Code_Changed_Date
-      EXCEPT
-      SELECT
-        d.Name, d.Country, d.FoundedYear, d.FleetSize, d.Website,
-        d.Current_IATA_Code, d.Previous_IATA_Code, d.IATA_Code_Changed_Date
-    );
-    SET @RowsUpdated = @@ROWCOUNT;
-
-    -- 6) Insert new airlines
-    INSERT INTO [DW].[DimAirline] (
-      AirlineKey,
-      Name,
-      Country,
-      FoundedYear,
-      FleetSize,
-      Website,
-      Current_IATA_Code,
-      Previous_IATA_Code,
-      IATA_Code_Changed_Date
-    )
-    SELECT
-      t.AirlineID,
-      t.Name,
-      t.Country,
-      t.FoundedYear,
-      t.FleetSize,
-      t.Website,
-      t.Current_IATA_Code,
-      t.Previous_IATA_Code,
-      t.IATA_Code_Changed_Date
-    FROM [DW].[Temp_Airline_table] AS t
-    WHERE NOT EXISTS (
-      SELECT 1
-      FROM [DW].[DimAirline] AS d
-      WHERE d.AirlineKey = t.AirlineID
-    );
-    SET @RowsInserted = @@ROWCOUNT;
-
-    -- 7) Update log to Success
-    UPDATE [DW].[ETL_Log]
+    -- 6. Update log entry to Success
+    UPDATE DW.ETL_Log
     SET
       ChangeDescription = CONCAT(
         'Incremental load complete: updated=', @RowsUpdated,
         ', inserted=', @RowsInserted
       ),
-      RowsAffected = @RowsUpdated + @RowsInserted,
-      DurationSec  = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
-      Status       = 'Success'
+      RowsAffected      = @RowsUpdated + @RowsInserted,
+      DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
+      Status            = 'Success'
     WHERE LogID = @LogID;
 
   END TRY
   BEGIN CATCH
-    -- 8) Update log to Error
-    UPDATE [DW].[ETL_Log]
+    DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
+    -- 7. Update log entry to Error
+    UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Incremental load failed',
       DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
       Status            = 'Error',
-      Message           = ERROR_MESSAGE()
+      Message           = @ErrMsg
     WHERE LogID = @LogID;
     THROW;
   END CATCH
-END;
+END
 GO

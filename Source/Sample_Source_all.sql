@@ -1,15 +1,17 @@
 -- Airline (10 خط)
-INSERT INTO Source.Airline (AirlineID, Name, Country, FoundedDate, HeadquartersNumber, FleetSize, Website) VALUES
-(1, 'Emirates', 'UAE', '1985-03-25', '+97143179999', 269, 'www.emirates.com'),
-(2, 'Lufthansa', 'Germany', '1953-01-06', '+496922960', 316, 'www.lufthansa.com'),
-(3, 'British Airways', 'UK', '1974-04-01', '+44344800780', 281, 'www.britishairways.com'),
-(4, 'Air France', 'France', '1933-10-07', '+33142725656', 213, 'www.airfrance.com'),
-(5, 'Qatar Airways', 'Qatar', '1993-11-22', '+97440222000', 234, 'www.qatarairways.com'),
-(6, 'Singapore Airlines', 'Singapore', '1947-05-01', '+6562218888', 152, 'www.singaporeair.com'),
-(7, 'Turkish Airlines', 'Turkey', '1933-05-20', '+902124631818', 370, 'www.turkishairlines.com'),
-(8, 'ANA', 'Japan', '1952-12-27', '+81367351111', 213, 'www.ana.co.jp'),
-(9, 'Delta Air Lines', 'USA', '1924-05-30', '+18002212146', 957, 'www.delta.com'),
-(10, 'Qantas', 'Australia', '1920-11-16', '+61296919691', 126, 'www.qantas.com');
+INSERT INTO Source.Airline 
+  (AirlineID, Name, Country, FoundedDate, HeadquartersNumber, FleetSize, Website, Current_IATA_Code) VALUES
+(1, 'Emirates',           'UAE',       '1985-03-25', '+97143179999', 269, 'www.emirates.com',       'EK'),
+(2, 'Lufthansa',          'Germany',   '1953-01-06', '+496922960',   316, 'www.lufthansa.com',      'LH'),
+(3, 'British Airways',    'UK',        '1974-04-01', '+44344800780', 281, 'www.britishairways.com', 'BA'),
+(4, 'Air France',         'France',    '1933-10-07', '+33142725656', 213, 'www.airfrance.com',      'AF'),
+(5, 'Qatar Airways',      'Qatar',     '1993-11-22', '+97440222000', 234, 'www.qatarairways.com',   'QR'),
+(6, 'Singapore Airlines', 'Singapore', '1947-05-01', '+6562218888',  152, 'www.singaporeair.com',   'SQ'),
+(7, 'Turkish Airlines',   'Turkey',    '1933-05-20', '+902124631818',370, 'www.turkishairlines.com','TK'),
+(8, 'ANA',                'Japan',     '1952-12-27', '+81367351111', 213, 'www.ana.co.jp',          'NH'),
+(9, 'Delta Air Lines',    'USA',       '1924-05-30', '+18002212146', 957, 'www.delta.com',          'DL'),
+(10,'Qantas',             'Australia', '1920-11-16', '+61296919691', 126, 'www.qantas.com',         'QF');
+
 
 -- Airport (15 خط)
 INSERT INTO Source.Airport (AirportID, City, Country, IATACode, ElevationMeter, TimeZone, NumberOfTerminals, AnnualPassengerTraffic, Latitude, Longitude, ManagerName) VALUES
