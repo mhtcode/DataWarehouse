@@ -25,6 +25,7 @@
       "Staging Area/ETL_Person.sql",
       "Staging Area/ETL_Points.sql",
       "Staging Area/ETL_PointsTransaction.sql",
+      "Staging Area/ETL_PointConversionRate.sql",
       "Staging Area/ETL_Reservation.sql",
       "Staging Area/ETL_SeatDetail.sql",
       "Staging Area/ETL_ServiceOffering.sql",

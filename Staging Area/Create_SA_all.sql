@@ -105,15 +105,12 @@ GO
 -- PointConversionRate
 CREATE TABLE [SA].[PointConversionRate] (
   [PointConversionRateID] INT PRIMARY KEY,
-  [EffectiveFrom] DATETIME NOT NULL,
-  [EffectiveTo] DATETIME,
   [ConversionRate] DECIMAL(18,6) NOT NULL,
   [CurrencyCode] VARCHAR(10) DEFAULT 'USD',
-  [IsCurrent] BIT DEFAULT 1,
   [StagingLoadTimestampUTC] DATETIME,
   [StagingLastUpdateTimestampUTC] DATETIME,
   [SourceSystem] VARCHAR(200)
-)
+);
 GO
 
 -- PointsTransaction

@@ -75,13 +75,10 @@ CREATE TABLE [Source].[LoyaltyTransactionType] (
 GO
 
 CREATE TABLE [Source].[PointConversionRate] (
-  [PointConversionRateID] INT PRIMARY KEY IDENTITY(1,1),
-  [EffectiveFrom] DATETIME NOT NULL,
-  [EffectiveTo] DATETIME,
-  [ConversionRate] DECIMAL(18,6) NOT NULL,
-  [CurrencyCode] VARCHAR(10) DEFAULT 'USD',
-  [IsCurrent] BIT DEFAULT 1
-)
+    [PointConversionRateID] INT PRIMARY KEY,
+    [ConversionRate] DECIMAL(18,6) NOT NULL,
+    [CurrencyCode] VARCHAR(10) DEFAULT 'USD'
+);
 GO
 
 CREATE TABLE [Source].[PointsTransaction] (

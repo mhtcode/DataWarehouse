@@ -68,10 +68,11 @@ INSERT INTO Source.LoyaltyTransactionType (LoyaltyTransactionTypeID, TypeName) V
 (4, 'Adjust'),
 (5, 'Bonus');
 
-INSERT INTO Source.PointConversionRate (EffectiveFrom, EffectiveTo, ConversionRate, CurrencyCode, IsCurrent) VALUES
-('2009-03-21', '2012-12-31', 0.010000, 'USD', 0),
-('2013-01-01', '2014-01-01', 0.012500, 'USD', 0),
-('2014-01-02', NULL, 0.013000, 'USD', 1);
+INSERT INTO Source.PointConversionRate (PointConversionRateID, ConversionRate, CurrencyCode) VALUES
+(1, 0.010000, 'USD'),
+(2, 0.012500, 'CA'),
+(3, 0.013000, 'UK');
+
 
 INSERT INTO [Source].[PointsTransaction]
 (PointsTransactionID, AccountID, TransactionDate, LoyaltyTransactionTypeID, PointsChange, BalanceAfterTransaction, USDValue, ConversionRate, PointConversionRateID, Description, ServiceOfferingID, FlightDetailID)
