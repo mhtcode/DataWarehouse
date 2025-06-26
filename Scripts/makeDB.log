@@ -73,3 +73,92 @@ Error: ('42S01', "[42S01] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]
 2025-06-26 04:44:10,490 - INFO - Running: Staging Area/ETL_ServiceOffering.sql
 2025-06-26 04:44:10,504 - INFO - Completed: Staging Area/ETL_ServiceOffering.sql in 0.01s
 2025-06-26 04:44:10,505 - INFO - Completed 4 scripts in 0.28s
+2025-06-26 17:14:58,825 - INFO - Running: Source/Create_Source_all.sql
+2025-06-26 17:14:58,880 - INFO - Completed: Source/Create_Source_all.sql in 0.05s
+2025-06-26 17:14:58,880 - INFO - Running: Source/Sample_Source_all.sql
+2025-06-26 17:14:58,965 - INFO - Completed: Source/Sample_Source_all.sql in 0.08s
+2025-06-26 17:14:58,965 - INFO - Running: Staging Area/Create_SA_all.sql
+2025-06-26 17:14:58,972 - ERROR - Error in batch from Staging Area/Create_SA_all.sql:
+CREATE SCHEMA [SA]
+
+-- Airline
+CREATE TABLE [SA].[Airline] (
+  [AirlineID] integer PRIMARY KEY,
+  [Name] varchar(100),
+  [Country] varchar(50),
+  [Fou...
+Error: ('42S01', "[42S01] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]There is already an object named 'SA' in the database. (2714) (SQLExecDirectW); [42S01] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]CREATE SCHEMA failed due to previous errors. (2759)")
+2025-06-26 17:14:58,973 - ERROR - Error in Staging Area/Create_SA_all.sql: ('42S01', "[42S01] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]There is already an object named 'SA' in the database. (2714) (SQLExecDirectW); [42S01] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]CREATE SCHEMA failed due to previous errors. (2759)")
+2025-06-26 17:14:58,973 - ERROR - Failed to run scripts: ('42S01', "[42S01] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]There is already an object named 'SA' in the database. (2714) (SQLExecDirectW); [42S01] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]CREATE SCHEMA failed due to previous errors. (2759)")
+2025-06-26 17:16:13,897 - INFO - Running: Staging Area/Drop_SA_all.sql
+2025-06-26 17:16:13,900 - INFO - Completed: Staging Area/Drop_SA_all.sql in 0.00s
+2025-06-26 17:16:13,900 - INFO - Running: Source/Drop_Source_all.sql
+2025-06-26 17:16:14,266 - INFO - Completed: Source/Drop_Source_all.sql in 0.37s
+2025-06-26 17:16:14,267 - INFO - Completed 2 scripts in 0.37s
+2025-06-26 17:21:53,731 - INFO - Running: Source/Create_Source_all.sql
+2025-06-26 17:21:53,768 - INFO - Completed: Source/Create_Source_all.sql in 0.04s
+2025-06-26 17:21:53,768 - INFO - Running: Source/Sample_Source_all.sql
+2025-06-26 17:21:53,847 - INFO - Completed: Source/Sample_Source_all.sql in 0.08s
+2025-06-26 17:21:53,847 - INFO - Running: Staging Area/Create_SA_all.sql
+2025-06-26 17:21:53,890 - INFO - Completed: Staging Area/Create_SA_all.sql in 0.04s
+2025-06-26 17:21:53,890 - INFO - Running: Staging Area/ETL_ServiceOffering.sql
+2025-06-26 17:21:53,919 - INFO - Completed: Staging Area/ETL_ServiceOffering.sql in 0.03s
+2025-06-26 17:21:53,919 - INFO - Running: Staging Area/ETL_Item.sql
+2025-06-26 17:21:53,944 - INFO - Completed: Staging Area/ETL_Item.sql in 0.02s
+2025-06-26 17:21:53,944 - INFO - Running: Staging Area/ETL_ServiceOfferingItem.sql
+2025-06-26 17:21:53,969 - INFO - Completed: Staging Area/ETL_ServiceOfferingItem.sql in 0.02s
+2025-06-26 17:21:53,970 - INFO - Completed 6 scripts in 0.24s
+2025-06-26 17:31:06,399 - INFO - Running: Staging Area/Drop_SA_all.sql
+2025-06-26 17:31:06,434 - INFO - Completed: Staging Area/Drop_SA_all.sql in 0.03s
+2025-06-26 17:31:06,434 - INFO - Running: Source/Drop_Source_all.sql
+2025-06-26 17:31:06,467 - INFO - Completed: Source/Drop_Source_all.sql in 0.03s
+2025-06-26 17:31:06,468 - INFO - Completed 2 scripts in 0.07s
+2025-06-26 17:35:24,009 - INFO - Running: Source/Create_Source_all.sql
+2025-06-26 17:35:24,049 - INFO - Completed: Source/Create_Source_all.sql in 0.04s
+2025-06-26 17:35:24,049 - INFO - Running: Source/Sample_Source_all.sql
+2025-06-26 17:35:24,127 - INFO - Completed: Source/Sample_Source_all.sql in 0.08s
+2025-06-26 17:35:24,127 - INFO - Running: Staging Area/Create_SA_all.sql
+2025-06-26 17:35:24,171 - INFO - Completed: Staging Area/Create_SA_all.sql in 0.04s
+2025-06-26 17:35:24,172 - INFO - Running: Staging Area/ETL.sql
+2025-06-26 17:35:24,206 - INFO - Completed: Staging Area/ETL.sql in 0.03s
+2025-06-26 17:35:24,206 - INFO - Completed 4 scripts in 0.20s
+2025-06-26 17:36:19,430 - INFO - Running: Staging Area/Drop_SA_all.sql
+2025-06-26 17:36:19,466 - ERROR - Error in batch from Staging Area/Drop_SA_all.sql:
+-- Drop all tables in [SA] schema (dependency order)
+
+DROP TABLE IF EXISTS [SA].[Payment];
+DROP TABLE IF EXISTS [SA].[Reservation];
+DROP TABLE IF EXIS...
+Error: ('42000', "[42000] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]Cannot drop schema 'SA' because it is being referenced by object 'Main_ETL'. (3729) (SQLExecDirectW)")
+2025-06-26 17:36:19,467 - ERROR - Error in Staging Area/Drop_SA_all.sql: ('42000', "[42000] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]Cannot drop schema 'SA' because it is being referenced by object 'Main_ETL'. (3729) (SQLExecDirectW)")
+2025-06-26 17:36:19,467 - ERROR - Failed to run scripts: ('42000', "[42000] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]Cannot drop schema 'SA' because it is being referenced by object 'Main_ETL'. (3729) (SQLExecDirectW)")
+2025-06-26 17:36:42,454 - INFO - Running: Staging Area/Drop_SA_all.sql
+2025-06-26 17:36:42,500 - ERROR - Error in batch from Staging Area/Drop_SA_all.sql:
+-- Drop all tables in [SA] schema (dependency order)
+
+DROP TABLE IF EXISTS [SA].[Payment];
+DROP TABLE IF EXISTS [SA].[Reservation];
+DROP TABLE IF EXIS...
+Error: ('42000', "[42000] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]Cannot drop schema 'SA' because it is being referenced by object 'Main_ETL'. (3729) (SQLExecDirectW)")
+2025-06-26 17:36:42,500 - ERROR - Error in Staging Area/Drop_SA_all.sql: ('42000', "[42000] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]Cannot drop schema 'SA' because it is being referenced by object 'Main_ETL'. (3729) (SQLExecDirectW)")
+2025-06-26 17:36:42,501 - ERROR - Failed to run scripts: ('42000', "[42000] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]Cannot drop schema 'SA' because it is being referenced by object 'Main_ETL'. (3729) (SQLExecDirectW)")
+2025-06-26 17:38:50,146 - INFO - Running: Staging Area/Drop_SA_all.sql
+2025-06-26 17:38:50,150 - INFO - Completed: Staging Area/Drop_SA_all.sql in 0.00s
+2025-06-26 17:38:50,150 - INFO - Running: Source/Drop_Source_all.sql
+2025-06-26 17:38:50,182 - INFO - Completed: Source/Drop_Source_all.sql in 0.03s
+2025-06-26 17:38:50,182 - INFO - Completed 2 scripts in 0.04s
+2025-06-26 17:39:10,925 - INFO - Running: Source/Create_Source_all.sql
+2025-06-26 17:39:10,969 - INFO - Completed: Source/Create_Source_all.sql in 0.04s
+2025-06-26 17:39:10,969 - INFO - Running: Source/Sample_Source_all.sql
+2025-06-26 17:39:11,051 - INFO - Completed: Source/Sample_Source_all.sql in 0.08s
+2025-06-26 17:39:11,051 - INFO - Running: Staging Area/Create_SA_all.sql
+2025-06-26 17:39:11,094 - INFO - Completed: Staging Area/Create_SA_all.sql in 0.04s
+2025-06-26 17:39:11,095 - INFO - Running: Staging Area/ETL_ServiceOffering.sql
+2025-06-26 17:39:11,100 - INFO - Completed: Staging Area/ETL_ServiceOffering.sql in 0.00s
+2025-06-26 17:39:11,100 - INFO - Running: Staging Area/ETL_Item.sql
+2025-06-26 17:39:11,105 - INFO - Completed: Staging Area/ETL_Item.sql in 0.01s
+2025-06-26 17:39:11,106 - INFO - Running: Staging Area/ETL_ServiceOfferingItem.sql
+2025-06-26 17:39:11,109 - INFO - Completed: Staging Area/ETL_ServiceOfferingItem.sql in 0.00s
+2025-06-26 17:39:11,109 - INFO - Running: Staging Area/ETL.sql
+2025-06-26 17:39:11,149 - INFO - Completed: Staging Area/ETL.sql in 0.04s
+2025-06-26 17:39:11,149 - INFO - Completed 7 scripts in 0.22s

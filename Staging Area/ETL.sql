@@ -1,25 +1,58 @@
 CREATE OR ALTER PROCEDURE [SA].[Main_ETL]
 AS
-BEGIN 
-    EXEC [SA].[ETL_Account]
-    EXEC [SA].[ETL_AccountTierHistory]
-    EXEC [SA].[ETL_Aircraft]
-    EXEC [SA].[ETL_Airline]
-    EXEC [SA].[ETL_Airport]
-    EXEC [SA].[ETL_CrewAssignment]
-    EXEC [SA].[ETL_CrewMember]
-    EXEC [SA].[ETL_FlightDetail]
-    EXEC [SA].[ETL_FlightOperation]
-    EXEC [SA].[ETL_LoyaltyTier]
-    EXEC [SA].[ETL_Passenger]
-    EXEC [SA].[ETL_Payment]
-    EXEC [SA].[ETL_Person]
-    EXEC [SA].[ETL_Points]
-    EXEC [SA].[ETL_PointsTransaction]
-    EXEC [SA].[ETL_Reservation]
-    EXEC [SA].[ETL_SeatDetail]
-    EXEC [SA].[ETL_ServiceOffering]
-    EXEC [SA].[ETL_TravelClass]
-END
+BEGIN
+    SET NOCOUNT ON;
 
-exec [SA].[Main_ETL]
+    -- List of all expected ETL procedures in SA schema
+    DECLARE @procs TABLE (ProcName NVARCHAR(128));
+    INSERT INTO @procs (ProcName) VALUES
+        (N'ETL_Account'),
+        (N'ETL_AccountTierHistory'),
+        (N'ETL_Aircraft'),
+        (N'ETL_Airline'),
+        (N'ETL_Airport'),
+        (N'ETL_CrewAssignment'),
+        (N'ETL_CrewMember'),
+        (N'ETL_FlightDetail'),
+        (N'ETL_FlightOperation'),
+        (N'ETL_Item'),
+        (N'ETL_LoyaltyTier'),
+        (N'ETL_LoyaltyTransactionType'),
+        (N'ETL_MaintenanceLocation'),
+        (N'ETL_MaintenanceType'),
+        (N'ETL_Part'),
+        (N'ETL_Passenger'),
+        (N'ETL_Payment'),
+        (N'ETL_Person'),
+        (N'ETL_PointConversionRate'),
+        (N'ETL_Points'),
+        (N'ETL_PointsTransaction'),
+        (N'ETL_Reservation'),
+        (N'ETL_SeatDetail'),
+        (N'ETL_ServiceOffering'),
+        (N'ETL_ServiceOfferingItem'),
+        (N'ETL_Technician'),
+        (N'ETL_TravelClass'),
+        (N'ETL_AirlineAirportService');
+
+    DECLARE @ProcName NVARCHAR(128), @sql NVARCHAR(300);
+
+    DECLARE proc_cursor CURSOR FOR SELECT ProcName FROM @procs;
+    OPEN proc_cursor;
+    FETCH NEXT FROM proc_cursor INTO @ProcName;
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        IF OBJECT_ID(N'SA.' + @ProcName, 'P') IS NOT NULL
+        BEGIN
+            SET @sql = N'EXEC [SA].[' + @ProcName + N']';
+            EXEC sp_executesql @sql;
+        END
+        FETCH NEXT FROM proc_cursor INTO @ProcName;
+    END
+    CLOSE proc_cursor;
+    DEALLOCATE proc_cursor;
+END
+GO
+
+-- Run your orchestrator as usual:
+EXEC [SA].[Main_ETL];

@@ -75,5 +75,7 @@ IF OBJECT_ID('[SA].[ETL_Part]', 'P') IS NOT NULL DROP PROCEDURE [SA].[ETL_Part];
 
 IF OBJECT_ID('[SA].[ETL_AirlineAirportService]', 'P') IS NOT NULL DROP PROCEDURE [SA].[ETL_AirlineAirportService];
 
+IF OBJECT_ID('[SA].[Main_ETL]', 'P') IS NOT NULL DROP PROCEDURE [SA].Main_ETL;
+
 DROP SCHEMA IF EXISTS [SA];
 
