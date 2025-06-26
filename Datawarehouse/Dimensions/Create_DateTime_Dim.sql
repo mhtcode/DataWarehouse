@@ -1,4 +1,4 @@
-﻿CREATE TABLE [DW].[DateTimeDim] (
+CREATE TABLE [DW].[DateTimeDim] (
   [DateTimeKey] datetime PRIMARY KEY,
   [FullDateAlternateKey] date,
   [PersianFullDateAlternateKey] nvarchar(12),
