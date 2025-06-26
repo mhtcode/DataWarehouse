@@ -1,0 +1,14 @@
+{
+  "make": {
+    "source": [
+      "Source/Create_Source_all.sql"
+    ],
+    "staging": [
+      "Staging Area/Create_SA_all.sql"
+    ]
+  },
+  "clean": [
+    "Staging Area/Drop_SA_all.sql",
+    "Source/Drop_Source_all.sql"
+  ]
+}

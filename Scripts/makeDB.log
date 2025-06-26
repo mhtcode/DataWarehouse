@@ -1,0 +1,49 @@
+2025-06-26 03:57:59,426 - INFO - Running: Source/Create_Source_all.sql
+2025-06-26 03:57:59,462 - INFO - Completed: Source/Create_Source_all.sql in 0.04s
+2025-06-26 03:57:59,462 - INFO - Running: Staging Area/Create_SA_all.sql
+2025-06-26 03:57:59,504 - INFO - Completed: Staging Area/Create_SA_all.sql in 0.04s
+2025-06-26 03:57:59,504 - INFO - Completed 2 scripts in 0.08s
+2025-06-26 04:01:34,377 - INFO - Running: Source/Create_Source_all.sql
+2025-06-26 04:01:34,379 - ERROR - Error in batch from Source/Create_Source_all.sql:
+CREATE SCHEMA [Source]
+
+CREATE TABLE [Source].[Airline] (
+  [AirlineID] integer PRIMARY KEY,
+  [Name] varchar(100),
+  [Country] varchar(50),
+  [Founde...
+Error: ('42S01', "[42S01] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]There is already an object named 'Source' in the database. (2714) (SQLExecDirectW); [42S01] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]CREATE SCHEMA failed due to previous errors. (2759)")
+2025-06-26 04:01:34,381 - ERROR - Error in Source/Create_Source_all.sql: ('42S01', "[42S01] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]There is already an object named 'Source' in the database. (2714) (SQLExecDirectW); [42S01] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]CREATE SCHEMA failed due to previous errors. (2759)")
+2025-06-26 04:01:34,381 - ERROR - Failed to run scripts: ('42S01', "[42S01] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]There is already an object named 'Source' in the database. (2714) (SQLExecDirectW); [42S01] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]CREATE SCHEMA failed due to previous errors. (2759)")
+2025-06-26 04:01:54,944 - INFO - Running: Staging Area/Drop_SA_all.sql
+2025-06-26 04:01:54,974 - INFO - Completed: Staging Area/Drop_SA_all.sql in 0.03s
+2025-06-26 04:01:54,974 - INFO - Running: Source/Drop_Source_all.sql
+2025-06-26 04:01:55,000 - INFO - Completed: Source/Drop_Source_all.sql in 0.03s
+2025-06-26 04:01:55,001 - INFO - Completed 2 scripts in 0.06s
+2025-06-26 04:02:04,833 - INFO - Running: Source/Create_Source_all.sql
+2025-06-26 04:02:04,874 - INFO - Completed: Source/Create_Source_all.sql in 0.04s
+2025-06-26 04:02:04,874 - INFO - Running: Staging Area/Create_SA_all.sql
+2025-06-26 04:02:04,916 - INFO - Completed: Staging Area/Create_SA_all.sql in 0.04s
+2025-06-26 04:02:04,917 - INFO - Completed 2 scripts in 0.08s
+2025-06-26 04:04:53,536 - INFO - Running: Source/Create_Source_all.sql
+2025-06-26 04:04:53,537 - ERROR - Error in batch from Source/Create_Source_all.sql:
+CREATE SCHEMA [Source]
+
+CREATE TABLE [Source].[Airline] (
+  [AirlineID] integer PRIMARY KEY,
+  [Name] varchar(100),
+  [Country] varchar(50),
+  [Founde...
+Error: ('42S01', "[42S01] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]There is already an object named 'Source' in the database. (2714) (SQLExecDirectW); [42S01] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]CREATE SCHEMA failed due to previous errors. (2759)")
+2025-06-26 04:04:53,538 - ERROR - Error in Source/Create_Source_all.sql: ('42S01', "[42S01] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]There is already an object named 'Source' in the database. (2714) (SQLExecDirectW); [42S01] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]CREATE SCHEMA failed due to previous errors. (2759)")
+2025-06-26 04:04:53,538 - ERROR - Failed to run scripts: ('42S01', "[42S01] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]There is already an object named 'Source' in the database. (2714) (SQLExecDirectW); [42S01] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]CREATE SCHEMA failed due to previous errors. (2759)")
+2025-06-26 04:05:01,540 - INFO - Running: Staging Area/Drop_SA_all.sql
+2025-06-26 04:05:01,570 - INFO - Completed: Staging Area/Drop_SA_all.sql in 0.03s
+2025-06-26 04:05:01,570 - INFO - Running: Source/Drop_Source_all.sql
+2025-06-26 04:05:01,602 - INFO - Completed: Source/Drop_Source_all.sql in 0.03s
+2025-06-26 04:05:01,602 - INFO - Completed 2 scripts in 0.06s
+2025-06-26 04:05:29,201 - INFO - Running: Source/Create_Source_all.sql
+2025-06-26 04:05:29,240 - INFO - Completed: Source/Create_Source_all.sql in 0.04s
+2025-06-26 04:05:29,241 - INFO - Running: Staging Area/Create_SA_all.sql
+2025-06-26 04:05:29,281 - INFO - Completed: Staging Area/Create_SA_all.sql in 0.04s
+2025-06-26 04:05:29,281 - INFO - Completed 2 scripts in 0.08s
