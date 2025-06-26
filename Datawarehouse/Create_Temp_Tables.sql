@@ -53,7 +53,10 @@ BEGIN
     Country       NVARCHAR(255)  NULL,
     FoundedYear   INT            NULL,
     FleetSize     INT            NULL,
-    Website       NVARCHAR(255)  NULL
+    Website       NVARCHAR(255)  NULL,
+	Current_IATA_Code varchar(3) NULL,
+    Previous_IATA_Code varchar(3) NULL,
+    IATA_Code_Changed_Date date NULL,
   );
 END;
 GO
