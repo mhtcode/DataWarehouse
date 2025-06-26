@@ -4,17 +4,13 @@ BEGIN
   SET NOCOUNT ON;
 
   DECLARE
-    @StartTime    DATETIME2(3) = SYSUTCDATETIME(),
-    @RowsInserted INT,
-    @LogID        BIGINT;
+    @StartTime     DATETIME2(3) = SYSUTCDATETIME(),
+    @RowsInserted  INT,
+    @LogID         BIGINT;
 
-  -- 1) Assume fatal: insert initial log entry
-  INSERT INTO [DW].[ETL_Log] (
-    ProcedureName,
-    TargetTable,
-    ChangeDescription,
-    ActionTime,
-    Status
+  -- 1. Insert initial (fatal) log entry
+  INSERT INTO DW.ETL_Log (
+    ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
     'Initial_Airline_Dim',
     'DimAirline',
@@ -25,9 +21,12 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2) Full load: insert all airlines
-    INSERT INTO [DW].[DimAirline] (
-      AirlineKey,
+    -- 2. Truncate dimension for full initial load
+    TRUNCATE TABLE DW.DimAirline;
+
+    -- 3. Insert all airlines (SCD Type 3: Previous IATA fields are NULL)
+    INSERT INTO DW.DimAirline (
+      AirlineID,
       Name,
       Country,
       FoundedYear,
@@ -45,18 +44,14 @@ BEGIN
       a.FleetSize,
       a.Website,
       a.Current_IATA_Code,
-      a.Previous_IATA_Code,
-      a.IATA_Code_Changed_Date
-    FROM [SA].[Airline] AS a
-    WHERE NOT EXISTS (
-      SELECT 1
-      FROM [DW].[DimAirline] AS d
-      WHERE d.AirlineKey = a.AirlineID
-    );
+      NULL,      -- No previous code on initial load
+      NULL       -- No change date on initial load
+    FROM SA.Airline AS a;
+
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 3) Update log to Success
-    UPDATE [DW].[ETL_Log]
+    -- 4. Update log entry to Success
+    UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Initial full load complete',
       RowsAffected      = @RowsInserted,
@@ -66,15 +61,16 @@ BEGIN
 
   END TRY
   BEGIN CATCH
-    -- 4) Update log to Error
-    UPDATE [DW].[ETL_Log]
+    DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
+    -- 5. Update log entry to Error
+    UPDATE DW.ETL_Log
     SET
-      ChangeDescription = 'Initial full load failed',
+      ChangeDescription = 'Initial load failed',
       DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
       Status            = 'Error',
-      Message           = ERROR_MESSAGE()
+      Message           = @ErrMsg
     WHERE LogID = @LogID;
     THROW;
   END CATCH
-END;
+END
 GO

@@ -30,7 +30,7 @@ BEGIN
     WHERE ProcedureName = 'ETL_Airline_Dim'
       AND Status = 'Success';
 
-    -- 3. Update existing airlines for non-IATA attribute changes (Type 1 part)
+    -- 3. Type 1 updates (simple attributes except IATA code)
     UPDATE d
     SET
       d.Name         = s.Name,
@@ -50,7 +50,7 @@ BEGIN
 
     SET @RowsUpdated = @@ROWCOUNT;
 
-    -- 4. SCD Type 3: IATA code changes (track previous/current and date)
+    -- 4. Type 3 SCD logic: IATA code change
     UPDATE d
     SET
       d.Previous_IATA_Code      = d.Current_IATA_Code,
