@@ -37,5 +37,3 @@ DROP TABLE IF EXISTS [SA].[MaintenanceLocation];
 DROP TABLE IF EXISTS [SA].[Part];
 
 DROP TABLE IF EXISTS [SA].[AirlineAirportService];
-
-DROP SCHEMA IF EXISTS [SA];
