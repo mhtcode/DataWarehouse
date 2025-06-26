@@ -17,7 +17,7 @@ DROP TABLE IF EXISTS [DW].[DimLoyaltyTier];
 DROP TABLE IF EXISTS [DW].[DimLoyaltyTransactionType];
 DROP TABLE IF EXISTS [DW].[DimMaintenanceLocation];
 DROP TABLE IF EXISTS [DW].[DimMaintenanceType];
-DROP TABLE IF EXISTS [DW].[DimParts];
+DROP TABLE IF EXISTS [DW].[DimPart];
 DROP TABLE IF EXISTS [DW].[DimPayment];
 DROP TABLE IF EXISTS [DW].[DimPerson];
 DROP TABLE IF EXISTS [DW].[DimPointConversionRate];
