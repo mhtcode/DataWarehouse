@@ -1,0 +1,45 @@
+CREATE OR ALTER PROCEDURE [DW].[Main_Dim_Initial_ETL]
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- List of all Initial Dimension ETL procedures
+    DECLARE @procs TABLE (ProcName NVARCHAR(128));
+    INSERT INTO @procs (ProcName) VALUES
+        (N'Initial_Account_Dim'),
+        (N'Initial_Aircraft_Dim'),
+        (N'Initial_Airline_Dim'),
+        (N'Initial_AirlineAirportService_Dim'),
+        (N'Initial_Airport_Dim'),
+        (N'Initial_Crew_Dim'),
+        (N'Initial_Date_Dim'),
+        (N'Initial_DateTime_Dim'),
+        (N'Initial_Flightt_Dim'),
+        (N'Initial_LoyaltyTier_Dim'),
+        (N'Initial_LoyaltyTransactionType_Dim'),
+        (N'Initial_Payment_Dim'),
+        (N'Initial_Person_Dim'),
+        (N'Initial_PointConversionRate_Dim'),   -- implement as needed
+        (N'Initial_ServiceOffering_Dim');       -- implement as needed
+
+    DECLARE @ProcName NVARCHAR(128), @sql NVARCHAR(300);
+
+    DECLARE proc_cursor CURSOR FOR SELECT ProcName FROM @procs;
+    OPEN proc_cursor;
+    FETCH NEXT FROM proc_cursor INTO @ProcName;
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        IF OBJECT_ID('DW.' + @ProcName, 'P') IS NOT NULL  -- Looks for dbo by default, use schema if needed
+        BEGIN
+            SET @sql = N'EXEC [DW].[' + @ProcName + N']';
+            EXEC sp_executesql @sql;
+        END
+        FETCH NEXT FROM proc_cursor INTO @ProcName;
+    END
+    CLOSE proc_cursor;
+    DEALLOCATE proc_cursor;
+END
+GO
+
+-- Example: Run all dimension initial ETLs
+EXEC [DW].[Main_Dim_Initial_ETL];

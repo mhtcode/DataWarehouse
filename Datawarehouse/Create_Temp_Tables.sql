@@ -207,3 +207,16 @@ BEGIN
   );
 END;
 GO
+
+IF OBJECT_ID('[DW].[Temp_ServiceOffering_table]', 'U') IS NULL
+BEGIN
+  CREATE TABLE [DW].[Temp_ServiceOffering_table] (
+    [ServiceOfferingID]    INT             NOT NULL,
+    [OfferingName]         NVARCHAR(100)   NULL,
+    [Description]          NVARCHAR(300)   NULL,
+    [TravelClassName]      NVARCHAR(50)    NULL,
+    [TotalCost]            DECIMAL(18,2)   NULL,
+    [ItemsSummary]         NVARCHAR(400)   NULL
+  );
+END;
+GO
