@@ -45,6 +45,9 @@ DROP TABLE IF EXISTS [DW].[Temp_Person_table];
 DROP TABLE IF EXISTS [DW].[Temp_PointConversionRate_table];
 DROP TABLE IF EXISTS [DW].[Temp_ServiceOffering_table];
 DROP TABLE IF EXISTS [DW].[Temp_Technician_table];
+DROP TABLE IF EXISTS [DW].[Temp_DailyPayments];
+DROP TABLE IF EXISTS [DW].[Temp_EnrichedFlightData];
+DROP TABLE IF EXISTS [DW].[Temp_EnrichedPersonData];
 
 -- Drop ETL Log table (after everything else)
 DROP TABLE IF EXISTS [DW].[ETL_Log];

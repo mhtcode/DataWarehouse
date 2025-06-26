@@ -1,4 +1,4 @@
-CREATE TABLE [DW].[DateDim] (
+CREATE TABLE [DW].[DimDate] (
   [DateKey] date PRIMARY KEY,
   [FullDateAlternateKey] date,
   [PersianFullDateAlternateKey] nvarchar(12),
