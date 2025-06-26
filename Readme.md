@@ -1,8 +1,7 @@
 # DB2 Project: Data Warehouse Automation
 
 **Project Topic:**  
-Modeling a comprehensive ...  
-*(replace with your actual topic, e.g., "flight reservation and loyalty system")*  
+Modeling a comprehensive "flight reservation and loyalty system"  
 **Supervisor:** Prof. Alireza Basiri
 
 ---
