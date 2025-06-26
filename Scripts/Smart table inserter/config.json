@@ -1,0 +1,18 @@
+{
+  "tables": [
+    {
+      "name": "Person",
+      "records": 1000
+    },
+    {
+      "name": "Passenger",
+      "records": 900,
+      "depends_on": ["Person"]
+    },
+    {
+      "name": "Account",
+      "records": 900,
+      "depends_on": ["Passenger"]
+    }
+  ]
+}

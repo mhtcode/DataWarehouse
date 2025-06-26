@@ -1,10 +1,12 @@
 {
   "make": {
     "source": [
-      "Source/Create_Source_all.sql"
+      "Source/Create_Source_all.sql",
+      "Source/Sample_Source_all.sql"
     ],
     "staging": [
-      "Staging Area/Create_SA_all.sql"
+      "Staging Area/Create_SA_all.sql",
+      "Staging Area/ETL_ServiceOffering.sql"
     ]
   },
   "clean": [
