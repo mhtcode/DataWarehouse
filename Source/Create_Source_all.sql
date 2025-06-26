@@ -8,9 +8,7 @@ CREATE TABLE [Source].[Airline] (
   [HeadquartersNumber] varchar(50),
   [FleetSize] integer,
   [Website] varchar(200),
-  [Current_IATA_Code] varchar(3) NULL,  
-  [Previous_IATA_Code] varchar(3) NULL,
-  [IATA_Code_Changed_Date] date NULL
+  [Current_IATA_Code] varchar(3) NULL
 )
 GO
 

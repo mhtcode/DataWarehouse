@@ -5,38 +5,36 @@ BEGIN
     USING [Source].[Airline] AS SOURCE
       ON TARGET.AirlineID = SOURCE.AirlineID
 
-    -- 1) UPDATE existing rows when *any* source column changed (now including IATA columns)
+    -- 1) UPDATE existing rows when *any* source column changed (only current IATA code included)
     WHEN MATCHED AND EXISTS (
       SELECT 
         SOURCE.Name, SOURCE.Country, SOURCE.FoundedDate, 
         SOURCE.HeadquartersNumber, SOURCE.FleetSize, SOURCE.Website,
-        SOURCE.Current_IATA_Code, SOURCE.Previous_IATA_Code, SOURCE.IATA_Code_Changed_Date
+        SOURCE.Current_IATA_Code
       EXCEPT
       SELECT 
         TARGET.Name, TARGET.Country, TARGET.FoundedDate, 
         TARGET.HeadquartersNumber, TARGET.FleetSize, TARGET.Website,
-        TARGET.Current_IATA_Code, TARGET.Previous_IATA_Code, TARGET.IATA_Code_Changed_Date
+        TARGET.Current_IATA_Code
     )
     THEN
       UPDATE SET
-        TARGET.Name                     = NULLIF(TRIM(SOURCE.Name), ''),
-        TARGET.Country                  = NULLIF(TRIM(SOURCE.Country), ''),
-        TARGET.FoundedDate              = SOURCE.FoundedDate,
-        TARGET.HeadquartersNumber       = NULLIF(TRIM(SOURCE.HeadquartersNumber), ''),
-        TARGET.FleetSize                = SOURCE.FleetSize,
-        TARGET.Website                  = NULLIF(TRIM(SOURCE.Website), ''),
-        TARGET.Current_IATA_Code        = SOURCE.Current_IATA_Code,
-        TARGET.Previous_IATA_Code       = SOURCE.Previous_IATA_Code,
-        TARGET.IATA_Code_Changed_Date   = SOURCE.IATA_Code_Changed_Date,
+        TARGET.Name                       = NULLIF(TRIM(SOURCE.Name), ''),
+        TARGET.Country                    = NULLIF(TRIM(SOURCE.Country), ''),
+        TARGET.FoundedDate                = SOURCE.FoundedDate,
+        TARGET.HeadquartersNumber         = NULLIF(TRIM(SOURCE.HeadquartersNumber), ''),
+        TARGET.FleetSize                  = SOURCE.FleetSize,
+        TARGET.Website                    = NULLIF(TRIM(SOURCE.Website), ''),
+        TARGET.Current_IATA_Code          = SOURCE.Current_IATA_Code,
         TARGET.StagingLastUpdateTimestampUTC = GETUTCDATE()
 
-    -- 2) INSERT brand-new airlines, including IATA columns
+    -- 2) INSERT brand-new airlines, only including current IATA code
     WHEN NOT MATCHED BY TARGET
     THEN
       INSERT (
         AirlineID, Name, Country, FoundedDate,
         HeadquartersNumber, FleetSize, Website,
-        Current_IATA_Code, Previous_IATA_Code, IATA_Code_Changed_Date,
+        Current_IATA_Code,
         StagingLoadTimestampUTC, SourceSystem
       )
       VALUES (
@@ -48,8 +46,6 @@ BEGIN
         SOURCE.FleetSize,
         NULLIF(TRIM(SOURCE.Website), ''),
         SOURCE.Current_IATA_Code,
-        SOURCE.Previous_IATA_Code,
-        SOURCE.IATA_Code_Changed_Date,
         GETUTCDATE(),
         'OperationalDB'
       );

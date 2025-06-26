@@ -10,8 +10,6 @@ CREATE TABLE [SA].[Airline] (
   [FleetSize] integer,
   [Website] varchar(200),
   [Current_IATA_Code] varchar(3) NULL,
-  [Previous_IATA_Code] varchar(3) NULL,
-  [IATA_Code_Changed_Date] date NULL,
   [StagingLoadTimestampUTC] datetime,
   [StagingLastUpdateTimestampUTC] datetime,
   [SourceSystem] varchar(200)
