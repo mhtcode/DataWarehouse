@@ -2,11 +2,10 @@ CREATE OR ALTER PROCEDURE [DW].[Initial_LoyaltyTier_Dim]
 AS
 BEGIN
   SET NOCOUNT ON;
-  
   DECLARE
-    @StartTime      DATETIME2(3) = SYSUTCDATETIME(),
-    @RowsInserted   INT,
-    @LogID          BIGINT;
+    @StartTime    DATETIME2(3) = SYSUTCDATETIME(),
+    @RowsInserted INT,
+    @LogID        BIGINT;
 
   -- 1) Assume fatal: insert initial log entry
   INSERT INTO DW.ETL_Log (
@@ -23,8 +22,13 @@ BEGIN
   BEGIN TRY
     -- 2) Insert all loyalty tiers into dimension
     INSERT INTO DW.DimLoyaltyTier (
-      LoyaltyTierKey, Name, MinPoints, Benefits,
-      EffectiveFrom, EffectiveTo, NameIsCurrent
+      LoyaltyTierID,
+      Name,
+      MinPoints,
+      Benefits,
+      EffectiveFrom,
+      EffectiveTo,
+      MinPointsIsCurrent
     )
     SELECT
       lt.LoyaltyTierID,
@@ -37,7 +41,7 @@ BEGIN
     FROM SA.LoyaltyTier AS lt
     WHERE NOT EXISTS (
       SELECT 1 FROM DW.DimLoyaltyTier AS d
-      WHERE d.LoyaltyTierKey = lt.LoyaltyTierID
+      WHERE d.LoyaltyTierID = lt.LoyaltyTierID
     );
     SET @RowsInserted = @@ROWCOUNT;
 
@@ -57,6 +61,7 @@ BEGIN
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Initial full load failed',
+      RowsAffected      = NULL,
       DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
       Status            = 'Error',
       Message           = @ErrMsg
