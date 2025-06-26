@@ -48,6 +48,10 @@ DROP TABLE IF EXISTS [DW].[Temp_Technician_table];
 DROP TABLE IF EXISTS [DW].[Temp_DailyPayments];
 DROP TABLE IF EXISTS [DW].[Temp_EnrichedFlightData];
 DROP TABLE IF EXISTS [DW].[Temp_EnrichedPersonData];
+DROP TABLE IF EXISTS [DW].[Temp_DailyFlightOperations];
+DROP TABLE IF EXISTS [DW].[Temp_EnrichedFlightPerformanceData];
+
+
 
 -- Drop ETL Log table (after everything else)
 DROP TABLE IF EXISTS [DW].[ETL_Log];
@@ -95,6 +99,8 @@ IF OBJECT_ID('[DW].[ETL_Person_Dim]', 'P') IS NOT NULL DROP PROCEDURE [DW].[ETL_
 IF OBJECT_ID('[DW].[ETL_PointConversionRate_Dim]', 'P') IS NOT NULL DROP PROCEDURE [DW].[ETL_PointConversionRate_Dim];
 IF OBJECT_ID('[DW].[ETL_ServiceOffering_Dim]', 'P') IS NOT NULL DROP PROCEDURE [DW].[ETL_ServiceOffering_Dim];
 IF OBJECT_ID('[DW].[ETL_Technician_Dim]', 'P') IS NOT NULL DROP PROCEDURE [DW].[ETL_Technician_Dim];
+
+IF OBJECT_ID('[DW].[Main_Dim_Initial_ETL]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Main_Dim_Initial_ETL]
 
 -- Drop the schema last
 DROP SCHEMA IF EXISTS [DW];

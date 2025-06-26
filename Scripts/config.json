@@ -9,10 +9,42 @@
       "Staging Area/ETL_ServiceOffering.sql",
       "Staging Area/ETL_Item.sql",
       "Staging Area/ETL_ServiceOfferingItem.sql",
-      "Staging Area/ETL.sql"
+      "Staging Area/ETL_Account.sql",
+      "Staging Area/ETL_AccountTierHistory.sql",
+      "Staging Area/ETL_Aircraft.sql",
+      "Staging Area/ETL_Airline.sql",
+      "Staging Area/ETL_AirlineAirportService.sql",
+      "Staging Area/ETL_Airport.sql",
+      "Staging Area/ETL_CrewAssignment.sql",
+      "Staging Area/ETL_CrewMember.sql",
+      "Staging Area/ETL_FlightDetail.sql",
+      "Staging Area/ETL_FlightOperation.sql",
+      "Staging Area/ETL_LoyaltyTier.sql",
+      "Staging Area/ETL_Passenger.sql",
+      "Staging Area/ETL_Payment.sql",
+      "Staging Area/ETL_Person.sql",
+      "Staging Area/ETL_Points.sql",
+      "Staging Area/ETL_PointsTransaction.sql",
+      "Staging Area/ETL_Reservation.sql",
+      "Staging Area/ETL_SeatDetail.sql",
+      "Staging Area/ETL_ServiceOffering.sql",
+      "Staging Area/ETL_ServiceOfferingItem.sql",
+      "Staging Area/ETL_TravelClass.sql",
+      "Staging Area/ALL_ETL.sql"
+    ],
+    "datawarehouse": [
+      "Datawarehouse/Create_DW_Schema.sql",
+      "Datawarehouse/Create_Log_Table.sql",
+      "Datawarehouse/Create_Temp_Tables.sql",
+      "Datawarehouse/Dimensions/Create_Date_Dim.sql",
+      "Datawarehouse/Dimensions/Initial_Date_Dim.sql",
+      "Datawarehouse/Dimensions/Create_DateTime_Dim.sql",
+      "Datawarehouse/Dimensions/Initial_DateTime_Dim.sql",
+      "Datawarehouse/ALL_Initial_ETL.sql"
     ]
   },
   "clean": [
+    "Datawarehouse/Drop_DW_all.sql",
     "Staging Area/Drop_SA_all.sql",
     "Source/Drop_Source_all.sql"
   ]

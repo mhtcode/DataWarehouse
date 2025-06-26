@@ -6,21 +6,21 @@ BEGIN
     -- List of all Initial Dimension ETL procedures
     DECLARE @procs TABLE (ProcName NVARCHAR(128));
     INSERT INTO @procs (ProcName) VALUES
+        (N'Initial_Date_Dim'),
+        (N'Initial_DateTime_Dim'),
         (N'Initial_Account_Dim'),
         (N'Initial_Aircraft_Dim'),
         (N'Initial_Airline_Dim'),
         (N'Initial_AirlineAirportService_Dim'),
         (N'Initial_Airport_Dim'),
         (N'Initial_Crew_Dim'),
-        (N'Initial_Date_Dim'),
-        (N'Initial_DateTime_Dim'),
-        (N'Initial_Flightt_Dim'),
+        (N'Initial_Flight_Dim'),
         (N'Initial_LoyaltyTier_Dim'),
         (N'Initial_LoyaltyTransactionType_Dim'),
         (N'Initial_Payment_Dim'),
         (N'Initial_Person_Dim'),
-        (N'Initial_PointConversionRate_Dim'),   -- implement as needed
-        (N'Initial_ServiceOffering_Dim');       -- implement as needed
+        (N'Initial_PointConversionRate_Dim'),
+        (N'Initial_ServiceOffering_Dim');
 
     DECLARE @ProcName NVARCHAR(128), @sql NVARCHAR(300);
 
@@ -29,10 +29,15 @@ BEGIN
     FETCH NEXT FROM proc_cursor INTO @ProcName;
     WHILE @@FETCH_STATUS = 0
     BEGIN
-        IF OBJECT_ID('DW.' + @ProcName, 'P') IS NOT NULL  -- Looks for dbo by default, use schema if needed
+        -- Check existence with correct schema and proc name, and run
+        IF OBJECT_ID(N'DW.' + @ProcName, 'P') IS NOT NULL
         BEGIN
             SET @sql = N'EXEC [DW].[' + @ProcName + N']';
             EXEC sp_executesql @sql;
+        END
+        ELSE
+        BEGIN
+            PRINT N'Skipped: [DW].[' + @ProcName + N'] does not exist.';
         END
         FETCH NEXT FROM proc_cursor INTO @ProcName;
     END
@@ -43,3 +48,4 @@ GO
 
 -- Example: Run all dimension initial ETLs
 EXEC [DW].[Main_Dim_Initial_ETL];
+GO

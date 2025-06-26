@@ -26,7 +26,7 @@ BEGIN
         @CurrentMonthStart = MIN(FullDateAlternateKey), 
         @EndDate = MAX(FullDateAlternateKey)
     FROM 
-        [DW].[DateDim]
+        [DW].[DimDate]
 
 
     WHILE @CurrentMonthStart <= @EndDate
@@ -59,7 +59,7 @@ BEGIN
             t.HourValue,
             t.MinuteValue
         FROM
-            [DW].[DateDim] d 
+            [DW].[DimDate] d 
         CROSS JOIN
             #TimeDimension t
         WHERE
@@ -71,9 +71,4 @@ BEGIN
 
     DROP TABLE #TimeDimension;
 END;
-
-exec [DW].[Initial_DateTime_Dim]
-
-select * from [DW].[DimDateTime]
-
-select * from [DW].[DateDim]
+GO
