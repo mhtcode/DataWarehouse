@@ -319,6 +319,8 @@ CREATE TABLE [SA].[FlightOperation] (
   [ActualArrivalDateTime] datetime,
   [DelayMinutes] integer DEFAULT (0),
   [CancelFlag] bit DEFAULT (0),
+  [LoadFactor] float,
+  [DelaySeverityScore] float,
   [StagingLoadTimestampUTC] datetime,
   [StagingLastUpdateTimestampUTC] datetime,
   [SourceSystem] varchar(200)

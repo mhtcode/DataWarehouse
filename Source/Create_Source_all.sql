@@ -230,7 +230,9 @@ CREATE TABLE [Source].[FlightOperation] (
   [ActualDepartureDateTime] datetime,
   [ActualArrivalDateTime] datetime,
   [DelayMinutes] integer DEFAULT (0),
-  [CancelFlag] bit DEFAULT (0)
+  [CancelFlag] bit DEFAULT (0),
+  [LoadFactor] float,
+  [DelaySeverityScore] float
 )
 GO
 

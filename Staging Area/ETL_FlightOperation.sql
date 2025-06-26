@@ -8,16 +8,18 @@ BEGIN
     -- Action for existing records that have changed
     WHEN MATCHED AND EXISTS (
         -- This clause correctly compares all relevant columns for any changes.
-        SELECT SOURCE.FlightDetailID, SOURCE.ActualDepartureDateTime, SOURCE.ActualArrivalDateTime, SOURCE.DelayMinutes, SOURCE.CancelFlag
+        SELECT SOURCE.FlightDetailID, SOURCE.ActualDepartureDateTime, SOURCE.ActualArrivalDateTime, SOURCE.DelayMinutes, SOURCE.CancelFlag, SOURCE.LoadFactor, SOURCE.DelaySeverityScore
         EXCEPT
-        SELECT TARGET.FlightDetailID, TARGET.ActualDepartureDateTime, TARGET.ActualArrivalDateTime, TARGET.DelayMinutes, TARGET.CancelFlag
+        SELECT TARGET.FlightDetailID, TARGET.ActualDepartureDateTime, TARGET.ActualArrivalDateTime, TARGET.DelayMinutes, TARGET.CancelFlag, TARGET.LoadFactor, TARGET.DelaySeverityScore
     ) THEN
         UPDATE SET
-            TARGET.FlightDetailID = SOURCE.FlightDetailID,
-            TARGET.ActualDepartureDateTime = SOURCE.ActualDepartureDateTime,
-            TARGET.ActualArrivalDateTime = SOURCE.ActualArrivalDateTime,
-            TARGET.DelayMinutes = SOURCE.DelayMinutes,
-            TARGET.CancelFlag = SOURCE.CancelFlag,
+            TARGET.FlightDetailID            = SOURCE.FlightDetailID,
+            TARGET.ActualDepartureDateTime   = SOURCE.ActualDepartureDateTime,
+            TARGET.ActualArrivalDateTime     = SOURCE.ActualArrivalDateTime,
+            TARGET.DelayMinutes              = SOURCE.DelayMinutes,
+            TARGET.CancelFlag                = SOURCE.CancelFlag,
+            TARGET.LoadFactor                = SOURCE.LoadFactor,
+            TARGET.DelaySeverityScore        = SOURCE.DelaySeverityScore,
             TARGET.StagingLastUpdateTimestampUTC = GETUTCDATE()
 
     -- Action for new records
@@ -29,6 +31,8 @@ BEGIN
             ActualArrivalDateTime,
             DelayMinutes,
             CancelFlag,
+            LoadFactor,
+            DelaySeverityScore,
             StagingLoadTimestampUTC,
             SourceSystem
         )
@@ -39,6 +43,8 @@ BEGIN
             SOURCE.ActualArrivalDateTime,
             SOURCE.DelayMinutes,
             SOURCE.CancelFlag,
+            SOURCE.LoadFactor,
+            SOURCE.DelaySeverityScore,
             GETUTCDATE(),
             'OperationalDB'
         ); -- Mandatory Semicolon
