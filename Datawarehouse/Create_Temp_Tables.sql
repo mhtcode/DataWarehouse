@@ -35,11 +35,10 @@ GO
 IF OBJECT_ID('[DW].[Temp_Account_table]', 'U') IS NULL
 BEGIN
   CREATE TABLE [DW].[Temp_Account_table] (
-    AccountID       INT             NOT NULL PRIMARY KEY,
-    AccountNumber   NVARCHAR(255)   NULL,
-    AccountType     NVARCHAR(255)   NULL,
-    CreatedDate     DATETIME        NULL,
-    IsActive        BIT             NULL
+    [AccountID] INT PRIMARY KEY,
+    [PassengerName] NVARCHAR(100),
+    [RegistrationDate] DATETIME,
+    [LoyaltyTierName] NVARCHAR(50)
   );
 END;
 GO
@@ -54,7 +53,7 @@ BEGIN
     FoundedYear   INT            NULL,
     FleetSize     INT            NULL,
     Website       NVARCHAR(255)  NULL,
-	Current_IATA_Code varchar(3) NULL,
+	  Current_IATA_Code varchar(3) NULL,
     Previous_IATA_Code varchar(3) NULL,
     IATA_Code_Changed_Date date NULL,
   );
