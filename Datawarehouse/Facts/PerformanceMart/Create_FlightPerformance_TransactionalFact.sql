@@ -1,6 +1,4 @@
 CREATE TABLE [DW].[FactFlightPerformance] (
-    [Id] INT NOT NULL PRIMARY KEY,  -- Surrogate key for fact record
-
     [ScheduledDepartureId] DATETIME NULL,  -- from SA.FlightDetail.ScheduledDepartureDateTime
     [ScheduledArrivalId]   DATETIME NULL,  -- from SA.FlightDetail.ScheduledArrivalDateTime
 
