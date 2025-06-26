@@ -54,5 +54,4 @@ BEGIN
 END
 GO
 
--- Run your orchestrator as usual:
 EXEC [SA].[Main_ETL];
