@@ -31,7 +31,6 @@ BEGIN
             Description,
             TotalCost,
             StagingLoadTimestampUTC,
-            StagingLastUpdateTimestampUTC,
             SourceSystem
         )
         VALUES (
@@ -40,7 +39,6 @@ BEGIN
             NULLIF(LTRIM(RTRIM(SOURCE.OfferingName)), ''),
             NULLIF(LTRIM(RTRIM(SOURCE.Description)), ''),
             SOURCE.TotalCost,
-            GETUTCDATE(),
             GETUTCDATE(),
             'OperationalDB'
         );
