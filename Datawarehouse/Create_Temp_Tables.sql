@@ -254,3 +254,15 @@ BEGIN
   );
 END;
 GO
+
+
+IF OBJECT_ID('[DW].[Temp_PointConversionRate_table]', 'U') IS NULL
+BEGIN
+  CREATE TABLE [DW].[Temp_PointConversionRate_table] (
+      PointConversionRateID INT,
+      ConversionRate DECIMAL(18,6),
+      Currency NVARCHAR(255)
+  );
+END;
+GO
+

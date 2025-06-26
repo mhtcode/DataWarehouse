@@ -1,0 +1,68 @@
+CREATE OR ALTER PROCEDURE [DW].[Initial_PointConversionRate_Dim]
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE
+        @StartTime     DATETIME2(3) = SYSUTCDATETIME(),
+        @RowsInserted  INT,
+        @LogID         BIGINT;
+
+    INSERT INTO DW.ETL_Log (
+        ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
+    ) VALUES (
+        'Initial_PointConversionRate_Dim',
+        'DimPointConversionRate',
+        'Procedure started - awaiting completion',
+        @StartTime,
+        'Fatal'
+    );
+    SET @LogID = SCOPE_IDENTITY();
+
+    BEGIN TRY
+        -- 1. Truncate the dimension for initial load
+        TRUNCATE TABLE DW.DimPointConversionRate;
+
+        -- 2. Insert current rows
+        INSERT INTO DW.DimPointConversionRate (
+            PointConversionRateID,
+            Rate,
+            Currency,
+            EffectiveFrom,
+            EffectiveTo,
+            IsCurrent
+        )
+        SELECT
+            sa.PointConversionRateID,
+            sa.ConversionRate,
+            sa.CurrencyCode,
+            COALESCE(sa.StagingLoadTimestampUTC, GETDATE()),
+            NULL,    -- No end date at initial
+            1        -- All are current at initial load
+        FROM SA.PointConversionRate sa;
+
+        SET @RowsInserted = @@ROWCOUNT;
+
+        -- 3. Update ETL log to Success
+        UPDATE DW.ETL_Log
+        SET
+            ChangeDescription = 'Initial full load complete',
+            RowsAffected      = @RowsInserted,
+            DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
+            Status            = 'Success'
+        WHERE LogID = @LogID;
+
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
+        UPDATE DW.ETL_Log
+        SET
+            ChangeDescription = 'Initial load failed',
+            DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
+            Status            = 'Error',
+            Message           = @ErrMsg
+        WHERE LogID = @LogID;
+        THROW;
+    END CATCH
+END
+GO
