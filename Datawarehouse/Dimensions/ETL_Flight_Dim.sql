@@ -6,11 +6,11 @@ BEGIN
   DECLARE
     @StartTime     DATETIME2(3) = SYSUTCDATETIME(),
     @LastRunTime   DATETIME2(3),
-    @RowsUpdated   INT,
-    @RowsInserted  INT,
+    @RowsUpdated   INT = 0,
+    @RowsInserted  INT = 0,
     @LogID         BIGINT;
 
-  -- 1) Assume fatal: insert initial log entry
+  -- 1) Insert log entry as fatal by default
   INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
@@ -25,10 +25,7 @@ BEGIN
   BEGIN TRY
     -- 2) Determine last successful run time
     SELECT
-      @LastRunTime = COALESCE(
-        MAX(ActionTime),
-        '1900-01-01'
-      )
+      @LastRunTime = COALESCE(MAX(ActionTime), '1900-01-01')
     FROM DW.ETL_Log
     WHERE ProcedureName = 'ETL_Flight_Dim'
       AND Status = 'Success';
@@ -36,83 +33,105 @@ BEGIN
     -- 3) Truncate staging
     TRUNCATE TABLE [DW].[Temp_Flight_table];
 
-    -- 4) Populate staging with changed/new flights
+    -- 4) Populate staging with changed/new flights (including joined names)
     INSERT INTO [DW].[Temp_Flight_table] (
-      FlightID,
+      FlightDetailID,
+      DepartureAirportName,
+      DestinationAirportName,
       DepartureDateTime,
       ArrivalDateTime,
       FlightDurationMinutes,
-      AircraftKey,
+      AircraftName,
       FlightCapacity,
       TotalCost
     )
     SELECT
-      a.FlightDetailID,
-      a.DepartureDateTime,
-      a.ArrivalDateTime,
-      (DATEDIFF(minute, a.DepartureDateTime, a.ArrivalDateTime)),
-      a.AircraftID,
-      a.FlightCapacity,
-      a.TotalCost
-    FROM SA.FlightDetail AS a
-    WHERE a.StagingLastUpdateTimestampUTC > @LastRunTime;
+      f.FlightDetailID,
+      dep.City + ' Airport',            -- Use dep.Name if you have it!
+      dest.City + ' Airport',
+      f.DepartureDateTime,
+      f.ArrivalDateTime,
+      DATEDIFF(MINUTE, f.DepartureDateTime, f.ArrivalDateTime),
+      a.Model,                         -- Use a.Name or a.Model (adjust to your table)
+      f.FlightCapacity,
+      f.TotalCost
+    FROM SA.FlightDetail AS f
+    LEFT JOIN SA.Airport AS dep  ON f.DepartureAirportID = dep.AirportID
+    LEFT JOIN SA.Airport AS dest ON f.DestinationAirportID = dest.AirportID
+    LEFT JOIN SA.Aircraft AS a   ON f.AircraftID = a.AircraftID
+    WHERE f.StagingLastUpdateTimestampUTC > @LastRunTime;
 
-    -- 5) Update existing accounts in dimension
+    -- 5) Update changed flights
     UPDATE d
     SET
-      d.FlightKey = t.FlightID,
-      d.DepartureDateTime = t.DepartureDateTime,
-      d.ArrivalDateTime = t.ArrivalDateTime,
-      d.FlightDurationMinutes = t.FlightDurationMinutes,
-      d.AircraftKey = t.AircraftKey,
-      d.FlightCapacity = t.FlightCapacity,
-      d.TotalCost = t.TotalCost    
+      d.DepartureAirportName    = t.DepartureAirportName,
+      d.DestinationAirportName  = t.DestinationAirportName,
+      d.DepartureDateTime       = t.DepartureDateTime,
+      d.ArrivalDateTime         = t.ArrivalDateTime,
+      d.FlightDurationMinutes   = t.FlightDurationMinutes,
+      d.AircraftName            = t.AircraftName,
+      d.FlightCapacity          = t.FlightCapacity,
+      d.TotalCost               = t.TotalCost
     FROM DW.DimFlight AS d
     JOIN DW.Temp_Flight_table AS t
-      ON d.FlightKey = t.FlightID;
+      ON d.FlightDetailID = t.FlightDetailID
+    WHERE
+      (
+        ISNULL(d.DepartureAirportName,'')    <> ISNULL(t.DepartureAirportName,'')
+        OR ISNULL(d.DestinationAirportName,'')<> ISNULL(t.DestinationAirportName,'')
+        OR ISNULL(d.DepartureDateTime,'')     <> ISNULL(t.DepartureDateTime,'')
+        OR ISNULL(d.ArrivalDateTime,'')       <> ISNULL(t.ArrivalDateTime,'')
+        OR ISNULL(d.FlightDurationMinutes,0)  <> ISNULL(t.FlightDurationMinutes,0)
+        OR ISNULL(d.AircraftName,'')          <> ISNULL(t.AircraftName,'')
+        OR ISNULL(d.FlightCapacity,0)         <> ISNULL(t.FlightCapacity,0)
+        OR ISNULL(d.TotalCost,0)              <> ISNULL(t.TotalCost,0)
+      );
     SET @RowsUpdated = @@ROWCOUNT;
 
-    -- 6) Insert new accounts into dimension
+    -- 6) Insert new flights
     INSERT INTO DW.DimFlight (
-      FlightKey,
+      FlightDetailID,
+      DepartureAirportName,
+      DestinationAirportName,
       DepartureDateTime,
       ArrivalDateTime,
       FlightDurationMinutes,
-      AircraftKey,
+      AircraftName,
       FlightCapacity,
       TotalCost
     )
     SELECT
-      t.FlightID,
+      t.FlightDetailID,
+      t.DepartureAirportName,
+      t.DestinationAirportName,
       t.DepartureDateTime,
       t.ArrivalDateTime,
       t.FlightDurationMinutes,
-      t.AircraftKey,
+      t.AircraftName,
       t.FlightCapacity,
       t.TotalCost
     FROM DW.Temp_Flight_table AS t
     WHERE NOT EXISTS (
       SELECT 1 FROM DW.DimFlight AS d
-      WHERE d.FlightKey = t.FlightID
+      WHERE d.FlightDetailID = t.FlightDetailID
     );
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 7) Update log entry to Success
+    -- 7) Mark log as success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = CONCAT(
         'Incremental load complete: updated=', @RowsUpdated,
         ', inserted=', @RowsInserted
       ),
-      RowsAffected      = @RowsUpdated + @RowsInserted,
-      DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
-      Status            = 'Success'
+      RowsAffected = @RowsUpdated + @RowsInserted,
+      DurationSec  = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
+      Status       = 'Success'
     WHERE LogID = @LogID;
 
   END TRY
   BEGIN CATCH
     DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
-    -- 8) Update log entry to Error
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Incremental load failed',
@@ -122,5 +141,5 @@ BEGIN
     WHERE LogID = @LogID;
     THROW;
   END CATCH
-END;
+END
 GO
