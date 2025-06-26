@@ -5,8 +5,8 @@ CREATE TABLE [DW].[DimAirline] (
   [FoundedYear] int,
   [FleetSize] int,
   [Website] nvarchar(255),
-  [EffectiveFrom] datetime,
-  [EffectiveTo] datetime,
-  [FleetSizeIsCurrent] bit
+  [Current_IATA_Code] varchar(3) NULL,
+  [Previous_IATA_Code] varchar(3) NULL,
+  [IATA_Code_Changed_Date] date NULL,
 )
 GO
