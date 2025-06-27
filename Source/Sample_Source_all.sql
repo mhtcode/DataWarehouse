@@ -360,7 +360,7 @@ INSERT INTO Source.FlightOperation (FlightOperationID, FlightDetailID, ActualDep
 
 
 
-INSERT INTO [Source].[MaintenanceType] (ID, Name, Category, Description) VALUES
+INSERT INTO [Source].[MaintenanceType] (MaintenanceTypeID, Name, Category, Description) VALUES
 (1, 'Engine Check', 'Routine', 'Regular engine maintenance and safety check'),
 (2, 'Landing Gear Inspection', 'Safety', 'Full check of landing gear systems'),
 (3, 'Cabin Systems Update', 'Update', 'Modernization of passenger cabin electronics'),
@@ -368,7 +368,7 @@ INSERT INTO [Source].[MaintenanceType] (ID, Name, Category, Description) VALUES
 (5, 'Fuel System Inspection', 'Routine', 'Inspection for leaks or issues in fuel system');
 
 
-INSERT INTO [Source].[Technician] (Technician_ID, Name, Certification_Level, Employment_Type, Active_Status) VALUES
+INSERT INTO [Source].[Technician] (TechnicianID, Name, CertificationLevel, EmploymentType, ActiveStatus) VALUES
 (1, 'Michael Scott', 'A', 'Full-time', 1),
 (2, 'Pam Beesly', 'B', 'Contract', 1),
 (3, 'Jim Halpert', 'A', 'Full-time', 1),
@@ -376,7 +376,7 @@ INSERT INTO [Source].[Technician] (Technician_ID, Name, Certification_Level, Emp
 (5, 'Stanley Hudson', 'B', 'Part-time', 1);
 
 
-INSERT INTO [Source].[MaintenanceLocation] (Location_NK, Name, City, Country, Inhouse_Flag) VALUES
+INSERT INTO [Source].[MaintenanceLocation] (MaintenanceLocationID, Name, City, Country, InhouseFlag) VALUES
 ('DXB-MX', 'Dubai Maintenance Hangar', 'Dubai', 'UAE', 1),
 ('LHR-MX', 'Heathrow Service Bay', 'London', 'UK', 1),
 ('JFK-MX', 'JFK Technical Center', 'New York', 'USA', 0),
@@ -384,7 +384,7 @@ INSERT INTO [Source].[MaintenanceLocation] (Location_NK, Name, City, Country, In
 ('HND-MX', 'Haneda Aero Services', 'Tokyo', 'Japan', 0);
 
 
-INSERT INTO [Source].[Part] (ID, Name, PartNumber, Manufacturer, Warranty_Period_Months, Category) VALUES
+INSERT INTO [Source].[Part] (PartID, Name, PartNumber, Manufacturer, WarrantyPeriodMonths, Category) VALUES
 (1, 'Turbofan Engine', 'ENG-777', 'Rolls-Royce', 120, 'Engine'),
 (2, 'Landing Gear Set', 'LG-320', 'Goodrich', 96, 'Landing Gear'),
 (3, 'Flight Computer', 'FC-900', 'Honeywell', 60, 'Avionics'),
