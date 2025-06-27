@@ -6,6 +6,7 @@
     ],
     "staging": [
       "Staging Area/Create_SA_all.sql",
+      "Staging Area/Create_Log_Table.sql",
       "Staging Area/ETL_ServiceOffering.sql",
       "Staging Area/ETL_Item.sql",
       "Staging Area/ETL_ServiceOfferingItem.sql",

@@ -27,6 +27,9 @@ DROP TABLE IF EXISTS [SA].[ServiceOfferingItem];
 DROP TABLE IF EXISTS [SA].[Technician];
 DROP TABLE IF EXISTS [SA].[TravelClass];
 
+-- Drop ETL Log table
+DROP TABLE IF EXISTS [SA].[ETL_Log];
+
 -- Drop all ETL procedures in alphabetical order
 IF OBJECT_ID('[SA].[ETL_Account]', 'P') IS NOT NULL DROP PROCEDURE [SA].[ETL_Account];
 IF OBJECT_ID('[SA].[ETL_AccountTierHistory]', 'P') IS NOT NULL DROP PROCEDURE [SA].[ETL_AccountTierHistory];
