@@ -3,46 +3,94 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    MERGE [SA].[TravelClass] AS TARGET
-    USING [Source].[TravelClass] AS SOURCE
-    ON (TARGET.TravelClassID = SOURCE.TravelClassID)
+    DECLARE
+        @StartTime     DATETIME2(3) = SYSUTCDATETIME(),
+        @RowsAffected  INT,
+        @LogID         BIGINT;
 
-    -- Update existing records if any field has changed (SCD1)
-    WHEN MATCHED AND EXISTS (
-        SELECT
-            SOURCE.ClassName,
-            SOURCE.Capacity,
-            SOURCE.BaseCost
-        EXCEPT
-        SELECT
-            TARGET.ClassName,
-            TARGET.Capacity,
-            TARGET.BaseCost
-    ) THEN
-        UPDATE SET
-            TARGET.ClassName = NULLIF(LTRIM(RTRIM(SOURCE.ClassName)), ''),
-            TARGET.Capacity = SOURCE.Capacity,
-            TARGET.BaseCost = SOURCE.BaseCost,
-            TARGET.StagingLastUpdateTimestampUTC = GETUTCDATE()
+    -- 1) Assume fatal: insert initial log entry
+    INSERT INTO [SA].[ETL_Log] (
+        ProcedureName,
+        SourceTable,
+        TargetTable,
+        ChangeDescription,
+        ActionTime,
+        Status
+    )
+    VALUES (
+        'ETL_TravelClass',
+        'Source.TravelClass',
+        'SA.TravelClass',
+        'Procedure started - awaiting completion',
+        @StartTime,
+        'Fatal'
+    );
+    SET @LogID = SCOPE_IDENTITY();
 
-    -- Insert new records
-    WHEN NOT MATCHED BY TARGET THEN
-        INSERT (
-            TravelClassID,
-            ClassName,
-            Capacity,
-            BaseCost,
-            StagingLoadTimestampUTC,
-            SourceSystem
-        )
-        VALUES (
-            SOURCE.TravelClassID,
-            NULLIF(LTRIM(RTRIM(SOURCE.ClassName)), ''),
-            SOURCE.Capacity,
-            SOURCE.BaseCost,
-            GETUTCDATE(),
-            'OperationalDB'
-        );
+    BEGIN TRY
+        -- 2) Perform the merge
+        MERGE [SA].[TravelClass] AS TARGET
+        USING [Source].[TravelClass] AS SOURCE
+          ON TARGET.TravelClassID = SOURCE.TravelClassID
 
-END
+        -- Update existing records if any field has changed (SCD1)
+        WHEN MATCHED AND EXISTS (
+            SELECT
+                SOURCE.ClassName,
+                SOURCE.Capacity,
+                SOURCE.BaseCost
+            EXCEPT
+            SELECT
+                TARGET.ClassName,
+                TARGET.Capacity,
+                TARGET.BaseCost
+        ) THEN
+            UPDATE SET
+                TARGET.ClassName                    = NULLIF(LTRIM(RTRIM(SOURCE.ClassName)), ''),
+                TARGET.Capacity                     = SOURCE.Capacity,
+                TARGET.BaseCost                     = SOURCE.BaseCost,
+                TARGET.StagingLastUpdateTimestampUTC = GETUTCDATE()
+
+        -- Insert new records
+        WHEN NOT MATCHED BY TARGET THEN
+            INSERT (
+                TravelClassID,
+                ClassName,
+                Capacity,
+                BaseCost,
+                StagingLoadTimestampUTC,
+                SourceSystem
+            )
+            VALUES (
+                SOURCE.TravelClassID,
+                NULLIF(LTRIM(RTRIM(SOURCE.ClassName)), ''),
+                SOURCE.Capacity,
+                SOURCE.BaseCost,
+                GETUTCDATE(),
+                'OperationalDB'
+            );
+
+        SET @RowsAffected = @@ROWCOUNT;
+
+        -- 3) Update log to Success
+        UPDATE [SA].[ETL_Log]
+        SET
+            ChangeDescription = CONCAT('Merge complete: rows affected=', @RowsAffected),
+            RowsAffected      = @RowsAffected,
+            DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
+            Status            = 'Success'
+        WHERE LogID = @LogID;
+    END TRY
+    BEGIN CATCH
+        -- 4) Update log to Error
+        UPDATE [SA].[ETL_Log]
+        SET
+            ChangeDescription = 'Merge failed',
+            DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
+            Status            = 'Error',
+            Message           = ERROR_MESSAGE()
+        WHERE LogID = @LogID;
+        THROW;
+    END CATCH
+END;
 GO
