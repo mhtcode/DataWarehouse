@@ -33,9 +33,6 @@ BEGIN
 		SET @LogID = SCOPE_IDENTITY();
 
 		BEGIN TRY
-			TRUNCATE TABLE [DW].[Temp_DailyLoyaltyTransactions];
-			TRUNCATE TABLE [DW].[Temp_EnrichedLoyaltyData];
-
 			-- For idempotency, delete any records from the fact table for the date being processed.
 			DELETE FROM [DW].[FactLoyaltyPointTransaction_Transactional]
 			WHERE CAST([TransactionDateKey] AS DATE) = @CurrentDate;
@@ -118,6 +115,9 @@ BEGIN
 			FROM [DW].[Temp_EnrichedLoyaltyData] ed;
 			
 			SET @RowCount = @@ROWCOUNT;
+
+			TRUNCATE TABLE [DW].[Temp_DailyLoyaltyTransactions];
+			TRUNCATE TABLE [DW].[Temp_EnrichedLoyaltyData];
 
 			UPDATE DW.ETL_Log SET ChangeDescription = 'Load complete for date: ' + CONVERT(varchar, @CurrentDate, 101), RowsAffected = @RowCount, DurationSec = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()), Status = 'Success' WHERE LogID = @LogID;
 
