@@ -78,7 +78,7 @@ BEGIN
       t.Phone,
       t.Address,
       t.PostalCode,
-      @StartTime,
+      '1950-01-01 00:00:00',
       NULL,
       1
     FROM [DW].[Temp_Person_table] AS t

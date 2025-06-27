@@ -1,6 +1,5 @@
 CREATE TABLE [DW].[DimServiceOffering] (
-  [ServiceOfferingKey] INT IDENTITY(1,1) PRIMARY KEY,
-  [ServiceOfferingID] INT,
+  [ServiceOfferingID] INT PRIMARY KEY,
   [OfferingName] NVARCHAR(100),
   [Description] NVARCHAR(300),
   [TravelClassName] NVARCHAR(50),         

@@ -35,7 +35,7 @@ BEGIN
       lt.Name,
       lt.MinPoints,
       lt.Benefits,
-      @StartTime,
+      '1950-01-01 00:00:00',
       NULL,
       1
     FROM SA.LoyaltyTier AS lt

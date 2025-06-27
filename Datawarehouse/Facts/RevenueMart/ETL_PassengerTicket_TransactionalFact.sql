@@ -15,12 +15,18 @@ BEGIN
     SELECT 
         @StartDate = MAX(CAST(PaymentDateKey AS DATE))
     FROM 
-        [DW].[FactPassengerTicket_Transactional];
+        [DW].[FactPassengerTicket_Transactional]
 
 	-- Exit if there is no data to process
 	IF @StartDate IS NULL
 	BEGIN
 		RAISERROR('No completed payments found. Exiting procedure.', 0, 1) WITH NOWAIT;
+		RETURN;
+	END
+
+	IF @StartDate >= @EndDate
+	BEGIN
+		RAISERROR('The FactPassengerTicket_Transactional table is up to date!', 0, 1) WITH NOWAIT;
 		RETURN;
 	END
 
@@ -40,13 +46,12 @@ BEGIN
 		-- Capture the LogID for this specific run
 		SET @LogID = SCOPE_IDENTITY();
 
-		BEGIN TRY
-			-- Clear staging tables for the current iteration
+BEGIN TRY
 			TRUNCATE TABLE [DW].[Temp_DailyPayments];
 			TRUNCATE TABLE [DW].[Temp_EnrichedFlightData];
 			TRUNCATE TABLE [DW].[Temp_EnrichedPersonData];
 			
-			-- STEP A: Load Core Transactions
+			-- STEP A: Load Core Transactions (Unchanged)
 			INSERT INTO [DW].[Temp_DailyPayments] (PaymentID, ReservationID, BuyerID, RealPrice, TicketPrice, Discount, Tax, PaymentDateTime, TicketHolderPassengerID, FlightDetailID, SeatDetailID)
 			SELECT p.PaymentID, r.ReservationID, p.BuyerID, p.RealPrice, p.TicketPrice, p.Discount, p.Tax, p.PaymentDateTime, r.PassengerID, r.FlightDetailID, r.SeatDetailID
 			FROM [SA].[Payment] p
@@ -55,15 +60,14 @@ BEGIN
 
 			IF @@ROWCOUNT = 0 
 			BEGIN
-				UPDATE DW.ETL_Log SET ChangeDescription = 'No payment data found for date: ' + CONVERT(varchar, @CurrentDate, 101), RowsAffected = 0, DurationSec = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()), Status = 'Success';
-				-- CRITICAL FIX: Increment date before continuing to avoid infinite loop
+				UPDATE DW.ETL_Log SET ChangeDescription = 'No payment data found for date: ' + CONVERT(varchar, @CurrentDate, 101), RowsAffected = 0, DurationSec = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()), Status = 'Success' WHERE LogID = @LogID;
 				SET @CurrentDate = DATEADD(day, 1, @CurrentDate);
 				CONTINUE;
 			END
 
-			-- STEP B: Load Flight-Enriched Data
+			-- STEP B: Load Flight-Enriched Data (Unchanged)
 			INSERT INTO [DW].[Temp_EnrichedFlightData] (PaymentID, FlightDateKey, FlightKey, AircraftKey, AirlineKey, SourceAirportKey, DestinationAirportKey, FlightClassPrice, FlightCost, KilometersFlown)
-			SELECT dp.PaymentID, fd.DepartureDateTime, fd.FlightDetailID, ac.AircraftID, ac.AirlineID, fd.DepartureAirportID, fd.DestinationAirportID, tc.Cost,
+			SELECT dp.PaymentID, fd.DepartureDateTime, fd.FlightDetailID, ac.AircraftID, ac.AirlineID, fd.DepartureAirportID, fd.DestinationAirportID, tc.BaseCost,
 				   CASE WHEN ISNULL(fd.FlightCapacity, 0) > 0 THEN ISNULL(fd.TotalCost, 0) / fd.FlightCapacity ELSE 0 END,
 				   fd.DistanceKM
 			FROM [DW].[Temp_DailyPayments] dp
@@ -72,16 +76,30 @@ BEGIN
 			INNER JOIN [SA].[SeatDetail] sd ON dp.SeatDetailID = sd.SeatDetailID
 			INNER JOIN [SA].[TravelClass] tc ON sd.TravelClassID = tc.TravelClassID;
 			
-			-- STEP C: Load Person-Enriched Data
+			-- ####################################################################################
+			-- STEP C: Load Person-Enriched Data (MODIFIED FOR SCD TYPE 2)
+			-- This step now joins to the DimPerson table to find the correct surrogate key
+			-- based on the PaymentDateTime.
+			-- ####################################################################################
 			INSERT INTO [DW].[Temp_EnrichedPersonData] (PaymentID, BuyerPersonKey, TicketHolderPersonKey)
-			SELECT dp.PaymentID, BuyerPerson.PersonID, TicketHolderPerson.PersonID
-			FROM [DW].[Temp_DailyPayments] dp
+			SELECT
+				dp.PaymentID,
+				BuyerDim.PersonKey,
+				TicketHolderDim.PersonKey
+			FROM 
+				[DW].[Temp_DailyPayments] dp
+			-- Join to find the correct historical version for the BUYER
 			INNER JOIN [SA].[Passenger] BuyerPassenger ON dp.BuyerID = BuyerPassenger.PassengerID
-			INNER JOIN [SA].[Person] BuyerPerson ON BuyerPassenger.PersonID = BuyerPerson.PersonID
+			INNER JOIN [DW].[DimPerson] BuyerDim ON BuyerPassenger.PersonID = BuyerDim.PersonID
+				AND dp.PaymentDateTime >= BuyerDim.EffectiveFrom 
+				AND dp.PaymentDateTime < ISNULL(BuyerDim.EffectiveTo, '9999-12-31')
+			-- Join to find the correct historical version for the TICKET HOLDER
 			INNER JOIN [SA].[Passenger] TicketHolderPassenger ON dp.TicketHolderPassengerID = TicketHolderPassenger.PassengerID
-			INNER JOIN [SA].[Person] TicketHolderPerson ON TicketHolderPassenger.PersonID = TicketHolderPerson.PersonID;
+			INNER JOIN [DW].[DimPerson] TicketHolderDim ON TicketHolderPassenger.PersonID = TicketHolderDim.PersonID
+				AND dp.PaymentDateTime >= TicketHolderDim.EffectiveFrom 
+				AND dp.PaymentDateTime < ISNULL(TicketHolderDim.EffectiveTo, '9999-12-31');
 
-			-- STEP D: Final Assembly and Insert into Fact Table
+			-- STEP D: Final Assembly and Insert into Fact Table (Unchanged)
 			INSERT INTO [DW].[FactPassengerTicket_Transactional] ([PaymentDateKey], [FlightDateKey], [BuyerPersonKey], [TicketHolderPersonKey], [PaymentKey], [FlightKey], [AircraftKey], [AirlineKey], [SourceAirportKey], [DestinationAirportKey], [ServiceOfferingKey], [TicketRealPrice], [TaxAmount], [DiscountAmount], [TicketPrice], [FlightCost], [FlightClassPrice], [FlightRevenue], [KilometersFlown])
 			SELECT
 				dp.PaymentDateTime, fd.FlightDateKey, pd.BuyerPersonKey, pd.TicketHolderPersonKey,
@@ -101,7 +119,7 @@ BEGIN
 				[DW].[Temp_EnrichedFlightData] fd ON dp.PaymentID = fd.PaymentID
 			INNER JOIN 
 				[DW].[Temp_EnrichedPersonData] pd ON dp.PaymentID = pd.PaymentID;
-			
+						
 			SET @RowCount = @@ROWCOUNT;
 
 			-- Update the log entry to 'Success' for the current day
@@ -124,8 +142,3 @@ BEGIN
 	SET NOCOUNT OFF;
 END
 GO
-exec [DW].[InitialFactPassengerTicket]
-
-select * from [DW].[FactPassengerTicket_Transactional]
-
-drop table [DW].[FactPassengerTicket_Transactional]

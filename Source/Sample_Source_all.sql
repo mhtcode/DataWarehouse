@@ -289,7 +289,7 @@ INSERT INTO Source.Payment (PaymentID, ReservationID, BuyerID, Status, TicketPri
 (11, 11, 9,'Completed', 1300.00, 1300.00, 0.00, 10 ,'Credit Card', '2014-05-11 17:20:00'),
 (12, 12, 10,'Completed', 1050.00, 1100.00, 50.00, 10 ,'PayPal', '2014-05-12 14:35:00'),
 (13, 13, 13,'Completed', 1950.00, 2000.00, 50.00, 10 ,'Credit Card', '2014-05-13 09:10:00'),
-(14, 14, 14,'Pending', 800.00, 800.00, 0.00, 10 ,NULL, NULL),
+(14, 14, 14,'Pending', 800.00, 800.00, 0.00, 10 ,'PayPal', '2014-05-13 09:15:00'),
 (15, 15, 15,'Completed', 1700.00, 1700.00, 0.00, 10 ,'Credit Card', '2014-05-15 16:45:00');
 
 INSERT INTO Source.AccountTierHistory (HistoryID, AccountID, LoyaltyTierID, EffectiveFrom, EffectiveTo, CurrentFlag) VALUES
