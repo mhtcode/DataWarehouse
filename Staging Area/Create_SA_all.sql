@@ -1,4 +1,46 @@
 CREATE SCHEMA [SA]
+GO
+
+-- Account
+CREATE TABLE [SA].[Account] (
+  [AccountID] integer PRIMARY KEY,
+  [PassengerID] integer NOT NULL,
+  [RegistrationDate] datetime,
+  [LoyaltyTierID] integer NOT NULL,
+  [StagingLoadTimestampUTC] datetime,
+  [StagingLastUpdateTimestampUTC] datetime,
+  [SourceSystem] varchar(200)
+)
+GO
+
+-- AccountTierHistory
+CREATE TABLE [SA].[AccountTierHistory] (
+  [HistoryID] integer PRIMARY KEY,
+  [AccountID] integer NOT NULL,
+  [LoyaltyTierID] integer NOT NULL,
+  [EffectiveFrom] datetime NOT NULL,
+  [EffectiveTo] datetime,
+  [CurrentFlag] bit DEFAULT (1),
+  [StagingLoadTimestampUTC] datetime,
+  [StagingLastUpdateTimestampUTC] datetime,
+  [SourceSystem] varchar(200)
+)
+GO
+
+-- Aircraft
+CREATE TABLE [SA].[Aircraft] (
+  [AircraftID] integer PRIMARY KEY,
+  [Model] varchar(50),
+  [Type] varchar(50),
+  [ManufacturerDate] date,
+  [Capacity] integer,
+  [Price] decimal(18,2),
+  [AirlineID] integer NOT NULL,
+  [StagingLoadTimestampUTC] datetime,
+  [StagingLastUpdateTimestampUTC] datetime,
+  [SourceSystem] varchar(200)
+)
+GO
 
 -- Airline
 CREATE TABLE [SA].[Airline] (
@@ -13,6 +55,23 @@ CREATE TABLE [SA].[Airline] (
   [StagingLoadTimestampUTC] datetime,
   [StagingLastUpdateTimestampUTC] datetime,
   [SourceSystem] varchar(200)
+)
+GO
+
+-- AirlineAirportService
+CREATE TABLE [SA].[AirlineAirportService] (
+  [ServiceTypeCode] varchar(50) NOT NULL,
+  [FlightTypeCode] varchar(50) NOT NULL,
+  [ServiceTypeName] varchar(100) NOT NULL,
+  [FlightTypeName] varchar(100) NOT NULL,
+  [ContractStartDate] date NOT NULL,
+  [ContractEndDate] date,
+  [LandingFeeRate] decimal(18,4),
+  [PassengerServiceRate] decimal(18,4),
+  [StagingLoadTimestampUTC] datetime,
+  [StagingLastUpdateTimestampUTC] datetime,
+  [SourceSystem] varchar(200),
+  CONSTRAINT [PK_SA_AirlineAirportService] PRIMARY KEY ([ServiceTypeCode], [FlightTypeCode])
 )
 GO
 
@@ -35,186 +94,11 @@ CREATE TABLE [SA].[Airport] (
 )
 GO
 
--- Aircraft
-CREATE TABLE [SA].[Aircraft] (
-  [AircraftID] integer PRIMARY KEY,
-  [Model] varchar(50),
-  [Type] varchar(50),
-  [ManufacturerDate] date,
-  [Capacity] integer,
-  [Price] decimal(18,2),
-  [AirlineID] integer NOT NULL,
-  [StagingLoadTimestampUTC] datetime,
-  [StagingLastUpdateTimestampUTC] datetime,
-  [SourceSystem] varchar(200)
-)
-GO
-
--- Person
-CREATE TABLE [SA].[Person] (
-  [PersonID] integer PRIMARY KEY,
-  [NatCode] varchar(20) NOT NULL,
-  [Name] varchar(100) NOT NULL,
-  [Phone] varchar(20),
-  [Email] varchar(100) UNIQUE,
-  [Address] varchar(200),
-  [City] varchar(50),
-  [Country] varchar(50),
-  [DateOfBirth] date,
-  [Gender] varchar(10),
-  [PostalCode] varchar(20),
-  [StagingLoadTimestampUTC] datetime,
-  [StagingLastUpdateTimestampUTC] datetime,
-  [SourceSystem] varchar(200)
-)
-GO
-
--- Passenger
-CREATE TABLE [SA].[Passenger] (
-  [PassengerID] integer PRIMARY KEY,
-  [PersonID] integer NOT NULL,
-  [PassportNumber] varchar(50) UNIQUE,
-  [StagingLoadTimestampUTC] datetime,
-  [StagingLastUpdateTimestampUTC] datetime,
-  [SourceSystem] varchar(200)
-)
-GO
-
--- Account
-CREATE TABLE [SA].[Account] (
-  [AccountID] integer PRIMARY KEY,
-  [PassengerID] integer NOT NULL,
-  [RegistrationDate] datetime,
-  [LoyaltyTierID] integer NOT NULL,
-  [StagingLoadTimestampUTC] datetime,
-  [StagingLastUpdateTimestampUTC] datetime,
-  [SourceSystem] varchar(200)
-)
-GO
-
--- LoyaltyTransactionType
-CREATE TABLE [SA].[LoyaltyTransactionType] (
-  [LoyaltyTransactionTypeID] INT PRIMARY KEY,
-  [TypeName] VARCHAR(50),
-  [StagingLoadTimestampUTC] DATETIME,
-  [StagingLastUpdateTimestampUTC] DATETIME,
-  [SourceSystem] VARCHAR(200)
-)
-GO
-
--- PointConversionRate
-CREATE TABLE [SA].[PointConversionRate] (
-  [PointConversionRateID] INT PRIMARY KEY,
-  [ConversionRate] DECIMAL(18,6) NOT NULL,
-  [CurrencyCode] VARCHAR(10) DEFAULT 'USD',
-  [StagingLoadTimestampUTC] DATETIME,
-  [StagingLastUpdateTimestampUTC] DATETIME,
-  [SourceSystem] VARCHAR(200)
-);
-GO
-
--- PointsTransaction
-CREATE TABLE [SA].[PointsTransaction] (
-  [PointsTransactionID] INT PRIMARY KEY,
-  [AccountID] INT NOT NULL,
-  [TransactionDate] DATETIME NOT NULL,
-  [LoyaltyTransactionTypeID] INT NOT NULL,
-  [PointsChange] DECIMAL(18,2) NOT NULL,
-  [BalanceAfterTransaction] DECIMAL(18,2) NOT NULL,
-  [USDValue] DECIMAL(18,2),
-  [ConversionRate] DECIMAL(18,6),
-  [PointConversionRateID] INT,
-  [Description] VARCHAR(200),
-  [ServiceOfferingID] INT,
-  [FlightDetailID] INT,
-  [StagingLoadTimestampUTC] DATETIME,
-  [StagingLastUpdateTimestampUTC] DATETIME,
-  [SourceSystem] VARCHAR(200)
-)
-GO
-
--- TravelClass
-CREATE TABLE [SA].[TravelClass] (
-  [TravelClassID] INT PRIMARY KEY,
-  [ClassName] VARCHAR(50) NOT NULL,
-  [Capacity] INT,
-  [BaseCost] DECIMAL(18,2),
-  [StagingLoadTimestampUTC] DATETIME,
-  [StagingLastUpdateTimestampUTC] DATETIME,
-  [SourceSystem] VARCHAR(200)
-)
-GO
-
--- Item
-CREATE TABLE [SA].[Item] (
-  [ItemID] INT PRIMARY KEY,
-  [ItemName] VARCHAR(100),
-  [Description] VARCHAR(300),
-  [BasePrice] DECIMAL(18,2),
-  [IsLoyaltyRedeemable] BIT DEFAULT 0,
-  [StagingLoadTimestampUTC] DATETIME,
-  [StagingLastUpdateTimestampUTC] DATETIME,
-  [SourceSystem] VARCHAR(200)
-)
-GO
-
--- ServiceOffering
-CREATE TABLE [SA].[ServiceOffering] (
-  [ServiceOfferingID] INT PRIMARY KEY,
-  [TravelClassID] INT,
-  [OfferingName] VARCHAR(100),
-  [Description] VARCHAR(300),
-  [TotalCost] DECIMAL(18,2),
-  [StagingLoadTimestampUTC] DATETIME,
-  [StagingLastUpdateTimestampUTC] DATETIME,
-  [SourceSystem] VARCHAR(200)
-)
-GO
-
--- ServiceOfferingItem
-CREATE TABLE [SA].[ServiceOfferingItem] (
-  [ServiceOfferingID] INT,
-  [ItemID] INT,
-  [Quantity] INT,
-  [StagingLoadTimestampUTC] DATETIME,
-  [StagingLastUpdateTimestampUTC] DATETIME,
-  [SourceSystem] VARCHAR(200),
-  PRIMARY KEY ([ServiceOfferingID], [ItemID])
-)
-GO
-
--- Points
-CREATE TABLE [SA].[Points] (
-  [PointsID] integer PRIMARY KEY,
-  [AccountID] integer NOT NULL,
-  [PointsBalance] decimal(18,2) DEFAULT (0),
-  [EffectiveDate] datetime NOT NULL,
-  [StagingLoadTimestampUTC] datetime,
-  [StagingLastUpdateTimestampUTC] datetime,
-  [SourceSystem] varchar(200)
-)
-GO
-
--- LoyaltyTier
-CREATE TABLE [SA].[LoyaltyTier] (
-  [LoyaltyTierID] integer PRIMARY KEY,
-  [Name] varchar(50) NOT NULL,
-  [MinPoints] integer NOT NULL,
-  [Benefits] varchar(200),
-  [StagingLoadTimestampUTC] datetime,
-  [StagingLastUpdateTimestampUTC] datetime,
-  [SourceSystem] varchar(200)
-)
-GO
-
--- AccountTierHistory
-CREATE TABLE [SA].[AccountTierHistory] (
-  [HistoryID] integer PRIMARY KEY,
-  [AccountID] integer NOT NULL,
-  [LoyaltyTierID] integer NOT NULL,
-  [EffectiveFrom] datetime NOT NULL,
-  [EffectiveTo] datetime,
-  [CurrentFlag] bit DEFAULT (1),
+-- CrewAssignment
+CREATE TABLE [SA].[CrewAssignment] (
+  [CrewAssignmentID] integer PRIMARY KEY,
+  [FlightDetailID] integer NOT NULL,
+  [CrewMemberID] integer NOT NULL,
   [StagingLoadTimestampUTC] datetime,
   [StagingLastUpdateTimestampUTC] datetime,
   [SourceSystem] varchar(200)
@@ -249,28 +133,101 @@ CREATE TABLE [SA].[FlightDetail] (
 )
 GO
 
--- SeatDetail
-CREATE TABLE [SA].[SeatDetail] (
-  [SeatDetailID] integer PRIMARY KEY,
-  [AircraftID] integer NOT NULL,
-  [SeatNo] integer NOT NULL,
-  [SeatType] varchar(20),
-  [TravelClassID] integer,
-  [ReservationID] integer,
+-- FlightOperation
+CREATE TABLE [SA].[FlightOperation] (
+  [FlightOperationID] integer PRIMARY KEY,
+  [FlightDetailID] integer NOT NULL,
+  [ActualDepartureDateTime] datetime,
+  [ActualArrivalDateTime] datetime,
+  [DelayMinutes] integer DEFAULT (0),
+  [CancelFlag] bit DEFAULT (0),
+  [LoadFactor] float,
+  [DelaySeverityScore] float,
   [StagingLoadTimestampUTC] datetime,
   [StagingLastUpdateTimestampUTC] datetime,
   [SourceSystem] varchar(200)
 )
 GO
 
--- Reservation
-CREATE TABLE [SA].[Reservation] (
-  [ReservationID] integer PRIMARY KEY,
-  [PassengerID] integer NOT NULL,
-  [FlightDetailID] integer NOT NULL,
-  [ReservationDate] datetime,
-  [SeatDetailID] integer,
-  [Status] varchar(20) DEFAULT 'Booked',
+-- Item
+CREATE TABLE [SA].[Item] (
+  [ItemID] INT PRIMARY KEY,
+  [ItemName] VARCHAR(100),
+  [Description] VARCHAR(300),
+  [BasePrice] DECIMAL(18,2),
+  [IsLoyaltyRedeemable] BIT DEFAULT 0,
+  [StagingLoadTimestampUTC] DATETIME,
+  [StagingLastUpdateTimestampUTC] DATETIME,
+  [SourceSystem] VARCHAR(200)
+)
+GO
+
+-- LoyaltyTier
+CREATE TABLE [SA].[LoyaltyTier] (
+  [LoyaltyTierID] integer PRIMARY KEY,
+  [Name] varchar(50) NOT NULL,
+  [MinPoints] integer NOT NULL,
+  [Benefits] varchar(200),
+  [StagingLoadTimestampUTC] datetime,
+  [StagingLastUpdateTimestampUTC] datetime,
+  [SourceSystem] varchar(200)
+)
+GO
+
+-- LoyaltyTransactionType
+CREATE TABLE [SA].[LoyaltyTransactionType] (
+  [LoyaltyTransactionTypeID] INT PRIMARY KEY,
+  [TypeName] VARCHAR(50),
+  [StagingLoadTimestampUTC] DATETIME,
+  [StagingLastUpdateTimestampUTC] DATETIME,
+  [SourceSystem] VARCHAR(200)
+)
+GO
+
+-- MaintenanceLocation
+CREATE TABLE [SA].[MaintenanceLocation] (
+  [MaintenanceLocationID] varchar(100) PRIMARY KEY,
+  [Name] varchar(100),
+  [City] varchar(50),
+  [Country] varchar(50),
+  [InhouseFlag] bit,
+  [StagingLoadTimestampUTC] datetime,
+  [StagingLastUpdateTimestampUTC] datetime,
+  [SourceSystem] varchar(200)
+)
+GO
+
+-- MaintenanceType
+CREATE TABLE [SA].[MaintenanceType] (
+  [MaintenanceTypeID] integer PRIMARY KEY,
+  [Name] varchar(100),
+  [Category] varchar(50),
+  [Description] varchar(500),
+  [StagingLoadTimestampUTC] datetime,
+  [StagingLastUpdateTimestampUTC] datetime,
+  [SourceSystem] varchar(200)
+)
+GO
+
+-- Part
+CREATE TABLE [SA].[Part] (
+  [PartID] integer PRIMARY KEY,
+  [Name] varchar(100),
+  [PartNumber] varchar(50),
+  [Manufacturer] varchar(100),
+  [WarrantyPeriodMonths] int,
+  [Category] varchar(50),
+  [StagingLoadTimestampUTC] datetime,
+  [StagingLastUpdateTimestampUTC] datetime,
+  [SourceSystem] varchar(200)
+)
+GO
+
+-- Passenger
+CREATE TABLE [SA].[Passenger] (
+  [PassengerID] integer PRIMARY KEY,
+  [PersonID] integer NOT NULL,
+  [PassportNumber] varchar(50) UNIQUE,
   [StagingLoadTimestampUTC] datetime,
   [StagingLastUpdateTimestampUTC] datetime,
   [SourceSystem] varchar(200)
@@ -295,98 +252,142 @@ CREATE TABLE [SA].[Payment] (
 )
 GO
 
--- CrewAssignment
-CREATE TABLE [SA].[CrewAssignment] (
-  [CrewAssignmentID] integer PRIMARY KEY,
-  [FlightDetailID] integer NOT NULL,
-  [CrewMemberID] integer NOT NULL,
+-- Person
+CREATE TABLE [SA].[Person] (
+  [PersonID] integer PRIMARY KEY,
+  [NatCode] varchar(20) NOT NULL,
+  [Name] varchar(100) NOT NULL,
+  [Phone] varchar(20),
+  [Email] varchar(100) UNIQUE,
+  [Address] varchar(200),
+  [City] varchar(50),
+  [Country] varchar(50),
+  [DateOfBirth] date,
+  [Gender] varchar(10),
+  [PostalCode] varchar(20),
   [StagingLoadTimestampUTC] datetime,
   [StagingLastUpdateTimestampUTC] datetime,
   [SourceSystem] varchar(200)
 )
 GO
 
--- FlightOperation
-CREATE TABLE [SA].[FlightOperation] (
-  [FlightOperationID] integer PRIMARY KEY,
-  [FlightDetailID] integer NOT NULL,
-  [ActualDepartureDateTime] datetime,
-  [ActualArrivalDateTime] datetime,
-  [DelayMinutes] integer DEFAULT (0),
-  [CancelFlag] bit DEFAULT (0),
-  [LoadFactor] float,
-  [DelaySeverityScore] float,
+-- PointConversionRate
+CREATE TABLE [SA].[PointConversionRate] (
+  [PointConversionRateID] INT PRIMARY KEY,
+  [ConversionRate] DECIMAL(18,6) NOT NULL,
+  [CurrencyCode] VARCHAR(10) DEFAULT 'USD',
+  [StagingLoadTimestampUTC] DATETIME,
+  [StagingLastUpdateTimestampUTC] DATETIME,
+  [SourceSystem] VARCHAR(200)
+)
+GO
+
+-- Points
+CREATE TABLE [SA].[Points] (
+  [PointsID] integer PRIMARY KEY,
+  [AccountID] integer NOT NULL,
+  [PointsBalance] decimal(18,2) DEFAULT (0),
+  [EffectiveDate] datetime NOT NULL,
   [StagingLoadTimestampUTC] datetime,
   [StagingLastUpdateTimestampUTC] datetime,
   [SourceSystem] varchar(200)
 )
 GO
 
--- MaintenanceType
-CREATE TABLE [SA].[MaintenanceType] (
-  [MaintenanceTypeID] integer PRIMARY KEY,
-  [Name] varchar(100),
-  [Category] varchar(50),
-  [Description] varchar(500),
+-- PointsTransaction
+CREATE TABLE [SA].[PointsTransaction] (
+  [PointsTransactionID] INT PRIMARY KEY,
+  [AccountID] INT NOT NULL,
+  [TransactionDate] DATETIME NOT NULL,
+  [LoyaltyTransactionTypeID] INT NOT NULL,
+  [PointsChange] DECIMAL(18,2) NOT NULL,
+  [BalanceAfterTransaction] DECIMAL(18,2) NOT NULL,
+  [USDValue] DECIMAL(18,2),
+  [ConversionRate] DECIMAL(18,6),
+  [PointConversionRateID] INT,
+  [Description] VARCHAR(200),
+  [ServiceOfferingID] INT,
+  [FlightDetailID] INT,
+  [StagingLoadTimestampUTC] DATETIME,
+  [StagingLastUpdateTimestampUTC] DATETIME,
+  [SourceSystem] VARCHAR(200)
+)
+GO
+
+-- Reservation
+CREATE TABLE [SA].[Reservation] (
+  [ReservationID] integer PRIMARY KEY,
+  [PassengerID] integer NOT NULL,
+  [FlightDetailID] integer NOT NULL,
+  [ReservationDate] datetime,
+  [SeatDetailID] integer,
+  [Status] varchar(20) DEFAULT 'Booked',
   [StagingLoadTimestampUTC] datetime,
   [StagingLastUpdateTimestampUTC] datetime,
   [SourceSystem] varchar(200)
-);
+)
+GO
+
+-- SeatDetail
+CREATE TABLE [SA].[SeatDetail] (
+  [SeatDetailID] integer PRIMARY KEY,
+  [AircraftID] integer NOT NULL,
+  [SeatNo] integer NOT NULL,
+  [SeatType] varchar(20),
+  [TravelClassID] integer,
+  [ReservationID] integer,
+  [StagingLoadTimestampUTC] datetime,
+  [StagingLastUpdateTimestampUTC] datetime,
+  [SourceSystem] varchar(200)
+)
+GO
+
+-- ServiceOffering
+CREATE TABLE [SA].[ServiceOffering] (
+  [ServiceOfferingID] INT PRIMARY KEY,
+  [TravelClassID] INT,
+  [OfferingName] VARCHAR(100),
+  [Description] VARCHAR(300),
+  [TotalCost] DECIMAL(18,2),
+  [StagingLoadTimestampUTC] DATETIME,
+  [StagingLastUpdateTimestampUTC] DATETIME,
+  [SourceSystem] VARCHAR(200)
+)
+
+GO
+
+-- ServiceOfferingItem
+CREATE TABLE [SA].[ServiceOfferingItem] (
+  [ServiceOfferingID] INT NOT NULL,
+  [ItemID] INT NOT NULL,
+  [StagingLoadTimestampUTC] DATETIME,
+  [StagingLastUpdateTimestampUTC] DATETIME,
+  [SourceSystem] VARCHAR(200),
+  CONSTRAINT [PK_SA_ServiceOfferingItem] PRIMARY KEY ([ServiceOfferingID], [ItemID])
+)
+
 GO
 
 -- Technician
 CREATE TABLE [SA].[Technician] (
-  [TechniciaID]       integer PRIMARY KEY,
-  [Name]                varchar(100),
-  [CertificationLevel] varchar(10),
-  [EmploymentType]     varchar(50),
-  [ActiveStatus]       bit,
-  [StagingLoadTimestampUTC]      datetime,
-  [StagingLastUpdateTimestampUTC] datetime,
-  [SourceSystem]                 varchar(200)
-);
+  [TechnicianID] INT PRIMARY KEY,
+  [PersonID] INT,
+  [Specialty] VARCHAR(100),
+  [StagingLoadTimestampUTC] DATETIME,
+  [StagingLastUpdateTimestampUTC] DATETIME,
+  [SourceSystem] VARCHAR(200)
+)
+
 GO
 
--- MaintenanceLocation
-CREATE TABLE [SA].[MaintenanceLocation] (
-  [MaintenanceLocationID]   varchar(100) PRIMARY KEY,
-  [Name]          varchar(100),
-  [City]          varchar(50),
-  [Country]       varchar(50),
-  [InhouseFlag]  bit,
-  [StagingLoadTimestampUTC]      datetime,
-  [StagingLastUpdateTimestampUTC] datetime,
-  [SourceSystem]                 varchar(200)
-);
-GO
+-- TravelClass
+CREATE TABLE [SA].[TravelClass] (
+  [TravelClassID] INT PRIMARY KEY,
+  [ClassName] VARCHAR(50),
+  [Description] VARCHAR(200),
+  [StagingLoadTimestampUTC] DATETIME,
+  [StagingLastUpdateTimestampUTC] DATETIME,
+  [SourceSystem] VARCHAR(200)
+)
 
--- Part
-CREATE TABLE [SA].[Part] (
-  [PartID]                     integer PRIMARY KEY,
-  [Name]                   varchar(100),
-  [PartNumber]             varchar(50),
-  [Manufacturer]           varchar(100),
-  [WarrantyPeriodMonths] int,
-  [Category]               varchar(50),
-  [StagingLoadTimestampUTC]      datetime,
-  [StagingLastUpdateTimestampUTC] datetime,
-  [SourceSystem]                 varchar(200)
-);
-GO
-
--- AirlineAirportService
-CREATE TABLE [SA].[AirlineAirportService] (
-    [ServiceTypeCode] VARCHAR(50) NOT NULL,
-    [FlightTypeCode] VARCHAR(50) NOT NULL,
-    [ServiceTypeName] VARCHAR(100) NOT NULL,
-    [FlightTypeName] VARCHAR(100) NOT NULL,
-    [ContractStartDate] DATE NOT NULL,
-    [ContractEndDate] DATE,
-    [LandingFeeRate] DECIMAL(18,4),
-    [PassengerServiceRate] DECIMAL(18,4),
-    [StagingLoadTimestampUTC] DATETIME,
-    [StagingLastUpdateTimestampUTC] DATETIME,
-    [SourceSystem] VARCHAR(200),
-    CONSTRAINT [PK_SA_AirlineAirportService] PRIMARY KEY ([ServiceTypeCode], [FlightTypeCode])
-);
 GO
