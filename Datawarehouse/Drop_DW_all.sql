@@ -35,6 +35,8 @@ DROP TABLE IF EXISTS [DW].[Temp_DateTime_table];
 DROP TABLE IF EXISTS [DW].[Temp_Date_table];
 DROP TABLE IF EXISTS [DW].[Temp_FlightOperationType_table];
 DROP TABLE IF EXISTS [DW].[Temp_Flight_table];
+DROP TABLE IF EXISTS [DW].[Temp_DailyLoyaltyTransactions];
+DROP TABLE IF EXISTS [DW].[Temp_EnrichedLoyaltyData];
 DROP TABLE IF EXISTS [DW].[Temp_LoyaltyTier_table];
 DROP TABLE IF EXISTS [DW].[Temp_LoyaltyTransactionType_table];
 DROP TABLE IF EXISTS [DW].[Temp_MaintenanceLocation_table];
