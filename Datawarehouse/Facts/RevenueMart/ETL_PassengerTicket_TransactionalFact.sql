@@ -138,7 +138,7 @@ BEGIN TRY
 		SET @CurrentDate = DATEADD(day, 1, @CurrentDate);
 	END;
 
-	RAISERROR('Fact table loading process has completed.', 0, 1) WITH NOWAIT;
+	RAISERROR('FactPassengerTicket_Transactional table loading process has completed.', 0, 1) WITH NOWAIT;
 	SET NOCOUNT OFF;
 END
 GO

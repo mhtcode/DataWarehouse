@@ -11,7 +11,7 @@ BEGIN
     SELECT 
         @StartDate = MAX(CAST(ActualDepartureDateTime AS DATE))
     FROM 
-        [DW].[FactFlightPerformance];
+        [DW].[FactFlightPerformance_Transactional];
 
 	SELECT 
 		@EndDate = MAX(CAST(ActualDepartureDateTime AS DATE))
@@ -22,6 +22,12 @@ BEGIN
 	IF @StartDate IS NULL
 	BEGIN
 		RAISERROR('No flight operations data found. Exiting procedure.', 0, 1) WITH NOWAIT;
+		RETURN;
+	END
+
+		IF @StartDate >= @EndDate
+	BEGIN
+		RAISERROR('The FactFlightPerformance_Transactional table is up to date!', 0, 1) WITH NOWAIT;
 		RETURN;
 	END
 
@@ -36,7 +42,7 @@ BEGIN
 
 		-- Log the start of the process for the current day
 		INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
-		VALUES ('LoadFactFlightPerformance', 'FactFlightPerformance', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
+		VALUES ('LoadFactFlightPerformance', 'FactFlightPerformance_Transactional', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
 		
 		SET @LogID = SCOPE_IDENTITY();
 
@@ -79,7 +85,7 @@ BEGIN
 			
 			-- STEP C: Final Assembly and Insert into Fact Table
 			-- Here we perform the final calculations (DATEDIFF).
-			INSERT INTO [DW].[FactFlightPerformance] (
+			INSERT INTO [DW].[FactFlightPerformance_Transactional] (
                 ScheduledDepartureId, ScheduledArrivalId, ActualDepartureId, ActualArrivalId,
                 DepartureAirportId, ArrivalAirportId, AircraftId, AirlineId,
                 DepartureDelayMinutes, ArrivalDelayMinutes, FlightDurationActual, FlightDurationScheduled,
@@ -114,13 +120,7 @@ BEGIN
 		SET @CurrentDate = DATEADD(day, 1, @CurrentDate);
 	END;
 
-	RAISERROR('FactFlightPerformance loading process has completed.', 0, 1) WITH NOWAIT;
+	RAISERROR('FactFlightPerformance_Transactional loading process has completed.', 0, 1) WITH NOWAIT;
 	SET NOCOUNT OFF;
 END
 GO
-
-exec [DW].[InitialFactFlightPerformance]
-
-drop table [DW].[FactFlightPerformance]
-
-select * from [DW].[FactFlightPerformance]
