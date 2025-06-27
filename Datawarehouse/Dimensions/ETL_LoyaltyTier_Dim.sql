@@ -2,13 +2,12 @@ CREATE OR ALTER PROCEDURE [DW].[ETL_LoyaltyTier_Dim]
 AS
 BEGIN
   SET NOCOUNT ON;
-
   DECLARE
-    @StartTime      DATETIME2(3) = SYSUTCDATETIME(),
-    @LastRunTime    DATETIME2(3),
-    @RowsExpired    INT,
-    @RowsInserted   INT,
-    @LogID          BIGINT;
+    @StartTime    DATETIME2(3) = SYSUTCDATETIME(),
+    @LastRunTime  DATETIME2(3),
+    @RowsExpired  INT,
+    @RowsInserted INT,
+    @LogID        BIGINT;
 
   -- 1) Assume fatal: insert initial log entry
   INSERT INTO DW.ETL_Log (
@@ -38,7 +37,10 @@ BEGIN
 
     -- 4) Populate staging with changed/new tiers
     INSERT INTO [DW].[Temp_LoyaltyTier_table] (
-      LoyaltyTierID, Name, MinPoints, Benefits
+      LoyaltyTierID,
+      Name,
+      MinPoints,
+      Benefits
     )
     SELECT
       lt.LoyaltyTierID,
@@ -47,27 +49,28 @@ BEGIN
       lt.Benefits
     FROM SA.LoyaltyTier AS lt
     WHERE lt.StagingLastUpdateTimestampUTC > @LastRunTime;
-
-    -- 5) Expire old versions for changed keys
+    
+    -- 5) Expire current version when MinPoints changed
     UPDATE d
     SET
-      d.EffectiveTo      = @StartTime,
-      d.NameIsCurrent    = 0
+      d.EffectiveTo         = @StartTime,
+      d.MinPointsIsCurrent  = 0
     FROM DW.DimLoyaltyTier AS d
     JOIN DW.Temp_LoyaltyTier_table AS t
-      ON d.LoyaltyTierKey = t.LoyaltyTierID
-    WHERE d.NameIsCurrent = 1
-      AND (
-        ISNULL(d.Name,'')       <> ISNULL(t.Name,'')
-        OR ISNULL(d.MinPoints,0) <> ISNULL(t.MinPoints,0)
-        OR ISNULL(d.Benefits,'') <> ISNULL(t.Benefits,'')
-      );
+      ON d.LoyaltyTierID = t.LoyaltyTierID
+    WHERE d.MinPointsIsCurrent = 1
+      AND ISNULL(d.MinPoints,0) <> ISNULL(t.MinPoints,0);
     SET @RowsExpired = @@ROWCOUNT;
 
-    -- 6) Insert new SCD2 versions for changed/new keys
+    -- 6) Insert new SCD2 versions for changed/new tiers
     INSERT INTO DW.DimLoyaltyTier (
-      LoyaltyTierKey, Name, MinPoints, Benefits,
-      EffectiveFrom, EffectiveTo, NameIsCurrent
+      LoyaltyTierID,
+      Name,
+      MinPoints,
+      Benefits,
+      EffectiveFrom,
+      EffectiveTo,
+      MinPointsIsCurrent
     )
     SELECT
       t.LoyaltyTierID,

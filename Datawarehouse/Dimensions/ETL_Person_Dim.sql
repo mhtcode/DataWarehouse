@@ -10,7 +10,7 @@ BEGIN
     @RowsInserted  INT,
     @LogID         BIGINT;
 
-  -- 1) Insert initial "Fatal" log entry (assume worst-case fatal error)
+  -- 1) Insert initial "Fatal" log entry
   INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
@@ -64,33 +64,44 @@ BEGIN
     -- 5) Expire current dimension rows for those keys
     UPDATE d
     SET
-      d.PassportNumberIsCurrent   = 0,
-      d.EffectiveTo = @StartTime
+      d.PassportNumberIsCurrent = 0,
+      d.EffectiveTo            = @StartTime
     FROM DW.DimPerson AS d
     WHERE
       d.PassportNumberIsCurrent = 1
       AND EXISTS (
         SELECT 1 FROM DW.Temp_Person_table AS t
-        WHERE t.PersonID = d.PersonKey
+        WHERE t.PersonID = d.PersonID
       );
     SET @RowsExpired = @@ROWCOUNT;
 
-    -- 6) Insert new SCD2 versions from staging
+    -- 6) Insert new SCD2 versions
     INSERT INTO DW.DimPerson (
-      PersonKey, NationalCode, PassportNumber, Name,
+      PersonID, NationalCode, PassportNumber, Name,
       Gender, DateOfBirth, City, Country,
       Email, Phone, Address, PostalCode,
       EffectiveFrom, EffectiveTo, PassportNumberIsCurrent
     )
     SELECT
-      t.PersonID, t.NationalCode, t.PassportNumber, t.Name,
-      t.Gender, t.DateOfBirth, t.City, t.Country,
-      t.Email, t.Phone, t.Address, t.PostalCode,
-      @StartTime, NULL, 1
+      t.PersonID,
+      t.NationalCode,
+      t.PassportNumber,
+      t.Name,
+      t.Gender,
+      t.DateOfBirth,
+      t.City,
+      t.Country,
+      t.Email,
+      t.Phone,
+      t.Address,
+      t.PostalCode,
+      @StartTime,
+      NULL,
+      1
     FROM DW.Temp_Person_table AS t;
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 7) Update log entry to Success
+    -- 7) Update log to Success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = CONCAT(
@@ -105,7 +116,7 @@ BEGIN
   END TRY
   BEGIN CATCH
     DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
-    -- 8) Update log entry to Error
+    -- 8) Update log to Error
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Incremental SCD2 load failed',
@@ -115,5 +126,5 @@ BEGIN
     WHERE LogID = @LogID;
     THROW;
   END CATCH
-END
+END;
 GO

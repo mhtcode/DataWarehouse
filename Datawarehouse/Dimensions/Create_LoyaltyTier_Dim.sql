@@ -1,10 +1,12 @@
 CREATE TABLE [DW].[DimLoyaltyTier] (
-  [LoyaltyTierKey] int PRIMARY KEY,
-  [Name] nvarchar(255),
-  [MinPoints] int,
-  [Benefits] nvarchar(255),
-  [EffectiveFrom] datetime,
-  [EffectiveTo] datetime,
-  [NameIsCurrent] bit
-)
+    [LoyaltyTierKey]    INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    [LoyaltyTierID]     INT NOT NULL,
+    [Name]              NVARCHAR(255) NULL,
+    [MinPoints]         INT            NULL,
+    [Benefits]          NVARCHAR(255) NULL,
+    [EffectiveFrom]     DATETIME       NOT NULL,
+    [EffectiveTo]       DATETIME       NULL,
+    [MinPointsIsCurrent] BIT           NOT NULL
+);
 GO
+

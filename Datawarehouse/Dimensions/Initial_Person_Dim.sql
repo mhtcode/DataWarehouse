@@ -8,7 +8,7 @@ BEGIN
     @RowsInserted INT,
     @LogID        BIGINT;
 
-  -- 1) Insert initial "Fatal" log entry (assume worst-case fatal error)
+  -- 1) Insert initial "Fatal" log entry
   INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
@@ -47,22 +47,45 @@ BEGIN
     LEFT JOIN SA.Passenger AS pas
       ON p.PersonID = pas.PersonID;
 
-    -- 4) Insert new keys into dimension
+    -- 4) Insert new persons into dimension
     INSERT INTO DW.DimPerson (
-      PersonKey, NationalCode, PassportNumber, Name,
-      Gender, DateOfBirth, City, Country,
-      Email, Phone, Address, PostalCode,
-      EffectiveFrom, EffectiveTo, PassportNumberIsCurrent
+      PersonID,
+      NationalCode,
+      PassportNumber,
+      Name,
+      Gender,
+      DateOfBirth,
+      City,
+      Country,
+      Email,
+      Phone,
+      Address,
+      PostalCode,
+      EffectiveFrom,
+      EffectiveTo,
+      PassportNumberIsCurrent
     )
     SELECT
-      t.PersonID, t.NationalCode, t.PassportNumber, t.Name,
-      t.Gender, t.DateOfBirth, t.City, t.Country,
-      t.Email, t.Phone, t.Address, t.PostalCode,
-      @StartTime, NULL, 1
-    FROM DW.Temp_Person_table AS t
+      t.PersonID,
+      t.NationalCode,
+      t.PassportNumber,
+      t.Name,
+      t.Gender,
+      t.DateOfBirth,
+      t.City,
+      t.Country,
+      t.Email,
+      t.Phone,
+      t.Address,
+      t.PostalCode,
+      @StartTime,
+      NULL,
+      1
+    FROM [DW].[Temp_Person_table] AS t
     WHERE NOT EXISTS (
-      SELECT 1 FROM DW.DimPerson AS d
-      WHERE d.PersonKey = t.PersonID
+      SELECT 1
+      FROM DW.DimPerson AS d
+      WHERE d.PersonID = t.PersonID
     );
     SET @RowsInserted = @@ROWCOUNT;
 
@@ -82,11 +105,12 @@ BEGIN
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Initial full load failed',
+      RowsAffected      = NULL,
       DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
       Status            = 'Error',
       Message           = @ErrMsg
     WHERE LogID = @LogID;
     THROW;
   END CATCH
-END
+END;
 GO
