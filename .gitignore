@@ -11,3 +11,5 @@ Scripts/Smart table inserter/fillingTables.log
 # Ignore .idea files
 .idea/*
 
+# Ignore Initial Date Dimension file
+Datawarehouse/Dimentions/Initial_Date_Dim.sql
