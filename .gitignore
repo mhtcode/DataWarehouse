@@ -7,3 +7,6 @@ Scripts/Smart table inserter/fillingTables.log
 # Ignore logs directory (uncomment if you have it)
 # logs/
 # log/
+
+# Ignore .idea files
+.idea/*
