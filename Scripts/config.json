@@ -80,9 +80,15 @@
       "Datawarehouse/ALL_Initial_ETL.sql"
     ]
   },
-  "clean": [
-    "Datawarehouse/Drop_DW_all.sql",
-    "Staging Area/Drop_SA_all.sql",
+"clean": {
+  "datawarehouse": [
+    "Datawarehouse/Drop_DW_all.sql"
+  ],
+  "staging": [
+    "Staging Area/Drop_SA_all.sql"
+  ],
+  "source": [
     "Source/Drop_Source_all.sql"
   ]
+}
 }

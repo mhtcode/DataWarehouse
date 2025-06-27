@@ -88,10 +88,22 @@ def main():
         with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
             config = json.load(f)
         if mode == "clean":
-            scripts = config['clean']
-            run_node(scripts)
+            node = config['clean']
+            for arg in sys.argv[2:]:
+                if isinstance(node, dict) and arg in node:
+                    node = node[arg]
+                else:
+                    try:
+                        idx = int(arg)
+                        if isinstance(node, list) and 0 <= idx < len(node):
+                            node = node[idx]
+                        else:
+                            raise
+                    except:
+                        logging.error(f"Invalid path argument: {arg}")
+                        sys.exit(1)
+            run_node(node)
         elif mode == "make":
-            # If extra args are present, treat them as a path to a subtree
             node = config['make']
             for arg in sys.argv[2:]:
                 if isinstance(node, dict) and arg in node:
