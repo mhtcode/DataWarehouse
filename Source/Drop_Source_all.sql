@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS [Source].[Account];
+DROP TABLE IF EXISTS [Source].[AccountTierHistory];
 DROP TABLE IF EXISTS [Source].[Aircraft];
 DROP TABLE IF EXISTS [Source].[Airline];
 DROP TABLE IF EXISTS [Source].[AirlineAirportService];
@@ -10,9 +11,12 @@ DROP TABLE IF EXISTS [Source].[FlightOperation];
 DROP TABLE IF EXISTS [Source].[Item];
 DROP TABLE IF EXISTS [Source].[LoyaltyTier];
 DROP TABLE IF EXISTS [Source].[LoyaltyTransactionType];
+DROP TABLE IF EXISTS [Source].[MaintenanceLocation];
+DROP TABLE IF EXISTS [Source].[MaintenanceType];
 DROP TABLE IF EXISTS [Source].[Part];
 DROP TABLE IF EXISTS [Source].[Passenger];
 DROP TABLE IF EXISTS [Source].[Payment];
+DROP TABLE IF EXISTS [Source].[Person];
 DROP TABLE IF EXISTS [Source].[PointConversionRate];
 DROP TABLE IF EXISTS [Source].[Points];
 DROP TABLE IF EXISTS [Source].[PointsTransaction];
