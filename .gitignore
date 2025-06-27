@@ -11,5 +11,3 @@ Scripts/Smart table inserter/fillingTables.log
 # Ignore .idea files
 .idea/*
 
-# Ignore initial date dimension (bulk insert takes absolute path)
-Datawarehouse/Dimensions/Initial_Date_Dim.sql
