@@ -25,7 +25,7 @@ BEGIN
 		RETURN;
 	END
 
-		IF @StartDate >= @EndDate
+	IF @StartDate >= @EndDate
 	BEGIN
 		RAISERROR('The FactFlightPerformance_Transactional table is up to date!', 0, 1) WITH NOWAIT;
 		RETURN;
@@ -46,11 +46,7 @@ BEGIN
 		
 		SET @LogID = SCOPE_IDENTITY();
 
-		BEGIN TRY
-			-- Clear staging tables for the current iteration
-			TRUNCATE TABLE [DW].[Temp_DailyFlightOperations];
-			TRUNCATE TABLE [DW].[Temp_EnrichedFlightPerformanceData];
-			
+		BEGIN TRY			
 			-- STEP A: Load Core Flight Operations for the day
 			INSERT INTO [DW].[Temp_DailyFlightOperations] (FlightOperationID, FlightDetailID, ActualDepartureDateTime, ActualArrivalDateTime, DelayMinutes, LoadFactor, DelaySeverityScore)
 			SELECT FlightOperationID, FlightDetailID, ActualDepartureDateTime, ActualArrivalDateTime, DelayMinutes, LoadFactor, DelaySeverityScore
@@ -106,6 +102,10 @@ BEGIN
 			
 			SET @RowCount = @@ROWCOUNT;
 
+			-- Clear staging tables for the current iteration
+			TRUNCATE TABLE [DW].[Temp_DailyFlightOperations];
+			TRUNCATE TABLE [DW].[Temp_EnrichedFlightPerformanceData];
+			
 			-- Update the log entry to 'Success' for the current day
 			UPDATE DW.ETL_Log SET ChangeDescription = 'Load complete for date: ' + CONVERT(varchar, @CurrentDate, 101), RowsAffected = @RowCount, DurationSec = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()), Status = 'Success' WHERE LogID = @LogID;
 

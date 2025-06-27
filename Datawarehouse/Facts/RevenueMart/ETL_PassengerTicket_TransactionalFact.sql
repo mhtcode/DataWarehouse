@@ -46,11 +46,7 @@ BEGIN
 		-- Capture the LogID for this specific run
 		SET @LogID = SCOPE_IDENTITY();
 
-BEGIN TRY
-			TRUNCATE TABLE [DW].[Temp_DailyPayments];
-			TRUNCATE TABLE [DW].[Temp_EnrichedFlightData];
-			TRUNCATE TABLE [DW].[Temp_EnrichedPersonData];
-			
+BEGIN TRY			
 			-- STEP A: Load Core Transactions (Unchanged)
 			INSERT INTO [DW].[Temp_DailyPayments] (PaymentID, ReservationID, BuyerID, RealPrice, TicketPrice, Discount, Tax, PaymentDateTime, TicketHolderPassengerID, FlightDetailID, SeatDetailID)
 			SELECT p.PaymentID, r.ReservationID, p.BuyerID, p.RealPrice, p.TicketPrice, p.Discount, p.Tax, p.PaymentDateTime, r.PassengerID, r.FlightDetailID, r.SeatDetailID
@@ -122,6 +118,10 @@ BEGIN TRY
 						
 			SET @RowCount = @@ROWCOUNT;
 
+			TRUNCATE TABLE [DW].[Temp_DailyPayments];
+			TRUNCATE TABLE [DW].[Temp_EnrichedFlightData];
+			TRUNCATE TABLE [DW].[Temp_EnrichedPersonData];
+			
 			-- Update the log entry to 'Success' for the current day
 			UPDATE DW.ETL_Log SET ChangeDescription = 'Load complete for date: ' + CONVERT(varchar, @CurrentDate, 101), RowsAffected = @RowCount, DurationSec = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()), Status = 'Success' WHERE LogID = @LogID;
 

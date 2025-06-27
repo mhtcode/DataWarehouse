@@ -266,3 +266,41 @@ BEGIN
 END;
 GO
 
+IF OBJECT_ID('[DW].[Temp_DailyLoyaltyTransactions]', 'U') IS NULL
+BEGIN
+CREATE TABLE [DW].[Temp_DailyLoyaltyTransactions](
+	[PointsTransactionID] [int] NOT NULL,
+	[AccountID] [int] NOT NULL,
+	[TransactionDate] [datetime] NOT NULL,
+	[LoyaltyTransactionTypeID] [int] NOT NULL,
+	[PointsChange] [decimal](18, 2) NOT NULL,
+	[BalanceAfterTransaction] [decimal](18, 2) NOT NULL,
+	[USDValue] [decimal](18, 2) NULL,
+	[ConversionRate] [decimal](18, 6) NULL,
+	[PointConversionRateID] [int] NULL,
+	[ServiceOfferingID] [int] NULL,
+	[FlightDetailID] [int] NULL
+);
+END;
+GO
+
+IF OBJECT_ID('[DW].[Temp_EnrichedLoyaltyData]', 'U') IS NULL
+BEGIN
+CREATE TABLE [DW].[Temp_EnrichedLoyaltyData](
+    -- Dimension Keys
+	[TransactionDateKey] [datetime] NOT NULL,
+	[PersonKey] [int] NOT NULL,
+	[AccountKey] [int] NOT NULL,
+	[LoyaltyTierKey] [int] NOT NULL,
+	[TransactionTypeKey] [int] NOT NULL,
+	[ConversionRateKey] [int] NULL,
+	[FlightKey] [int] NULL,
+	[ServiceOfferingKey] [int] NULL,
+    -- Measures
+	[PointsChange] [decimal](18, 2) NOT NULL,
+	[USDValue] [decimal](18, 2) NULL,
+	[ConversionRateSnapshot] [decimal](18, 6) NULL,
+	[BalanceAfterTransaction] [decimal](18, 2) NOT NULL
+);
+END;
+GO
