@@ -232,37 +232,37 @@ CREATE TABLE [Source].[FlightOperation] (
 GO
 
 CREATE TABLE [Source].[MaintenanceType] (
-  [ID]          integer PRIMARY KEY,
-  [Name]        varchar(100),
-  [Category]    varchar(50),
-  [Description] varchar(500)
+  [MaintenanceTypeID]  integer PRIMARY KEY,
+  [Name]               varchar(100),
+  [Category]           varchar(50),
+  [Description]        varchar(500)
 );
 GO
 
 CREATE TABLE [Source].[Technician] (
-  [Technician_ID]       integer PRIMARY KEY,
+  [TechnicianID]       integer PRIMARY KEY,
   [Name]                varchar(100),
-  [Certification_Level] varchar(10),
-  [Employment_Type]     varchar(50),
-  [Active_Status]       bit
+  [CertificationLevel] varchar(10),
+  [EmploymentType]     varchar(50),
+  [ActiveStatus]       bit
 );
 GO
 
 CREATE TABLE [Source].[MaintenanceLocation] (
-  [Location_NK]   varchar(100) PRIMARY KEY,
+  [MaintenanceLocationID]   varchar(100) PRIMARY KEY,
   [Name]          varchar(100),
   [City]          varchar(50),
   [Country]       varchar(50),
-  [Inhouse_Flag]  bit
+  [InhouseFlag]  bit
 );
 GO
 
 CREATE TABLE [Source].[Part] (
-  [ID]                     integer PRIMARY KEY,
+  [PartID]                     integer PRIMARY KEY,
   [Name]                   varchar(100),
   [PartNumber]             varchar(50),
   [Manufacturer]           varchar(100),
-  [Warranty_Period_Months] int,
+  [WarrantyPeriodMonths] int,
   [Category]               varchar(50)
 );
 GO

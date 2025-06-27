@@ -324,23 +324,23 @@ GO
 
 -- MaintenanceType
 CREATE TABLE [SA].[MaintenanceType] (
-  [ID]          integer PRIMARY KEY,
-  [Name]        varchar(100),
-  [Category]    varchar(50),
+  [MaintenanceTypeID] integer PRIMARY KEY,
+  [Name] varchar(100),
+  [Category] varchar(50),
   [Description] varchar(500),
-  [StagingLoadTimestampUTC]      datetime,
+  [StagingLoadTimestampUTC] datetime,
   [StagingLastUpdateTimestampUTC] datetime,
-  [SourceSystem]                 varchar(200)
+  [SourceSystem] varchar(200)
 );
 GO
 
 -- Technician
 CREATE TABLE [SA].[Technician] (
-  [Technician_ID]       integer PRIMARY KEY,
+  [TechniciaID]       integer PRIMARY KEY,
   [Name]                varchar(100),
-  [Certification_Level] varchar(10),
-  [Employment_Type]     varchar(50),
-  [Active_Status]       bit,
+  [CertificationLevel] varchar(10),
+  [EmploymentType]     varchar(50),
+  [ActiveStatus]       bit,
   [StagingLoadTimestampUTC]      datetime,
   [StagingLastUpdateTimestampUTC] datetime,
   [SourceSystem]                 varchar(200)
@@ -349,11 +349,11 @@ GO
 
 -- MaintenanceLocation
 CREATE TABLE [SA].[MaintenanceLocation] (
-  [Location_NK]   varchar(100) PRIMARY KEY,
+  [MaintenanceLocationID]   varchar(100) PRIMARY KEY,
   [Name]          varchar(100),
   [City]          varchar(50),
   [Country]       varchar(50),
-  [Inhouse_Flag]  bit,
+  [InhouseFlag]  bit,
   [StagingLoadTimestampUTC]      datetime,
   [StagingLastUpdateTimestampUTC] datetime,
   [SourceSystem]                 varchar(200)
@@ -362,11 +362,11 @@ GO
 
 -- Part
 CREATE TABLE [SA].[Part] (
-  [ID]                     integer PRIMARY KEY,
+  [PartID]                     integer PRIMARY KEY,
   [Name]                   varchar(100),
   [PartNumber]             varchar(50),
   [Manufacturer]           varchar(100),
-  [Warranty_Period_Months] int,
+  [WarrantyPeriodMonths] int,
   [Category]               varchar(50),
   [StagingLoadTimestampUTC]      datetime,
   [StagingLastUpdateTimestampUTC] datetime,
