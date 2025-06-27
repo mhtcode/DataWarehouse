@@ -360,6 +360,7 @@ GO
 CREATE TABLE [SA].[ServiceOfferingItem] (
   [ServiceOfferingID] INT NOT NULL,
   [ItemID] INT NOT NULL,
+  [Quantity] INT,
   [StagingLoadTimestampUTC] DATETIME,
   [StagingLastUpdateTimestampUTC] DATETIME,
   [SourceSystem] VARCHAR(200),
@@ -384,7 +385,8 @@ GO
 CREATE TABLE [SA].[TravelClass] (
   [TravelClassID] INT PRIMARY KEY,
   [ClassName] VARCHAR(50),
-  [Description] VARCHAR(200),
+  [Capacity] INT,
+  [BaseCost] DECIMAL(18,2),
   [StagingLoadTimestampUTC] DATETIME,
   [StagingLastUpdateTimestampUTC] DATETIME,
   [SourceSystem] VARCHAR(200)
