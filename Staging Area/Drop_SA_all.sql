@@ -58,5 +58,8 @@ IF OBJECT_ID('[SA].[ETL_ServiceOfferingItem]', 'P') IS NOT NULL DROP PROCEDURE [
 IF OBJECT_ID('[SA].[ETL_Technician]', 'P') IS NOT NULL DROP PROCEDURE [SA].[ETL_Technician];
 IF OBJECT_ID('[SA].[ETL_TravelClass]', 'P') IS NOT NULL DROP PROCEDURE [SA].[ETL_TravelClass];
 
+-- Drop the main ETL procedure
+IF OBJECT_ID('[SA].[Main_ETL]', 'P') IS NOT NULL DROP PROCEDURE [SA].[Main_ETL];
+
 DROP SCHEMA IF EXISTS [SA];
 GO
