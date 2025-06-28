@@ -14,9 +14,9 @@ CREATE TABLE [DW].[PassengerActivity_YearlyFact] (
 GO
 
 CREATE NONCLUSTERED INDEX IX_PassengerActivity_ACCFact_PersonKey
-ON [DW].[PassengerActivity_ACCFact] (PersonKey);
+ON [DW].[PassengerActivity_YearlyFact] (PersonKey);
 GO
 
 CREATE NONCLUSTERED INDEX IX_PassengerActivity_ACCFact_YearID
-ON [DW].[PassengerActivity_ACCFact] (YearID);
+ON [DW].[PassengerActivity_YearlyFact] (YearID);
 GO

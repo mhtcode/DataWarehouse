@@ -61,7 +61,7 @@ BEGIN
 					[DW].[DimPayment] dp ON fptt.PaymentKey = dp.PaymentKey
 				WHERE
 					YEAR(fptt.FlightDateKey) = @CurrentYear 
-					AND dp.PaymentStatus = 'Completed'.
+					AND dp.PaymentStatus = 'Completed'
 				GROUP BY
 					fptt.TicketHolderPersonKey
 			)
