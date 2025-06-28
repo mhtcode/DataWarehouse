@@ -68,6 +68,7 @@ INSERT INTO Source.LoyaltyTransactionType (LoyaltyTransactionTypeID, TypeName) V
 (4, 'Adjust'),
 (5, 'Bonus');
 
+
 INSERT INTO Source.PointConversionRate (PointConversionRateID, ConversionRate, CurrencyCode) VALUES
 (1, 0.010000, 'USD'),
 (2, 0.012500, 'CA'),
@@ -77,26 +78,28 @@ INSERT INTO Source.PointConversionRate (PointConversionRateID, ConversionRate, C
 INSERT INTO [Source].[PointsTransaction]
 (PointsTransactionID, AccountID, TransactionDate, LoyaltyTransactionTypeID, PointsChange, BalanceAfterTransaction, USDValue, ConversionRate, PointConversionRateID, Description, ServiceOfferingID, FlightDetailID)
 VALUES
-(1, 1, '2014-05-01', 1, 500.00, 5500.00, 5.00, 0.01, NULL, 'Flight Booking', 1, 1),
-(2, 2, '2014-05-02', 1, 850.00, 15850.00, 8.50, 0.01, NULL, 'Flight Booking', 2, 1),
-(3, 3, '2014-05-03', 1, 1200.00, 76200.00, 12.00, 0.01, NULL, 'Flight Booking', 3, 2),
-(4, 4, '2014-05-04', 1, 780.00, 3780.00, 7.80, 0.01, NULL, 'Flight Booking', 1, 3),
-(5, 5, '2014-05-05', 2, -200.00, 24800.00, -2.00, 0.01, NULL, 'Seat Upgrade', 9, 4),
-(6, 6, '2014-05-06', 1, 950.00, 120950.00, 9.50, 0.01, NULL, 'Flight Booking', 4, 5),
-(7, 7, '2014-05-07', 1, 1100.00, 9100.00, 11.00, 0.01, NULL, 'Flight Booking', 5, 6),
-(8, 8, '2014-05-08', 1, 2200.00, 67200.00, 22.00, 0.01, NULL, 'Flight Booking', 6, 7),
-(9, 9, '2014-05-09', 3, -1500.00, 33500.00, -15.00, 0.01, NULL, 'Points Expiration', NULL, 8),
-(10, 10, '2014-05-10', 1, 890.00, 2890.00, 8.90, 0.01, NULL, 'Flight Booking', 7, 9),
-(11, 11, '2014-05-11', 1, 1300.00, 111300.00, 13.00, 0.01, NULL, 'Flight Booking', 8, 10),
-(12, 12, '2014-05-12', 1, 1050.00, 5050.00, 10.50, 0.01, NULL, 'Flight Booking', 9, 11),
-(13, 13, '2014-05-13', 1, 1950.00, 19950.00, 19.50, 0.01, NULL, 'Flight Booking', 10, 12),
-(14, 14, '2014-05-14', 2, -300.00, 6700.00, -3.00, 0.01, NULL, 'Extra Baggage', 4, 13),
-(15, 15, '2014-05-15', 1, 1700.00, 86700.00, 17.00, 0.01, NULL, 'Flight Booking', 1, 14),
-(16, 1, '2014-05-16', 2, -100.00, 5400.00, -1.00, 0.01, NULL, 'Meal Upgrade', 2, 1),
-(17, 2, '2014-05-17', 4, 50.00, 15900.00, 0.50, 0.01, NULL, 'Correction', NULL, 2),
-(18, 3, '2014-05-18', 2, -500.00, 75700.00, -5.00, 0.01, NULL, 'Lounge Access', 6, 3),
-(19, 4, '2014-05-19', 1, 200.00, 3980.00, 2.00, 0.01, NULL, 'Referral Bonus', NULL, 4),
-(20, 5, '2014-05-20', 3, -100.00, 24700.00, -1.00, 0.01, NULL, 'Points Expiration', NULL, 5);
+(1, 1, '2014-05-01', 1, 500.00, 5500.00, 5.00, 0.01, 1, 'Flight Booking', 1, 1),
+(2, 2, '2014-05-02', 1, 850.00, 15850.00, 8.50, 0.01, 1, 'Flight Booking', 2, 1),
+(3, 3, '2014-05-03', 1, 1200.00, 76200.00, 12.00, 0.01, 1, 'Flight Booking', 3, 2),
+(4, 4, '2014-05-04', 1, 780.00, 3780.00, 7.80, 0.01, 1, 'Flight Booking', 1, 3),
+(5, 5, '2014-05-05', 2, -200.00, 24800.00, -2.00, 0.01, 1, 'Seat Upgrade', 9, 4),
+(6, 6, '2014-05-06', 1, 950.00, 120950.00, 9.50, 0.01, 1, 'Flight Booking', 4, 5),
+(7, 7, '2014-05-07', 1, 1100.00, 9100.00, 11.00, 0.01, 1, 'Flight Booking', 5, 6),
+(8, 8, '2014-05-08', 1, 2200.00, 67200.00, 22.00, 0.01, 1, 'Flight Booking', 6, 7),
+(9, 9, '2014-05-09', 3, -1500.00, 33500.00, -15.00, 0.01, 1, 'Points Expiration', NULL, 8),
+(10, 10, '2014-05-10', 1, 890.00, 2890.00, 8.90, 0.01, 1, 'Flight Booking', 7, 9),
+
+(11, 11, '2014-05-11', 1, 1300.00, 111300.00, 13.00, 0.0125, 2, 'Flight Booking', 8, 10),
+(12, 12, '2014-05-12', 1, 1050.00, 5050.00, 10.50, 0.0125, 2, 'Flight Booking', 9, 11),
+(13, 13, '2014-05-13', 1, 1950.00, 19950.00, 19.50, 0.0125, 2, 'Flight Booking', 10, 12),
+(14, 14, '2014-05-14', 2, -300.00, 6700.00, -3.00, 0.0125, 2, 'Extra Baggage', 4, 13),
+(15, 15, '2014-05-15', 1, 1700.00, 86700.00, 17.00, 0.0125, 2, 'Flight Booking', 1, 14),
+
+(16, 1, '2014-05-16', 2, -100.00, 5400.00, -1.00, 0.013, 3, 'Meal Upgrade', 2, 1),
+(17, 2, '2014-05-17', 4, 50.00, 15900.00, 0.50, 0.013, 3, 'Correction', NULL, 2),
+(18, 3, '2014-05-18', 2, -500.00, 75700.00, -5.00, 0.013, 3, 'Lounge Access', 6, 3),
+(19, 4, '2014-05-19', 1, 200.00, 3980.00, 2.00, 0.013, 3, 'Referral Bonus', NULL, 4),
+(20, 5, '2014-05-20', 3, -100.00, 24700.00, -1.00, 0.013, 3, 'Points Expiration', NULL, 5);
 
 -- TravelClass (4 خط)
 INSERT INTO [Source].[TravelClass] (TravelClassID, ClassName, Capacity, BaseCost) VALUES
