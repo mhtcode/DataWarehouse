@@ -6,13 +6,12 @@ BEGIN
     DECLARE @StartDate date;
     DECLARE @EndDate date;
 
-    -- 1. Determine the max date already in the fact table (TransactionDateKey = datetime)
     SELECT 
         @StartDate = MAX(CAST(TransactionDateKey AS DATE))
     FROM 
         [DW].[LoyaltyPointTransaction_TransactionalFact];
 
-    -- 2. Determine the max date available in the staging (TransactionDate = datetime)
+    
     SELECT 
         @EndDate = MAX(CAST(TransactionDate AS DATE))
     FROM 
@@ -25,7 +24,7 @@ BEGIN
     END
 
     IF @StartDate IS NULL
-        SET @StartDate = @EndDate; -- Optional: Start with latest, or SET to earliest date in PointsTransaction for full load
+        SET @StartDate = @EndDate; -
 
     IF @StartDate >= @EndDate
     BEGIN
@@ -33,7 +32,7 @@ BEGIN
         RETURN;
     END
 
-    DECLARE @CurrentDate date = DATEADD(day, 1, @StartDate); -- Always move forward by one day
+    DECLARE @CurrentDate date = DATEADD(day, 1, @StartDate); 
 
     WHILE @CurrentDate <= @EndDate
     BEGIN
@@ -52,8 +51,6 @@ BEGIN
         SET @LogID = SCOPE_IDENTITY();
 
         BEGIN TRY			
-            -- STEP A: Stage the daily loyalty transactions for the current date.
-            TRUNCATE TABLE [DW].[Temp_DailyLoyaltyTransactions]; -- Ensure table is empty
 
             INSERT INTO [DW].[Temp_DailyLoyaltyTransactions]
             (
@@ -80,9 +77,6 @@ BEGIN
                 CONTINUE;
             END
 
-            -- STEP B: Enrich the data by joining to dimensions and resolving SCD Type 2 keys.
-            TRUNCATE TABLE [DW].[Temp_EnrichedLoyaltyData]; -- Ensure table is empty
-
             INSERT INTO [DW].[Temp_EnrichedLoyaltyData] (
                 TransactionDateKey, PersonKey, AccountKey, LoyaltyTierKey, TransactionTypeKey, 
                 ConversionRateKey, FlightKey, ServiceOfferingKey, PointsChange, CurrencyValue, 
@@ -90,7 +84,7 @@ BEGIN
             )
             SELECT
                 -- Dimension Keys
-                pt.TransactionDate,    -- TransactionDateKey (datetime)
+                pt.TransactionDate,    
                 ISNULL(dp.PersonKey, -1),
                 pt.AccountID,
                 ISNULL(dlt.LoyaltyTierKey, -1),
@@ -101,31 +95,25 @@ BEGIN
                 -- Measures
                 pt.PointsChange,
                 pt.CurrencyValue,
-                ISNULL(dcr.Rate, pt.ConversionRate),  -- fallback to staging value if no match
+                ISNULL(dcr.Rate, pt.ConversionRate),  
                 pt.BalanceAfterTransaction
             FROM [DW].[Temp_DailyLoyaltyTransactions] pt
             INNER JOIN [SA].[Account] acc ON pt.AccountID = acc.AccountID
             INNER JOIN [SA].[Passenger] pass ON acc.PassengerID = pass.PassengerID
-            -- SCD Type 2 Join for Person
             LEFT JOIN [DW].[DimPerson] dp ON pass.PersonID = dp.PersonID
                 AND pt.TransactionDate >= dp.EffectiveFrom 
                 AND pt.TransactionDate < ISNULL(dp.EffectiveTo, '9999-12-31')
-            -- SCD Type 2 Join to find which tier the account was in
             LEFT JOIN [SA].[AccountTierHistory] ath ON pt.AccountID = ath.AccountID
                 AND pt.TransactionDate >= ath.EffectiveFrom
                 AND pt.TransactionDate < ISNULL(ath.EffectiveTo, '9999-12-31')
-            -- SCD Type 2 Join to find the correct version of that tier
             LEFT JOIN [DW].[DimLoyaltyTier] dlt ON ath.LoyaltyTierID = dlt.LoyaltyTierID
                 AND pt.TransactionDate >= dlt.EffectiveFrom
                 AND pt.TransactionDate < ISNULL(dlt.EffectiveTo, '9999-12-31')
-            -- SCD Type 2 Join for Point Conversion Rate
             LEFT JOIN [DW].[DimPointConversionRate] dcr ON pt.PointConversionRateID = dcr.PointConversionRateID
                 AND pt.TransactionDate >= dcr.EffectiveFrom
                 AND pt.TransactionDate < ISNULL(dcr.EffectiveTo, '9999-12-31')
-            -- Join for Service Offering (not SCD)
             LEFT JOIN [DW].[DimServiceOffering] dso ON pt.ServiceOfferingID = dso.ServiceOfferingID;
 
-            -- STEP C: Final Insert into the fact table
             INSERT INTO [DW].[LoyaltyPointTransaction_TransactionalFact] (
                 TransactionDateKey, PersonKey, AccountKey, LoyaltyTierKey, TransactionTypeKey,
                 ConversionRateKey, FlightKey, ServiceOfferingKey, PointsEarned, PointsRedeemed,
@@ -145,6 +133,7 @@ BEGIN
 
             TRUNCATE TABLE [DW].[Temp_DailyLoyaltyTransactions];
             TRUNCATE TABLE [DW].[Temp_EnrichedLoyaltyData];
+
 
             UPDATE DW.ETL_Log 
             SET ChangeDescription = 'Load complete for date: ' + CONVERT(varchar, @CurrentDate, 101), 

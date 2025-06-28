@@ -13,8 +13,6 @@ BEGIN
 	SET @LogID = SCOPE_IDENTITY();
 
 	BEGIN TRY
-		-- Truncate the table for a full rebuild.
-		TRUNCATE TABLE [DW].[PersonPointTransactions_ACCFact];
 
 		WITH LifetimeAggregates AS (
 			SELECT
@@ -39,7 +37,6 @@ BEGIN
                 [DW].[LoyaltyPointTransaction_TransactionalFact] fact
             INNER JOIN [DW].[DimPerson] historical_person ON fact.PersonKey = historical_person.PersonKey
         )
-		-- Simple insert for the initial load
 		INSERT INTO [DW].[PersonPointTransactions_ACCFact] (
 			PersonKey, LoyaltyTierKey, TotalPointsEarned, TotalPointsRedeemed, NetPointChange,
 			TotalPointValueUSD, TotalNumberOfTransactions, TotalDistinctFlightsEarnedOn

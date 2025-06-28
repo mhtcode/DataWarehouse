@@ -2,8 +2,6 @@ CREATE OR ALTER PROCEDURE [DW].[Load_FlightOperation_Factless]
 AS
 BEGIN
 	SET NOCOUNT ON;
-
-    -- The procedure now performs a full reload each time.
 	DECLARE @LogID BIGINT;
 	DECLARE @StartTime DATETIME2(3) = SYSUTCDATETIME();
 	DECLARE @RowCount INT;
@@ -15,8 +13,6 @@ BEGIN
 
 	BEGIN TRY
 		
-		-- Use a MERGE statement to efficiently synchronize the target table.
-		-- This will INSERT new flights, and UPDATE the status of existing flights if it changes.
 		MERGE [DW].[FactFlightOperation_Factless] AS Target
 		USING (
 			SELECT
@@ -25,7 +21,6 @@ BEGIN
 				fd.DestinationAirportID AS DestinationAirportKey,
 				ac.AirlineID AS AirlineKey,
 				fd.AircraftID AS AircraftKey,
-				-- Use a CASE statement to determine which flag to set
 				CASE
 					WHEN fo.CancelFlag = 1 THEN 3 -- Canceled
 					WHEN fo.DelayMinutes > 0 THEN 2 -- Delayed
@@ -40,7 +35,6 @@ BEGIN
 		) AS Source
 		ON (Target.FlightKey = Source.FlightKey)
 
-		-- Action for existing flights: UPDATE the status if it has changed.
 		WHEN MATCHED AND Target.OperationTypeKey <> Source.OperationTypeKey THEN
 			UPDATE SET
 				Target.SourceAirportKey = Source.SourceAirportKey,
@@ -49,7 +43,6 @@ BEGIN
 				Target.AircraftKey = Source.AircraftKey,
 				Target.OperationTypeKey = Source.OperationTypeKey
 
-		-- Action for new flights: INSERT a new record.
 		WHEN NOT MATCHED BY TARGET THEN
 			INSERT (
 				FlightKey,

@@ -14,7 +14,6 @@ BEGIN
 
 	BEGIN TRY
 		
-		-- Use a MERGE statement to efficiently synchronize the target table.
 		MERGE [DW].[PersonPointTransactions_ACCFact] AS Target
 		USING (
 			-- Subquery to get the fully aggregated lifetime data
@@ -57,7 +56,6 @@ BEGIN
 		) AS Source
 		ON (Target.PersonKey = Source.PersonKey)
 
-		-- Action for existing people: UPDATE their record
 		WHEN MATCHED THEN
 			UPDATE SET
 				Target.LoyaltyTierKey = Source.LoyaltyTierKey,
@@ -68,7 +66,6 @@ BEGIN
 				Target.TotalNumberOfTransactions = Source.TotalNumberOfTransactions,
 				Target.TotalDistinctFlightsEarnedOn = Source.TotalDistinctFlightsEarnedOn
 
-		-- Action for new people: INSERT a new record
 		WHEN NOT MATCHED BY TARGET THEN
 			INSERT (
 				PersonKey, LoyaltyTierKey, TotalPointsEarned, TotalPointsRedeemed, NetPointChange,

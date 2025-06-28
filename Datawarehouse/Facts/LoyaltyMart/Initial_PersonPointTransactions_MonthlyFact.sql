@@ -35,7 +35,6 @@ BEGIN
 		SET @LogID = SCOPE_IDENTITY();
 
 		BEGIN TRY
-			-- CTE to aggregate transactions for the current month in the loop.
 			WITH MonthlyAggregates AS (
 				SELECT
 					fact.PersonKey AS HistoricalPersonKey,
@@ -53,7 +52,6 @@ BEGIN
 					fact.PersonKey,
 					fact.LoyaltyTierKey
 			)
-			-- Final insert for the initial load
 			INSERT INTO [DW].[PersonPointTransactions_MonthlyFact] (
 				MonthID, PersonKey, LoyaltyTierKey, MonthlyPointsEarned, MonthlyPointsRedeemed,
 				NetPointChange, MonthlyPointValueUSD, MonthlyNumberOfTransactions, MonthlyDistinctFlightsEarnedOn
@@ -90,7 +88,6 @@ BEGIN
 			THROW;
 		END CATCH
 
-        -- Increment the month to process the next one
 		SET @CurrentMonthStart = DATEADD(month, 1, @CurrentMonthStart);
 	END;
 
