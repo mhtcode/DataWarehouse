@@ -14,6 +14,7 @@ DROP TABLE IF EXISTS [DW].[PartReplacement_TransactionalFact];
 
 -- PerformanceMart
 DROP TABLE IF EXISTS [DW].[FlightPerformance_TransactionalFact];
+DROP TABLE IF EXISTS [DW].[FlightPerformance_DailyFact];
 
 -- RevenueMart
 DROP TABLE IF EXISTS [DW].[FlightOperation_Factless];
