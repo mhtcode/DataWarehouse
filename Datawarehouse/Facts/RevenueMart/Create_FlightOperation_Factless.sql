@@ -1,4 +1,4 @@
-CREATE TABLE [DW].[FlightOperation_FactlessFact] (
+CREATE TABLE [DW].[FlightOperation_Factless] (
   [FlightKey] int,
   [SourceAirportKey] int,
   [DestinationAirportKey] int,
