@@ -64,15 +64,15 @@ BEGIN
 			INSERT INTO [DW].[FactPassengerActivity_Yearly] (
 				YearID,
 				PersonKey,
-				TotalTicketValue,
-				TotalMilesFlown,
-				TotalDiscountAmount,
-				AverageTicketPrice,
-				DistinctAirlinesUsed,
-				DistinctRoutesFlown,
-				TotalFlights,
-				MaxFlightDistance,
-				MinFlightDistance
+				YearlyTicketValue,
+				YearlyMilesFlown,
+				YearlyDiscountAmount,
+				YearlyAverageTicketPrice,
+				YearlyDistinctAirlinesUsed,
+				YearlyDistinctRoutesFlown,
+				YearlyFlights,
+				YearlyMaxFlightDistance,
+				YearlyMinFlightDistance
 			)
 			SELECT
 				DATEFROMPARTS(@CurrentYear, 1, 1), -- YearID is the first day of the current year in the loop
@@ -113,11 +113,3 @@ BEGIN
 	SET NOCOUNT OFF;
 END
 GO
-
-exec [DW].[InitialFactPassengerActivity_Yearly]
-
-select * from dw.[FactPassengerActivity_Yearly]
-
-select * from dw.FactPassengerTicket_Transactional
-
-select * from sa.Reservation

@@ -20,8 +20,8 @@ GO
 
 CREATE TABLE [Source].[Aircraft] (
   [AircraftID] integer PRIMARY KEY,
-  [Model] varchar(50),
-  [Type] varchar(50),
+  [Model] nvarchar(50),
+  [Type] nvarchar(50),
   [ManufacturerDate] date,
   [Capacity] integer,
   [Price] decimal(18,2),
@@ -31,21 +31,21 @@ GO
 
 CREATE TABLE [Source].[Airline] (
   [AirlineID] integer PRIMARY KEY,
-  [Name] varchar(100),
-  [Country] varchar(50),
+  [Name] nvarchar(100),
+  [Country] nvarchar(50),
   [FoundedDate] date,
-  [HeadquartersNumber] varchar(50),
+  [HeadquartersNumber] nvarchar(50),
   [FleetSize] integer,
-  [Website] varchar(200),
-  [Current_IATA_Code] varchar(3) NULL
+  [Website] nvarchar(200),
+  [Current_IATA_Code] nvarchar(3) NULL
 )
 GO
 
 CREATE TABLE [Source].[AirlineAirportService] (
-    [ServiceTypeCode] VARCHAR(50) NOT NULL,
-    [FlightTypeCode] VARCHAR(50) NOT NULL,
-    [ServiceTypeName] VARCHAR(100) NOT NULL,
-    [FlightTypeName] VARCHAR(100) NOT NULL,
+    [ServiceTypeCode] NVARCHAR(50) NOT NULL,
+    [FlightTypeCode] NVARCHAR(50) NOT NULL,
+    [ServiceTypeName] NVARCHAR(100) NOT NULL,
+    [FlightTypeName] NVARCHAR(100) NOT NULL,
     [ContractStartDate] DATE NOT NULL,
     [ContractEndDate] DATE,
     [LandingFeeRate] DECIMAL(18,4),
@@ -56,16 +56,16 @@ GO
 
 CREATE TABLE [Source].[Airport] (
   [AirportID] integer PRIMARY KEY,
-  [City] varchar(50),
-  [Country] varchar(50),
-  [IATACode] varchar(3),
+  [City] nvarchar(50),
+  [Country] nvarchar(50),
+  [IATACode] nvarchar(3),
   [ElevationMeter] integer,
-  [TimeZone] varchar(50),
+  [TimeZone] nvarchar(50),
   [NumberOfTerminals] integer,
   [AnnualPassengerTraffic] bigint,
   [Latitude] decimal(9,6),
   [Longitude] decimal(9,6),
-  [ManagerName] varchar(100)
+  [ManagerName] nvarchar(100)
 )
 GO
 
@@ -79,7 +79,7 @@ GO
 CREATE TABLE [Source].[CrewMember] (
   [CrewMemberID] integer PRIMARY KEY,
   [PersonID] integer NOT NULL,
-  [Role] varchar(50)
+  [Role] nvarchar(50)
 )
 GO
 
@@ -110,8 +110,8 @@ GO
 
 CREATE TABLE [Source].[Item] (
   [ItemID] INT PRIMARY KEY,
-  [ItemName] VARCHAR(100),
-  [Description] VARCHAR(300),
+  [ItemName] NVARCHAR(100),
+  [Description] NVARCHAR(300),
   [BasePrice] DECIMAL(18,2),
   [IsLoyaltyRedeemable] BIT DEFAULT 0
 )
@@ -119,24 +119,24 @@ GO
 
 CREATE TABLE [Source].[LoyaltyTier] (
   [LoyaltyTierID] integer PRIMARY KEY,
-  [Name] varchar(50) NOT NULL,
+  [Name] nvarchar(50) NOT NULL,
   [MinPoints] integer NOT NULL,
-  [Benefits] varchar(200)
+  [Benefits] nvarchar(200)
 )
 GO
 
 CREATE TABLE [Source].[LoyaltyTransactionType] (
   [LoyaltyTransactionTypeID] INT PRIMARY KEY,
-  [TypeName] VARCHAR(50)
+  [TypeName] NVARCHAR(50)
 )
 GO
 
 -- Maintenance Data Mart
 CREATE TABLE [Source].[MaintenanceLocation] (
-  [MaintenanceLocationID]   varchar(100) PRIMARY KEY,
-  [Name]          varchar(100),
-  [City]          varchar(50),
-  [Country]       varchar(50),
+  [MaintenanceLocationID]   nvarchar(100) PRIMARY KEY,
+  [Name]          nvarchar(100),
+  [City]          nvarchar(50),
+  [Country]       nvarchar(50),
   [InhouseFlag]  bit
 );
 GO
@@ -144,27 +144,27 @@ GO
 -- Maintenance Data Mart
 CREATE TABLE [Source].[MaintenanceType] (
   [MaintenanceTypeID]  integer PRIMARY KEY,
-  [Name]               varchar(100),
-  [Category]           varchar(50),
-  [Description]        varchar(500)
+  [Name]               nvarchar(100),
+  [Category]           nvarchar(50),
+  [Description]        nvarchar(500)
 );
 GO
 
 -- Maintenance Data Mart
 CREATE TABLE [Source].[Part] (
   [PartID]                     integer PRIMARY KEY,
-  [Name]                   varchar(100),
-  [PartNumber]             varchar(50),
-  [Manufacturer]           varchar(100),
+  [Name]                   nvarchar(100),
+  [PartNumber]             nvarchar(50),
+  [Manufacturer]           nvarchar(100),
   [WarrantyPeriodMonths] int,
-  [Category]               varchar(50)
+  [Category]               nvarchar(50)
 );
 GO
 
 CREATE TABLE [Source].[Passenger] (
   [PassengerID] integer PRIMARY KEY,
   [PersonID] integer NOT NULL,
-  [PassportNumber] varchar(50) UNIQUE
+  [PassportNumber] nvarchar(50) UNIQUE
 )
 GO
 
@@ -172,35 +172,35 @@ CREATE TABLE [Source].[Payment] (
   [PaymentID] integer PRIMARY KEY,
   [ReservationID] integer NOT NULL,
   [BuyerID] integer NOT NULL,
-  [Status] varchar(20) DEFAULT 'Pending',
+  [Status] nvarchar(20) DEFAULT 'Pending',
   [RealPrice] decimal(18,2),
   [TicketPrice] decimal(18,2) NOT NULL,
   [Discount] decimal(18,2) DEFAULT (0),
   [Tax] decimal(18,2) DEFAULT (10),
-  [Method] varchar(50),
+  [Method] nvarchar(50),
   [PaymentDateTime] datetime
 )
 GO
 
 CREATE TABLE [Source].[Person] (
   [PersonID] integer PRIMARY KEY,
-  [NatCode] varchar(20) NOT NULL,
-  [Name] varchar(100) NOT NULL,
-  [Phone] varchar(20),
-  [Email] varchar(100) UNIQUE,
-  [Address] varchar(200),
-  [City] varchar(50),
-  [Country] varchar(50),
+  [NatCode] nvarchar(20) NOT NULL,
+  [Name] nvarchar(100) NOT NULL,
+  [Phone] nvarchar(20),
+  [Email] nvarchar(100) UNIQUE,
+  [Address] nvarchar(200),
+  [City] nvarchar(50),
+  [Country] nvarchar(50),
   [DateOfBirth] date,
-  [Gender] varchar(10),
-  [PostalCode] varchar(20)
+  [Gender] nvarchar(10),
+  [PostalCode] nvarchar(20)
 )
 GO
 
 CREATE TABLE [Source].[PointConversionRate] (
     [PointConversionRateID] INT PRIMARY KEY,
     [ConversionRate] DECIMAL(18,6) NOT NULL,
-    [CurrencyCode] VARCHAR(10) DEFAULT 'USD'
+    [CurrencyCode] NVARCHAR(10) DEFAULT 'USD'
 );
 GO
 
@@ -222,7 +222,7 @@ CREATE TABLE [Source].[PointsTransaction] (
   [USDValue] DECIMAL(18,2),
   [ConversionRate] DECIMAL(18,6),
   [PointConversionRateID] INT,
-  [Description] VARCHAR(200),
+  [Description] NVARCHAR(200),
   [ServiceOfferingID] INT,
   [FlightDetailID] INT
 )
@@ -234,7 +234,7 @@ CREATE TABLE [Source].[Reservation] (
   [FlightDetailID] integer NOT NULL,
   [ReservationDate] datetime,
   [SeatDetailID] integer,
-  [Status] varchar(20) DEFAULT 'Booked'
+  [Status] nvarchar(20) DEFAULT 'Booked'
 )
 GO
 
@@ -242,7 +242,7 @@ CREATE TABLE [Source].[SeatDetail] (
   [SeatDetailID] integer PRIMARY KEY,
   [AircraftID] integer NOT NULL,
   [SeatNo] integer NOT NULL,
-  [SeatType] varchar(20),
+  [SeatType] nvarchar(20),
   [TravelClassID] integer,
   [ReservationID] integer
 )
@@ -251,8 +251,8 @@ GO
 CREATE TABLE [Source].[ServiceOffering] (
   [ServiceOfferingID] INT PRIMARY KEY,
   [TravelClassID] INT,
-  [OfferingName] VARCHAR(100),
-  [Description] VARCHAR(300),
+  [OfferingName] NVARCHAR(100),
+  [Description] NVARCHAR(300),
   [TotalCost] DECIMAL(18,2)
 )
 GO
@@ -268,16 +268,16 @@ GO
 -- Maintenance Data Mart
 CREATE TABLE [Source].[Technician] (
   [TechnicianID]       integer PRIMARY KEY,
-  [Name]                varchar(100),
-  [CertificationLevel] varchar(10),
-  [EmploymentType]     varchar(50),
+  [Name]                nvarchar(100),
+  [CertificationLevel] nvarchar(10),
+  [EmploymentType]     nvarchar(50),
   [ActiveStatus]       bit
 );
 GO
 
 CREATE TABLE [Source].[TravelClass] (
   [TravelClassID] INT PRIMARY KEY,
-  [ClassName] VARCHAR(50) NOT NULL,
+  [ClassName] NVARCHAR(50) NOT NULL,
   [Capacity] INT,
   [BaseCost] DECIMAL(18,2)
 )
