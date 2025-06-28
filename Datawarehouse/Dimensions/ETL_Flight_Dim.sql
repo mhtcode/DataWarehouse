@@ -10,7 +10,6 @@ BEGIN
     @RowsInserted  INT = 0,
     @LogID         BIGINT;
 
-  -- 1) Insert log entry as fatal by default
   INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
@@ -23,17 +22,14 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2) Determine last successful run time
     SELECT
       @LastRunTime = COALESCE(MAX(ActionTime), '1900-01-01')
     FROM DW.ETL_Log
     WHERE ProcedureName = 'ETL_Flight_Dim'
       AND Status = 'Success';
 
-    -- 3) Truncate staging
     TRUNCATE TABLE [DW].[Temp_Flight_table];
 
-    -- 4) Populate staging with changed/new flights (including joined names)
     INSERT INTO [DW].[Temp_Flight_table] (
       FlightDetailID,
       DepartureAirportName,
@@ -47,12 +43,12 @@ BEGIN
     )
     SELECT
       f.FlightDetailID,
-      dep.City + ' Airport',            -- Use dep.Name if you have it!
+      dep.City + ' Airport',         
       dest.City + ' Airport',
       f.DepartureDateTime,
       f.ArrivalDateTime,
       DATEDIFF(MINUTE, f.DepartureDateTime, f.ArrivalDateTime),
-      a.Model,                         -- Use a.Name or a.Model (adjust to your table)
+      a.Model,                        
       f.FlightCapacity,
       f.TotalCost
     FROM SA.FlightDetail AS f
@@ -61,7 +57,6 @@ BEGIN
     LEFT JOIN SA.Aircraft AS a   ON f.AircraftID = a.AircraftID
     WHERE f.StagingLastUpdateTimestampUTC > @LastRunTime;
 
-    -- 5) Update changed flights
     UPDATE d
     SET
       d.DepartureAirportName    = t.DepartureAirportName,
@@ -88,7 +83,6 @@ BEGIN
       );
     SET @RowsUpdated = @@ROWCOUNT;
 
-    -- 6) Insert new flights
     INSERT INTO DW.DimFlight (
       FlightDetailID,
       DepartureAirportName,
@@ -117,7 +111,6 @@ BEGIN
     );
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 7) Mark log as success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = CONCAT(

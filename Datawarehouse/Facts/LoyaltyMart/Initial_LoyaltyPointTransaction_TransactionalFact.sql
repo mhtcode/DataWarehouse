@@ -6,7 +6,6 @@ BEGIN
 	DECLARE @StartDate date;
 	DECLARE @EndDate date;
 
-	-- Determine the date range from the loyalty transaction table.
 	SELECT 
 		@StartDate = MIN(CAST(TransactionDate AS DATE)),
 		@EndDate = MAX(CAST(TransactionDate AS DATE))
@@ -33,11 +32,9 @@ BEGIN
 		SET @LogID = SCOPE_IDENTITY();
 
 		BEGIN TRY
-			-- For idempotency, delete any records from the fact table for the date being processed.
 			DELETE FROM [DW].[LoyaltyPointTransaction_TransactionalFact]
 			WHERE CAST([TransactionDateKey] AS DATE) = @CurrentDate;
 			
-			-- STEP A: Stage the daily loyalty transactions.
 			INSERT INTO [DW].[Temp_DailyLoyaltyTransactions]
 			SELECT 
                 PointsTransactionID, AccountID, TransactionDate, LoyaltyTransactionTypeID, 
@@ -53,7 +50,6 @@ BEGIN
 				CONTINUE;
 			END
 
-			-- STEP B: Enrich the data by joining to dimensions and resolving SCD Type 2 keys.
 			INSERT INTO [DW].[Temp_EnrichedLoyaltyData] (
                 TransactionDateKey, PersonKey, AccountKey, LoyaltyTierKey, TransactionTypeKey, 
                 ConversionRateKey, FlightKey, ServiceOfferingKey, PointsChange, CurrencyValue, 
@@ -68,35 +64,28 @@ BEGIN
 				pt.LoyaltyTransactionTypeID,
 				ISNULL(dcr.ConversionRateKey, -1),
 				pt.FlightDetailID,
-				ISNULL(dso.ServiceOfferingID, -1), -- The surrogate key for the service offering
-                -- Measures for final calculation
+				ISNULL(dso.ServiceOfferingID, -1), 
                 pt.PointsChange,
                 pt.CurrencyValue,
-                ISNULL(dcr.Rate, 0),-- Get the rate from the dimension for historical accuracy
+                ISNULL(dcr.Rate, 0),
                 pt.BalanceAfterTransaction
 			FROM [DW].[Temp_DailyLoyaltyTransactions] pt
 			INNER JOIN [SA].[Account] acc ON pt.AccountID = acc.AccountID
 			INNER JOIN [SA].[Passenger] pass ON acc.PassengerID = pass.PassengerID
-			-- SCD Type 2 Join for Person
 			LEFT JOIN [DW].[DimPerson] dp ON pass.PersonID = dp.PersonID
 				AND pt.TransactionDate >= dp.EffectiveFrom 
 				AND pt.TransactionDate < ISNULL(dp.EffectiveTo, '9999-12-31')
-            -- SCD Type 2 Join to find which tier the account was in
             LEFT JOIN [SA].[AccountTierHistory] ath ON pt.AccountID = ath.AccountID
                 AND pt.TransactionDate >= ath.EffectiveFrom
                 AND pt.TransactionDate < ISNULL(ath.EffectiveTo, '9999-12-31')
-			-- SCD Type 2 Join to find the correct version of that tier
 			LEFT JOIN [DW].[DimLoyaltyTier] dlt ON ath.LoyaltyTierID = dlt.LoyaltyTierID
 				AND pt.TransactionDate >= dlt.EffectiveFrom
 				AND pt.TransactionDate < ISNULL(dlt.EffectiveTo, '9999-12-31')
-			-- SCD Type 2 Join for Point Conversion Rate
 			LEFT JOIN [DW].[DimPointConversionRate] dcr ON pt.PointConversionRateID = dcr.PointConversionRateID
 				AND pt.TransactionDate >= dcr.EffectiveFrom
 				AND pt.TransactionDate < ISNULL(dcr.EffectiveTo, '9999-12-31')
-			-- Join for Service Offering (assuming not SCD Type 2)
 			LEFT JOIN [DW].[DimServiceOffering] dso ON pt.ServiceOfferingID = dso.ServiceOfferingID;
 
-			-- STEP C: Final Insert into the fact table, calculating earned/redeemed points.
 			INSERT INTO [DW].[LoyaltyPointTransaction_TransactionalFact] (
                 TransactionDateKey, PersonKey, AccountKey, LoyaltyTierKey, TransactionTypeKey,
                 ConversionRateKey, FlightKey, ServiceOfferingKey, PointsEarned, PointsRedeemed,

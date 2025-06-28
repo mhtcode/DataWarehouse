@@ -1,4 +1,3 @@
--- Initial Load for DimAirlineAirportService
 CREATE OR ALTER PROCEDURE [DW].[Initial_AirlineAirportService_Dim]
 AS
 BEGIN

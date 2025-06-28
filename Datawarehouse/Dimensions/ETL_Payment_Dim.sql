@@ -10,7 +10,6 @@ BEGIN
     @RowsInserted  INT,
     @LogID         BIGINT;
 
-  -- 1) Assume fatal: insert initial log entry
   INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
@@ -23,7 +22,6 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2) Determine last successful run time
     SELECT
       @LastRunTime = COALESCE(
         MAX(ActionTime),
@@ -33,10 +31,8 @@ BEGIN
     WHERE ProcedureName = 'ETL_Payment_Dim'
       AND Status = 'Success';
 
-    -- 3) Truncate staging
     TRUNCATE TABLE [DW].[Temp_Payment_table];
 
-    -- 4) Populate staging with changed/new payments
     INSERT INTO DW.Temp_Payment_table (
       PaymentID, PaymentMethod, PaymentStatus, PaymentTimestamp
     )
@@ -48,7 +44,6 @@ BEGIN
     FROM SA.Payment AS p
     WHERE p.StagingLastUpdateTimestampUTC > @LastRunTime;
 
-    -- 5) Update existing payments in dimension
     UPDATE d
     SET
       d.PaymentMethod    = t.PaymentMethod,
@@ -59,7 +54,6 @@ BEGIN
       ON d.PaymentKey = t.PaymentID;
     SET @RowsUpdated = @@ROWCOUNT;
 
-    -- 6) Insert new payments into dimension
     INSERT INTO DW.DimPayment (
       PaymentKey, PaymentMethod, PaymentStatus, PaymentTimestamp
     )
@@ -75,7 +69,6 @@ BEGIN
     );
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 7) Update log to Success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = CONCAT(
@@ -90,7 +83,6 @@ BEGIN
   END TRY
   BEGIN CATCH
     DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
-    -- 8) Update log to Error
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Incremental load failed',

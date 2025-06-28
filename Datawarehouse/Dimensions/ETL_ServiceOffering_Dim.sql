@@ -10,7 +10,6 @@ BEGIN
     @RowsInserted INT = 0,
     @LogID        BIGINT;
 
-  -- 1) Log start (assume fatal)
   INSERT INTO [DW].[ETL_Log] (
     ProcedureName,
     TargetTable,
@@ -27,17 +26,14 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2) Find last successful run time
     SELECT
       @LastRunTime = COALESCE(MAX(ActionTime), '1900-01-01')
     FROM [DW].[ETL_Log]
     WHERE ProcedureName = 'ETL_ServiceOffering_Dim'
       AND Status = 'Success';
 
-    -- 3) Truncate staging table
     TRUNCATE TABLE [DW].[Temp_ServiceOffering_table];
 
-    -- 4) Load changed/new ServiceOfferings into staging (with de-normalized fields)
     INSERT INTO [DW].[Temp_ServiceOffering_table] (
       ServiceOfferingID,
       OfferingName,
@@ -76,7 +72,6 @@ BEGIN
              AND i.StagingLastUpdateTimestampUTC > @LastRunTime
          );
 
-    -- 5) Update changed rows (SCD Type 1 overwrite)
     UPDATE d
     SET
       d.OfferingName  = t.OfferingName,
@@ -94,7 +89,6 @@ BEGIN
     );
     SET @RowsUpdated = @@ROWCOUNT;
 
-    -- 6) Insert new rows
     INSERT INTO [DW].[DimServiceOffering] (
       ServiceOfferingID,
       OfferingName,
@@ -117,7 +111,6 @@ BEGIN
     );
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 7) Log success
     UPDATE [DW].[ETL_Log]
     SET
       ChangeDescription = CONCAT(

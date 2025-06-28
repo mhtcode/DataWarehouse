@@ -13,7 +13,6 @@ BEGIN
 	SET @LogID = SCOPE_IDENTITY();
 
 	BEGIN TRY
-		-- Use a CTE to gather all unique airline-airport relationships from flight details.
 		WITH AirlineAirportRelations AS (
 			-- Select all departure relationships
 			SELECT
@@ -24,9 +23,8 @@ BEGIN
 			INNER JOIN
 				[SA].[Aircraft] ac ON fd.AircraftID = ac.AircraftID
 			
-			UNION -- UNION automatically handles duplicates between the two sets
+			UNION 
 
-			-- Select all arrival relationships
 			SELECT
 				ac.AirlineID,
 				fd.DestinationAirportID AS AirportID
@@ -35,7 +33,6 @@ BEGIN
 			INNER JOIN
 				[SA].[Aircraft] ac ON fd.AircraftID = ac.AircraftID
 		)
-		-- Perform a simple insert for the initial load.
 		INSERT INTO [DW].[AirlineAndAirport_Factless] (
 			AirlineID,
 			AirportID

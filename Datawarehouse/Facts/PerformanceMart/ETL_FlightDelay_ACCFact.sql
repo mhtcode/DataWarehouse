@@ -14,7 +14,6 @@ BEGIN
 
 	BEGIN TRY
 
-		-- Use a MERGE statement to efficiently synchronize the target table.
 		MERGE [DW].[FlightDelay_ACCFact] AS Target
 		USING (
 			-- The source is the full lifetime aggregation from the SA tables
@@ -40,7 +39,6 @@ BEGIN
 		) AS Source
 		ON (Target.AirlineID = Source.AirlineID AND Target.DepartureAirportID = Source.DepartureAirportID AND Target.ArrivalAirportID = Source.DestinationAirportID)
 
-		-- Action for existing routes: UPDATE the summary measures.
 		WHEN MATCHED THEN
 			UPDATE SET
 				Target.TotalFlightsNumber = Source.TotalFlightsNumber,
@@ -52,7 +50,6 @@ BEGIN
 				Target.TotalDelayRate = CASE WHEN Source.TotalFlightsNumber > 0 THEN CAST(Source.TotalDelayedFlightsNumber AS FLOAT) / Source.TotalFlightsNumber ELSE 0 END,
 				Target.TotalOnTimePercentage = CASE WHEN Source.TotalFlightsNumber > 0 THEN CAST(Source.TotalFlightsNumber - Source.TotalDelayedFlightsNumber - Source.TotalCancelledFlightsNumber AS FLOAT) / Source.TotalFlightsNumber * 100.0 ELSE 0 END
 
-		-- Action for new routes: INSERT a new summary record.
 		WHEN NOT MATCHED BY TARGET THEN
 			INSERT (
 				AirlineID, DepartureAirportID, ArrivalAirportID, TotalFlightsNumber, TotalDelayedFlightsNumber,

@@ -9,7 +9,6 @@ BEGIN
     @RowsInserted INT,
     @LogID        BIGINT;
 
-  -- 1) Assume fatal: insert initial log entry
   INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
@@ -22,7 +21,6 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2) Determine last successful run time
     SELECT
       @LastRunTime = COALESCE(
         MAX(ActionTime),
@@ -32,10 +30,8 @@ BEGIN
     WHERE ProcedureName = 'ETL_LoyaltyTier_Dim'
       AND Status = 'Success';
 
-    -- 3) Truncate staging
     TRUNCATE TABLE [DW].[Temp_LoyaltyTier_table];
 
-    -- 4) Populate staging with changed/new tiers
     INSERT INTO [DW].[Temp_LoyaltyTier_table] (
       LoyaltyTierID,
       Name,
@@ -50,7 +46,6 @@ BEGIN
     FROM SA.LoyaltyTier AS lt
     WHERE lt.StagingLastUpdateTimestampUTC > @LastRunTime;
     
-    -- 5) Expire current version when MinPoints changed
     UPDATE d
     SET
       d.EffectiveTo         = @StartTime,
@@ -62,7 +57,6 @@ BEGIN
       AND ISNULL(d.MinPoints,0) <> ISNULL(t.MinPoints,0);
     SET @RowsExpired = @@ROWCOUNT;
 
-    -- 6) Insert new SCD2 versions for changed/new tiers
     INSERT INTO DW.DimLoyaltyTier (
       LoyaltyTierID,
       Name,
@@ -83,7 +77,6 @@ BEGIN
     FROM DW.Temp_LoyaltyTier_table AS t;
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 7) Update log entry to Success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = CONCAT(
@@ -98,7 +91,6 @@ BEGIN
   END TRY
   BEGIN CATCH
     DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
-    -- 8) Update log entry to Error
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Incremental SCD2 load failed',

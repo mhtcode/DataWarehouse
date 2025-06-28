@@ -13,7 +13,6 @@ BEGIN
 	SET @LogID = SCOPE_IDENTITY();
 
 	BEGIN TRY
-		-- Perform a simple insert for the initial load.
 		INSERT INTO [DW].[FactFlightOperation_Factless] (
 			FlightKey,
 			SourceAirportKey,
@@ -28,7 +27,6 @@ BEGIN
 			fd.DestinationAirportID AS DestinationAirportKey,
 			ac.AirlineID AS AirlineKey,
 			fd.AircraftID AS AircraftKey,
-			-- Use a CASE statement to determine which flag to set
 			CASE
 				WHEN fo.CancelFlag = 1 THEN 3 -- Canceled
 				WHEN fo.DelayMinutes > 0 THEN 2 -- Delayed

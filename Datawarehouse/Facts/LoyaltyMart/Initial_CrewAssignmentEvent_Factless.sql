@@ -13,7 +13,6 @@ BEGIN
 	SET @LogID = SCOPE_IDENTITY();
 
 	BEGIN TRY
-		-- Perform a simple insert for the initial load.
 		INSERT INTO [DW].[CrewAssignmentEvent_Factless] (
 			FlightID,
 			SourceAirportID,

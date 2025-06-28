@@ -13,7 +13,6 @@ BEGIN
 	SET @LogID = SCOPE_IDENTITY();
 
 	BEGIN TRY
-		-- Aggregate directly from the source tables to ensure accurate lifetime calculations.
 		WITH LifetimeAggregates AS (
 			SELECT
 				ac.AirlineID,
@@ -35,7 +34,6 @@ BEGIN
 				fd.DepartureAirportID,
 				fd.DestinationAirportID
 		)
-		-- Final insert with calculated rates
 		INSERT INTO [DW].[FlightDelay_ACCFact] (
 			AirlineID, DepartureAirportID, ArrivalAirportID, TotalFlightsNumber, TotalDelayedFlightsNumber,
 			TotalCancelledFlightsNumber, TotalAvgDepartureDelayMinutes, TotalAvgArrivalDelayMinutes,

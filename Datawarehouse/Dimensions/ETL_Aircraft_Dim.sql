@@ -10,7 +10,6 @@ BEGIN
     @RowsInserted INT,
     @LogID        BIGINT;
 
-  -- 1) Assume fatal: insert initial log entry
   INSERT INTO DW.ETL_Log (
     ProcedureName,
     TargetTable,
@@ -27,7 +26,6 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2) Determine last successful run time
     SELECT
       @LastRunTime = COALESCE(
         MAX(ActionTime),
@@ -37,10 +35,8 @@ BEGIN
     WHERE ProcedureName = 'ETL_Aircraft_Dim'
       AND Status = 'Success';
 
-    -- 3) Truncate staging
     TRUNCATE TABLE [DW].[Temp_Aircraft_table];
 
-    -- 4) Populate staging with changed/new aircrafts
     INSERT INTO [DW].[Temp_Aircraft_table] (
       AircraftID,
       Model,
@@ -59,7 +55,6 @@ BEGIN
     FROM SA.Aircraft AS a
     WHERE a.StagingLastUpdateTimestampUTC > @LastRunTime;
 
-    -- 5) Update existing aircrafts in dimension
     UPDATE d
     SET
       d.Model            = t.Model,
@@ -72,7 +67,6 @@ BEGIN
       ON d.AircraftID = t.AircraftID;
     SET @RowsUpdated = @@ROWCOUNT;
 
-    -- 6) Insert new aircrafts into dimension
     INSERT INTO DW.DimAircraft (
       AircraftID,
       Model,
@@ -96,7 +90,6 @@ BEGIN
     );
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 7) Update log entry to Success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = CONCAT(
@@ -111,7 +104,6 @@ BEGIN
   END TRY
   BEGIN CATCH
     DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
-    -- 8) Update log entry to Error
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Incremental load failed',

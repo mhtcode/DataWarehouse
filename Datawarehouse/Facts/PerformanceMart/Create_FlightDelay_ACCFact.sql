@@ -15,3 +15,15 @@ CREATE TABLE [DW].[FlightDelay_ACCFact] (
     [TotalOnTimePercentage]        FLOAT  NULL
 );
 GO
+
+CREATE NONCLUSTERED INDEX IX_FlightDelay_ACCFact_AirlineID
+ON [DW].[FlightDelay_ACCFact] (AirlineID);
+GO
+
+CREATE NONCLUSTERED INDEX IX_FlightDelay_ACCFact_DepartureAirportID
+ON [DW].[FlightDelay_ACCFact] (DepartureAirportID);
+GO
+
+CREATE NONCLUSTERED INDEX IX_FlightDelay_ACCFact_ArrivalAirportID
+ON [DW].[FlightDelay_ACCFact] (ArrivalAirportID);
+GO

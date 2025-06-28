@@ -8,7 +8,6 @@ BEGIN
     @RowsInserted INT,
     @LogID        BIGINT;
 
-  -- 1) Insert initial "Fatal" log entry
   INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
@@ -21,10 +20,8 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2) Clean staging
     TRUNCATE TABLE [DW].[Temp_Person_table];
 
-    -- 3) Populate staging with all source rows
     INSERT INTO [DW].[Temp_Person_table] (
       PersonID, NationalCode, PassportNumber, Name,
       Gender, DateOfBirth, City, Country,
@@ -47,7 +44,6 @@ BEGIN
     LEFT JOIN SA.Passenger AS pas
       ON p.PersonID = pas.PersonID;
 
-    -- 4) Insert new persons into dimension
     INSERT INTO DW.DimPerson (
       PersonID,
       NationalCode,
@@ -89,7 +85,6 @@ BEGIN
     );
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 5) Update log entry to Success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Initial full load complete',
@@ -101,7 +96,6 @@ BEGIN
   END TRY
   BEGIN CATCH
     DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
-    -- 6) Update log entry to Error
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Initial full load failed',
