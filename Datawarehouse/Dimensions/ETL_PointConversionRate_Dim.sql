@@ -10,7 +10,6 @@ BEGIN
         @RowsInserted  INT,
         @LogID         BIGINT;
 
-    -- 1) Insert initial log entry
     INSERT INTO DW.ETL_Log (
         ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
     ) VALUES (
@@ -23,17 +22,14 @@ BEGIN
     SET @LogID = SCOPE_IDENTITY();
 
     BEGIN TRY
-        -- 2) Determine last successful run time
         SELECT
             @LastRunTime = COALESCE(MAX(ActionTime), '1900-01-01')
         FROM DW.ETL_Log
         WHERE ProcedureName = 'ETL_PointConversionRate_Dim'
           AND Status = 'Success';
 
-        -- 3) Truncate temp staging table
         TRUNCATE TABLE [DW].[Temp_PointConversionRate_table];
 
-        -- 4) Populate staging with changed/new rates since last run
         INSERT INTO [DW].[Temp_PointConversionRate_table] (
             PointConversionRateID, ConversionRate, Currency
         )
@@ -44,7 +40,6 @@ BEGIN
         FROM SA.PointConversionRate AS sa
         WHERE sa.StagingLastUpdateTimestampUTC > @LastRunTime;
 
-        -- 5) Expire old versions in DW for changed business keys
         UPDATE d
         SET
             d.EffectiveTo = @StartTime,
@@ -60,7 +55,6 @@ BEGIN
 
         SET @RowsExpired = @@ROWCOUNT;
 
-        -- 6) Insert new SCD2 versions for changed/new business keys
         INSERT INTO DW.DimPointConversionRate (
             PointConversionRateID, Rate, Currency,
             EffectiveFrom, EffectiveTo, IsCurrent
@@ -76,7 +70,6 @@ BEGIN
 
         SET @RowsInserted = @@ROWCOUNT;
 
-        -- 7) Update log entry to Success
         UPDATE DW.ETL_Log
         SET
             ChangeDescription = CONCAT(

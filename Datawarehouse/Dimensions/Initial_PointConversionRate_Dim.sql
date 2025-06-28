@@ -20,10 +20,8 @@ BEGIN
     SET @LogID = SCOPE_IDENTITY();
 
     BEGIN TRY
-        -- 1. Truncate the dimension for initial load
         TRUNCATE TABLE DW.DimPointConversionRate;
 
-        -- 2. Insert current rows
         INSERT INTO DW.DimPointConversionRate (
             PointConversionRateID,
             Rate,
@@ -37,13 +35,12 @@ BEGIN
             sa.ConversionRate,
             sa.CurrencyCode,
             '1950-01-01 00:00:00',
-            NULL,    -- No end date at initial
-            1        -- All are current at initial load
+            NULL,    
+            1        
         FROM SA.PointConversionRate sa;
 
         SET @RowsInserted = @@ROWCOUNT;
 
-        -- 3. Update ETL log to Success
         UPDATE DW.ETL_Log
         SET
             ChangeDescription = 'Initial full load complete',

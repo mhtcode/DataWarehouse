@@ -28,7 +28,6 @@ BEGIN
     @RowsInserted  INT = 0,
     @LogID         BIGINT;
 
-  -- Insert initial ETL log entry
   INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
@@ -41,16 +40,13 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- Find last successful run for incremental load
     SELECT @LastRunTime = COALESCE(MAX(ActionTime), '1900-01-01')
     FROM DW.ETL_Log
     WHERE ProcedureName = 'ETL_Airport_Dim'
       AND Status = 'Success';
 
-    -- Truncate staging
     TRUNCATE TABLE DW.Temp_Airport_table;
 
-    -- Insert all new/changed airports since last run
     INSERT INTO DW.Temp_Airport_table (
       AirportID,
       City,
@@ -77,7 +73,6 @@ BEGIN
     FROM SA.Airport AS a
     WHERE a.StagingLastUpdateTimestampUTC > @LastRunTime;
 
-    -- Update changed rows in the dimension (SCD1)
     UPDATE d
     SET
       d.City = t.City,
@@ -93,7 +88,6 @@ BEGIN
     INNER JOIN DW.Temp_Airport_table AS t
       ON d.AirportID = t.AirportID
     WHERE
-      -- Compare all relevant columns for changes
       (
         ISNULL(d.City, '')                  <> ISNULL(t.City, '') OR
         ISNULL(d.Country, '')               <> ISNULL(t.Country, '') OR
@@ -107,7 +101,6 @@ BEGIN
       );
     SET @RowsUpdated = @@ROWCOUNT;
 
-    -- Insert new rows not present in the DW
     INSERT INTO DW.DimAirport (
       AirportID,
       City,
@@ -137,7 +130,6 @@ BEGIN
     );
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- Update ETL log as success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = CONCAT(
@@ -151,7 +143,6 @@ BEGIN
 
   END TRY
   BEGIN CATCH
-    -- Log error
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Incremental load failed',

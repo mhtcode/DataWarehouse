@@ -8,7 +8,6 @@ BEGIN
     @RowsInserted INT,
     @LogID        BIGINT;
 
-  -- 1. Insert initial log entry
   INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
@@ -21,10 +20,8 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2. Clean dimension table
     TRUNCATE TABLE [DW].[DimServiceOffering];
 
-    -- 3. Insert all rows (de-normalized, star-style)
     INSERT INTO [DW].[DimServiceOffering] (
       ServiceOfferingID,
       OfferingName,
@@ -37,7 +34,7 @@ BEGIN
       so.ServiceOfferingID,
       so.OfferingName,
       so.Description,
-      tc.ClassName,  -- Flattened TravelClass name
+      tc.ClassName, 
       so.TotalCost,
       ISNULL(
         STUFF((
@@ -54,7 +51,6 @@ BEGIN
 
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 4. Mark log entry as success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Initial full load complete',
@@ -66,7 +62,6 @@ BEGIN
   END TRY
   BEGIN CATCH
     DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
-    -- 5. Mark log entry as error
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Initial full load failed',

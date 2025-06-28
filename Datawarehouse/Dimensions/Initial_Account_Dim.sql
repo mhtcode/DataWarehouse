@@ -8,7 +8,6 @@ BEGIN
     @RowsInserted  INT,
     @LogID         BIGINT;
 
-  -- 1. Insert initial (fatal) log entry
   INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
@@ -21,10 +20,8 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2. Truncate dimension for full initial load
     TRUNCATE TABLE DW.DimAccount;
 
-    -- 3. Insert all distinct accounts (with names and tier name)
     INSERT INTO DW.DimAccount (
       AccountID,
       PassengerName,
@@ -43,7 +40,6 @@ BEGIN
 
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 4. Update log entry to Success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Initial full load complete',
@@ -55,7 +51,6 @@ BEGIN
   END TRY
   BEGIN CATCH
     DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
-    -- 5. Update log entry to Error
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Initial load failed',

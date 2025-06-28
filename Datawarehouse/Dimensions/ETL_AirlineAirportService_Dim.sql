@@ -44,7 +44,6 @@ BEGIN
     WHERE s.StagingLastUpdateTimestampUTC > @LastRunTime;
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- Update existing
     UPDATE d
     SET
       d.ServiceTypeName       = t.ServiceTypeName,

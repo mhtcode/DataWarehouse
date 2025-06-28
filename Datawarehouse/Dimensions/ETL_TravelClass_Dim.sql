@@ -10,7 +10,6 @@ BEGIN
     @RowsInserted  INT = 0,
     @LogID         BIGINT;
 
-  -- 1. Insert initial (fatal) log entry
   INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
@@ -23,17 +22,14 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2. Find last successful run time
     SELECT
       @LastRunTime = COALESCE(MAX(ActionTime), '1900-01-01')
     FROM DW.ETL_Log
     WHERE ProcedureName = 'ETL_TravelClass_Dim'
       AND Status = 'Success';
 
-    -- 3. Truncate staging table
     TRUNCATE TABLE DW.Temp_TravelClass_Dim;
 
-    -- 4. Populate staging with all changed or new travel classes
     INSERT INTO DW.Temp_TravelClass_Dim (
       TravelClassID,
       ClassName,
@@ -46,7 +42,6 @@ BEGIN
     FROM SA.TravelClass AS tc
     WHERE tc.StagingLastUpdateTimestampUTC > @LastRunTime;
 
-    -- 5. Update existing dimension rows if any column has changed (SCD Type 1)
     UPDATE d
     SET
       d.ClassName = t.ClassName,
@@ -55,23 +50,21 @@ BEGIN
     JOIN DW.Temp_TravelClass_Dim AS t
       ON d.TravelClassKey = t.TravelClassID
     WHERE
-      -- Update only if any attribute has changed
       (
         ISNULL(d.ClassName, '') <> ISNULL(t.ClassName, '')
-        OR ISNULL(d.Capacity, -1) <> ISNULL(t.Capacity, -1) -- ADDED
+        OR ISNULL(d.Capacity, -1) <> ISNULL(t.Capacity, -1) 
       );
     SET @RowsUpdated = @@ROWCOUNT;
 
-    -- 6. Insert new travel classes not already in the dimension
     INSERT INTO DW.DimTravelClass (
       TravelClassKey,
       ClassName,
-      Capacity -- ADDED
+      Capacity 
     )
     SELECT
       t.TravelClassID,
       t.ClassName,
-      t.Capacity -- ADDED
+      t.Capacity 
     FROM DW.Temp_TravelClass_Dim AS t
     WHERE NOT EXISTS (
       SELECT 1 FROM DW.DimTravelClass AS d
@@ -79,7 +72,6 @@ BEGIN
     );
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 7. Update log entry to Success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = CONCAT(
@@ -93,7 +85,6 @@ BEGIN
 
   END TRY
   BEGIN CATCH
-    -- 8. Update log entry to Error
     DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
     UPDATE DW.ETL_Log
     SET

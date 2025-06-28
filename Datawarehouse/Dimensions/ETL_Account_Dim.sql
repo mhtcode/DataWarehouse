@@ -10,7 +10,6 @@ BEGIN
     @RowsInserted  INT = 0,
     @LogID         BIGINT;
 
-  -- 1. Insert initial (fatal) log entry
   INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
@@ -23,17 +22,14 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2. Find last successful run time
     SELECT
       @LastRunTime = COALESCE(MAX(ActionTime), '1900-01-01')
     FROM DW.ETL_Log
     WHERE ProcedureName = 'ETL_Account_Dim'
       AND Status = 'Success';
 
-    -- 3. Truncate staging table
     TRUNCATE TABLE DW.Temp_Account_table;
 
-    -- 4. Populate staging with all changed or new accounts
     INSERT INTO DW.Temp_Account_table (
       AccountID,
       PassengerName,
@@ -51,7 +47,6 @@ BEGIN
       JOIN SA.LoyaltyTier t ON a.LoyaltyTierID = t.LoyaltyTierID
     WHERE a.StagingLastUpdateTimestampUTC > @LastRunTime;
 
-    -- 5. Update existing dimension rows if any column has changed
     UPDATE d
     SET
       d.PassengerName    = t.PassengerName,
@@ -61,7 +56,6 @@ BEGIN
     JOIN DW.Temp_Account_table AS t
       ON d.AccountID = t.AccountID
     WHERE
-      -- Update only if any attribute has changed
       (
         ISNULL(d.PassengerName, '')    <> ISNULL(t.PassengerName, '')
         OR ISNULL(d.RegistrationDate, '1900-01-01') <> ISNULL(t.RegistrationDate, '1900-01-01')
@@ -69,7 +63,6 @@ BEGIN
       );
     SET @RowsUpdated = @@ROWCOUNT;
 
-    -- 6. Insert new accounts not already in the dimension
     INSERT INTO DW.DimAccount (
       AccountID,
       PassengerName,
@@ -88,7 +81,6 @@ BEGIN
     );
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 7. Update log entry to Success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = CONCAT(
@@ -102,7 +94,6 @@ BEGIN
 
   END TRY
   BEGIN CATCH
-    -- 8. Update log entry to Error
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Incremental load failed',
