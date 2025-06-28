@@ -5,15 +5,10 @@ CREATE TABLE [DW].[DimTechnician] (
 );
 GO
 
-CREATE NONCLUSTERED INDEX IX_DimTechnician_Certification_Level
-ON [DW].[DimTechnician] (Certification_Level);
+CREATE NONCLUSTERED INDEX IX_DimTechnician_PersonID
+ON [DW].[DimTechnician] (PersonID);
 GO
 
-CREATE NONCLUSTERED INDEX IX_DimTechnician_Employment_Type
+CREATE NONCLUSTERED INDEX IX_DimTechnician_Specialty
 ON [DW].[DimTechnician] (Employment_Type);
-GO
-
-CREATE NONCLUSTERED INDEX IX_DimTechnician_Active_Status
-ON [DW].[DimTechnician] (Active_Status)
-WHERE Active_Status = 1;
 GO
