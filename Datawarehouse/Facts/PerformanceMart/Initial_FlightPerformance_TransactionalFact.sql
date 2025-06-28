@@ -8,8 +8,8 @@ BEGIN
 
 	-- Determine the date range from the actual departure dates in the flight operations table.
 	SELECT 
-		@StartDate = MIN(CAST(ActualDepartureId AS DATE)),
-		@EndDate = MAX(CAST(ActualDepartureId AS DATE))
+		@StartDate = MIN(CAST(ActualDepartureDateTime AS DATE)),
+		@EndDate = MAX(CAST(ActualDepartureDateTime AS DATE))
 	FROM 
 		[SA].[FlightOperation];
 
