@@ -188,7 +188,8 @@ BEGIN
     [FlightKey] [int] NOT NULL,
     [AircraftKey] [int] NULL,
     [AirlineKey] [int] NOT NULL,
-    [SourceAirportKey] [int] NOT NULL,
+    [TravelClassKey] [int] NOT NULL,
+	[SourceAirportKey] [int] NOT NULL,
     [DestinationAirportKey] [int] NOT NULL,
     [FlightClassPrice] [decimal](18, 2) NULL,
     [FlightCost] [decimal](18, 2) NULL,
@@ -207,6 +208,15 @@ BEGIN
 END;
 GO
 
+IF OBJECT_ID('[DW].[Temp_TravelClass_Dim]', 'U') IS NULL
+BEGIN
+CREATE TABLE [DW].[Temp_TravelClass_Dim] (
+    [TravelClassID] INT PRIMARY KEY,
+    [ClassName]      NVARCHAR(50) NOT NULL,
+    [Capacity]       INT NULL
+);
+END;
+GO
 
 IF OBJECT_ID('[DW].[Temp_DailyFlightOperations]', 'U') IS NULL
 BEGIN

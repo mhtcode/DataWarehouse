@@ -9,7 +9,7 @@ CREATE TABLE [DW].[FactPassengerTicket_Transactional] (
   [AirlineKey] int,
   [SourceAirportKey] int,
   [DestinationAirportKey] int,
-  [ServiceOfferingKey] int,
+  [TravelClassKey] [int] ,
   [TicketRealPrice] decimal(18,2), -- Price before discounts and taxes (from Payment.RealPrice)
   [TaxAmount] decimal(18,2),  -- Tax applied (it % is writen in Payment.Tax)
   [DiscountAmount] decimal(18,2),   -- Total discount given (from Payment.Discount)
@@ -20,5 +20,3 @@ CREATE TABLE [DW].[FactPassengerTicket_Transactional] (
   [kilometersFlown] decimal(18,2)  -- Distance flown (from FlightDetail.DistanceKM)
 )
 GO
-
-               

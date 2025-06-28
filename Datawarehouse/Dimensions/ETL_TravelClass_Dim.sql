@@ -1,0 +1,108 @@
+CREATE OR ALTER PROCEDURE [DW].[ETL_TravelClass_Dim]
+AS
+BEGIN
+  SET NOCOUNT ON;
+
+  DECLARE
+    @StartTime     DATETIME2(3) = SYSUTCDATETIME(),
+    @LastRunTime   DATETIME2(3),
+    @RowsUpdated   INT = 0,
+    @RowsInserted  INT = 0,
+    @LogID         BIGINT;
+
+  -- 1. Insert initial (fatal) log entry
+  INSERT INTO DW.ETL_Log (
+    ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
+  ) VALUES (
+    'ETL_TravelClass_Dim',
+    'DimTravelClass',
+    'Procedure started - awaiting completion',
+    @StartTime,
+    'Fatal'
+  );
+  SET @LogID = SCOPE_IDENTITY();
+
+  BEGIN TRY
+    -- 2. Find last successful run time
+    SELECT
+      @LastRunTime = COALESCE(MAX(ActionTime), '1900-01-01')
+    FROM DW.ETL_Log
+    WHERE ProcedureName = 'ETL_TravelClass_Dim'
+      AND Status = 'Success';
+
+    -- 3. Truncate staging table
+    TRUNCATE TABLE DW.Temp_TravelClass_Dim;
+
+    -- 4. Populate staging with all changed or new travel classes
+    INSERT INTO DW.Temp_TravelClass_Dim (
+      TravelClassID,
+      ClassName,
+      Capacity -- ADDED
+    )
+    SELECT
+      tc.TravelClassID,
+      tc.ClassName,
+      tc.Capacity -- ADDED
+    FROM SA.TravelClass AS tc
+    WHERE tc.StagingLastUpdateTimestampUTC > @LastRunTime;
+
+    -- 5. Update existing dimension rows if any column has changed (SCD Type 1)
+    UPDATE d
+    SET
+      d.ClassName = t.ClassName,
+      d.Capacity  = t.Capacity -- ADDED
+    FROM DW.DimTravelClass AS d
+    JOIN DW.Temp_TravelClass_Dim AS t
+      ON d.TravelClassKey = t.TravelClassID
+    WHERE
+      -- Update only if any attribute has changed
+      (
+        ISNULL(d.ClassName, '') <> ISNULL(t.ClassName, '')
+        OR ISNULL(d.Capacity, -1) <> ISNULL(t.Capacity, -1) -- ADDED
+      );
+    SET @RowsUpdated = @@ROWCOUNT;
+
+    -- 6. Insert new travel classes not already in the dimension
+    INSERT INTO DW.DimTravelClass (
+      TravelClassKey,
+      ClassName,
+      Capacity -- ADDED
+    )
+    SELECT
+      t.TravelClassID,
+      t.ClassName,
+      t.Capacity -- ADDED
+    FROM DW.Temp_TravelClass_Dim AS t
+    WHERE NOT EXISTS (
+      SELECT 1 FROM DW.DimTravelClass AS d
+      WHERE d.TravelClassKey = t.TravelClassID
+    );
+    SET @RowsInserted = @@ROWCOUNT;
+
+    -- 7. Update log entry to Success
+    UPDATE DW.ETL_Log
+    SET
+      ChangeDescription = CONCAT(
+        'Incremental load complete: updated=', @RowsUpdated,
+        ', inserted=', @RowsInserted
+      ),
+      RowsAffected      = @RowsUpdated + @RowsInserted,
+      DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
+      Status            = 'Success'
+    WHERE LogID = @LogID;
+
+  END TRY
+  BEGIN CATCH
+    -- 8. Update log entry to Error
+    DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
+    UPDATE DW.ETL_Log
+    SET
+      ChangeDescription = 'Incremental load failed',
+      DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
+      Status            = 'Error',
+      Message           = @ErrMsg
+    WHERE LogID = @LogID;
+    THROW;
+  END CATCH
+END
+GO
