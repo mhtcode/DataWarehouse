@@ -267,11 +267,9 @@ GO
 
 -- Maintenance Data Mart
 CREATE TABLE [Source].[Technician] (
-  [TechnicianID]       integer PRIMARY KEY,
-  [Name]                nvarchar(100),
-  [CertificationLevel] nvarchar(10),
-  [EmploymentType]     nvarchar(50),
-  [ActiveStatus]       bit
+    [TechnicianID] INT PRIMARY KEY,
+    [PersonID] INT,                   
+    [Specialty] NVARCHAR(100),        
 );
 GO
 

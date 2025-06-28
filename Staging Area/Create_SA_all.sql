@@ -378,7 +378,6 @@ CREATE TABLE [SA].[Technician] (
   [StagingLastUpdateTimestampUTC] DATETIME,
   [SourceSystem] NVARCHAR(200)
 )
-
 GO
 
 -- TravelClass
