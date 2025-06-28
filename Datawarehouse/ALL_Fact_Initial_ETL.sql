@@ -8,6 +8,7 @@ BEGIN
     INSERT INTO @procs (ProcName) VALUES
         -- LoyaltyMart
         (N'Initial_LoyaltyPoint_TransactionalFact'),
+        (N'Initial_CrewAssignmentEvent_Factless'),
 
         -- MaintenanceMart
         (N'Initial_AircraftHealth_MonthlyFact'),

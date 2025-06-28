@@ -90,7 +90,10 @@
       "LoyaltyMart": [
         "Datawarehouse/Facts/LoyaltyMart/Create_LoyaltyPointTransaction_TransactionalFact.sql",
         "Datawarehouse/Facts/LoyaltyMart/Initial_LoyaltyPointTransaction_TransactionalFact.sql",
-        "Datawarehouse/Facts/LoyaltyMart/ETL_LoyaltyPointTransaction_TransactionalFact.sql"
+        "Datawarehouse/Facts/LoyaltyMart/ETL_LoyaltyPointTransaction_TransactionalFact.sql",
+        "Datawarehouse/Facts/LoyaltyMart/Create_CrewAssignmentEvent_Factless.sql",
+        "Datawarehouse/Facts/LoyaltyMart/Initial_CrewAssignmentEvent_Factless.sql",
+        "Datawarehouse/Facts/LoyaltyMart/ETL_CrewAssignmentEvent_Factless.sql"
       ],
       "MaintenanceMart": [
         "Datawarehouse/Facts/MaintenanceMart/Create_AircraftHealth_MonthlyFact.sql",
