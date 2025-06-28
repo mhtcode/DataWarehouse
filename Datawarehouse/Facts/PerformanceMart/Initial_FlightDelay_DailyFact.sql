@@ -61,7 +61,7 @@ BEGIN
 			)
 			-- Final insert with calculated rates
 			INSERT INTO [DW].[FlightDelay_DailyFact] (
-				SnapshotDateKey, AirlineID, DepartureAirportID, ArrivalAirportID, DailyFlightsNumber,
+				DateID, AirlineID, DepartureAirportID, ArrivalAirportID, DailyFlightsNumber,
 				DailyDelayedFlightsNumber, DailyCancelledFlightsNumber, DailyAvgDepartureDelayMinutes,
 				DailyAvgArrivalDelayMinutes, DailyMaxDelayMinutes, DailyDelayRate, DailyOnTimePercentage
 			)

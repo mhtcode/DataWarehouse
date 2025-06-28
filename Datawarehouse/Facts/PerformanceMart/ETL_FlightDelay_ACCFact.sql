@@ -7,7 +7,7 @@ BEGIN
 	DECLARE @EndDate date;
 
 	SELECT @EndDate = MAX(CAST(ActualDepartureDateTime AS DATE)) FROM [SA].[FlightOperation];
-	SELECT @StartDate = MAX(DateID) FROM [DW].[FlightDelay_DailyFact];
+	SELECT @StartDate = MAX(SnapshotDateKey) FROM [DW].[FlightDelay_DailyFact];
 
     IF @StartDate IS NULL
     BEGIN
@@ -37,7 +37,9 @@ BEGIN
 			
 		SET @LogID = SCOPE_IDENTITY();
 
-		BEGIN TRY            
+		BEGIN TRY
+			DELETE FROM [DW].[FlightDelay_DailyFact] WHERE SnapshotDateKey = @CurrentDate;
+            
 			WITH DailyAggregates AS (
 				SELECT
 					ac.AirlineID, fd.DepartureAirportID, fd.DestinationAirportID,
@@ -53,7 +55,7 @@ BEGIN
 				GROUP BY ac.AirlineID, fd.DepartureAirportID, fd.DestinationAirportID
 			)
 			INSERT INTO [DW].[FlightDelay_DailyFact] (
-				DateID, AirlineID, DepartureAirportID, ArrivalAirportID, DailyFlightsNumber,
+				SnapshotDateKey, AirlineID, DepartureAirportID, ArrivalAirportID, DailyFlightsNumber,
 				DailyDelayedFlightsNumber, DailyCancelledFlightsNumber, DailyAvgDepartureDelayMinutes,
 				DailyAvgArrivalDelayMinutes, DailyMaxDelayMinutes, DailyDelayRate, DailyOnTimePercentage
 			)

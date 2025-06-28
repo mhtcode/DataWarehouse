@@ -1,5 +1,5 @@
 CREATE TABLE [DW].[FlightDelay_DailyFact] (
-    [SnapshotDateKey]         DATE    NOT NULL,  
+    [DateID]         DATE    NOT NULL,  
     [AirlineID]              INT    NOT NULL,  
     [DepartureAirportID]     INT    NOT NULL,  
     [ArrivalAirportID]       INT    NOT NULL,  
