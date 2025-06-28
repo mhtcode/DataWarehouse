@@ -52,6 +52,7 @@ DROP TABLE IF EXISTS [DW].[Temp_EnrichedFlightData];
 DROP TABLE IF EXISTS [DW].[Temp_EnrichedPersonData];
 DROP TABLE IF EXISTS [DW].[Temp_DailyFlightOperations];
 DROP TABLE IF EXISTS [DW].[Temp_EnrichedFlightPerformanceData];
+DROP TABLE IF EXISTS [DW].[Temp_LifetimeSourceData];
 
 
 
