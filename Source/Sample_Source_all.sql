@@ -76,7 +76,7 @@ INSERT INTO Source.PointConversionRate (PointConversionRateID, ConversionRate, C
 
 
 INSERT INTO [Source].[PointsTransaction]
-(PointsTransactionID, AccountID, TransactionDate, LoyaltyTransactionTypeID, PointsChange, BalanceAfterTransaction, USDValue, ConversionRate, PointConversionRateID, Description, ServiceOfferingID, FlightDetailID)
+(PointsTransactionID, AccountID, TransactionDate, LoyaltyTransactionTypeID, PointsChange, BalanceAfterTransaction, CurrencyValue, ConversionRate, PointConversionRateID, Description, ServiceOfferingID, FlightDetailID)
 VALUES
 (1, 1, '2014-05-01', 1, 500.00, 5500.00, 5.00, 0.01, 1, 'Flight Booking', 1, 1),
 (2, 2, '2014-05-02', 1, 850.00, 15850.00, 8.50, 0.01, 1, 'Flight Booking', 2, 1),

@@ -79,7 +79,7 @@ BEGIN
       t.PassengerServiceRate;
 
     UPDATE [DW].[ETL_Log]
-    SET ChangeDescription = 'Initial load complete',
+    SET ChangeDescription = 'Initial full load complete',
         RowsAffected = @RowsInserted,
         DurationSec  = DATEDIFF(SECOND,@StartTime,SYSUTCDATETIME()),
         Status       = 'Success'

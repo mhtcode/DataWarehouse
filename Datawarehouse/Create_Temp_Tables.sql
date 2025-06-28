@@ -285,7 +285,7 @@ CREATE TABLE [DW].[Temp_DailyLoyaltyTransactions](
 	[LoyaltyTransactionTypeID] [int] NOT NULL,
 	[PointsChange] [decimal](18, 2) NOT NULL,
 	[BalanceAfterTransaction] [decimal](18, 2) NOT NULL,
-	[USDValue] [decimal](18, 2) NULL,
+	[CurrencyValue] [decimal](18, 2) NULL,
 	[ConversionRate] [decimal](18, 6) NULL,
 	[PointConversionRateID] [int] NULL,
 	[ServiceOfferingID] [int] NULL,
@@ -308,7 +308,7 @@ CREATE TABLE [DW].[Temp_EnrichedLoyaltyData](
 	[ServiceOfferingKey] [int] NULL,
     -- Measures
 	[PointsChange] [decimal](18, 2) NOT NULL,
-	[USDValue] [decimal](18, 2) NULL,
+	[CurrencyValue] [decimal](18, 2) NULL,
 	[ConversionRateSnapshot] [decimal](18, 6) NULL,
 	[BalanceAfterTransaction] [decimal](18, 2) NOT NULL
 );
