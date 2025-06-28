@@ -368,12 +368,14 @@ INSERT INTO [Source].[MaintenanceType] (MaintenanceTypeID, Name, Category, Descr
 (5, 'Fuel System Inspection', 'Routine', 'Inspection for leaks or issues in fuel system');
 
 
-INSERT INTO [Source].[Technician] (TechnicianID, Name, CertificationLevel, EmploymentType, ActiveStatus) VALUES
-(1, 'Michael Scott', 'A', 'Full-time', 1),
-(2, 'Pam Beesly', 'B', 'Contract', 1),
-(3, 'Jim Halpert', 'A', 'Full-time', 1),
-(4, 'Dwight Schrute', 'C', 'Full-time', 1),
-(5, 'Stanley Hudson', 'B', 'Part-time', 1);
+INSERT INTO [Source].[Technician] (TechnicianID, PersonID, Specialty) VALUES
+(1,  1,  'A - Full-time'),
+(2,  2,  'B - Contract'),
+(3,  3,  'C - Full-time'),
+(4,  4,  'A - Part-time'),
+(5,  5,  'B - Full-time'),
+(6,  6,  'C - Contract');
+
 
 INSERT INTO [Source].[MaintenanceEvent] (MaintenanceEventID, AircraftID, MaintenanceTypeID, MaintenanceLocationID, TechnicianID, MaintenanceDate, DowntimeHours, LaborHours, LaborCost, TotalPartsCost, TotalMaintenanceCost, DistinctIssuesSolved, Description) VALUES
 (1, 1, 1, 'DXB-MX', 1, '2009-05-15', 6.5, 6.0, 1200.00, 3200.00, 4400.00, 2, 'Engine Check and minor leak fix'),
