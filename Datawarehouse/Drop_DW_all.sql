@@ -4,7 +4,7 @@
 DROP TABLE IF EXISTS [DW].[FactLoyaltyPointTransaction_Transactional];
 
 -- MaintenanceMart
-DROP TABLE IF EXISTS [DW].[FactAircraftHealthSnapshot_PeriodicSnapshot];
+DROP TABLE IF EXISTS [DW].[FactAircraftHealthSnapshot_Monthly];
 DROP TABLE IF EXISTS [DW].[FactMaintenanceEvent_Transactional];
 DROP TABLE IF EXISTS [DW].[FactPartReplacement_Transactional];
 
@@ -12,10 +12,10 @@ DROP TABLE IF EXISTS [DW].[FactPartReplacement_Transactional];
 DROP TABLE IF EXISTS [DW].[FactFlightPerformance_Transactional];
 
 -- RevenueMart
-DROP TABLE IF EXISTS [DW].[FactFlightOperation_Factless];
-DROP TABLE IF EXISTS [DW].[PassengerTicket_ACCFact];
-DROP TABLE IF EXISTS [DW].[PassengerTicket_TransactionalFact];
-DROP TABLE IF EXISTS [DW].[PassengerTicket_YearlyFact];
+DROP TABLE IF EXISTS [DW].[FlightOperationFlag_Factless];
+DROP TABLE IF EXISTS [DW].[FactPassengerLifetimeActivity];
+DROP TABLE IF EXISTS [DW].[FactPassengerTicket_Transactional];
+DROP TABLE IF EXISTS [DW].[FactPassengerActivity_Yearly];
 
 -- ========== DROP ALL DIMENSION TABLES ==========
 DROP TABLE IF EXISTS [DW].[DimAccount];
@@ -132,31 +132,34 @@ IF OBJECT_ID('[DW].[LoadFactLoyaltyPointTransaction]', 'P') IS NOT NULL DROP PRO
 IF OBJECT_ID('[DW].[InitialFactLoyaltyPointTransaction]', 'P') IS NOT NULL DROP PROCEDURE [DW].[InitialFactLoyaltyPointTransaction];
 
 -- RevenueMart
-IF OBJECT_ID('[DW].[LoadFactFlightOperation_Factless]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFactFlightOperation_Factless];
-IF OBJECT_ID('[DW].[InitialFactFlightOperation_Factless]', 'P') IS NOT NULL DROP PROCEDURE [DW].[InitialFactFlightOperation_Factless];
+IF OBJECT_ID('[DW].[LoadFlightOperationFactless]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFlightOperationFactless];
+IF OBJECT_ID('[DW].[InitialFlightOperationFactless]', 'P') IS NOT NULL DROP PROCEDURE [DW].[InitialFlightOperationFactless];
 
-IF OBJECT_ID('[DW].[LoadFactPassengerTicket_ACCFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFactPassengerTicket_ACCFact];
-IF OBJECT_ID('[DW].[InitialFactPassengerTicket_ACCFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[InitialFactPassengerTicket_ACCFact];
+IF OBJECT_ID('[DW].[LoadFactPassengerLifetimeActivity]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFactPassengerLifetimeActivity];
+IF OBJECT_ID('[DW].[InitialFactPassengerLifetimeActivity]', 'P') IS NOT NULL DROP PROCEDURE [DW].[InitialFactPassengerLifetimeActivity];
 
-IF OBJECT_ID('[DW].[LoadFactPassengerTicket_TransactionalFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFactPassengerTicket_TransactionalFact];
-IF OBJECT_ID('[DW].[InitialFactPassengerTicket_TransactionalFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[InitialFactPassengerTicket_TransactionalFact];
+IF OBJECT_ID('[DW].[LoadFactPassengerTicket]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFactPassengerTicket];
+IF OBJECT_ID('[DW].[InitialFactPassengerTicket]', 'P') IS NOT NULL DROP PROCEDURE [DW].[InitialFactPassengerTicket];
 
-IF OBJECT_ID('[DW].[LoadFactPassengerTicket_YearlyFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFactPassengerTicket_YearlyFact];
-IF OBJECT_ID('[DW].[InitialFactPassengerTicket_YearlyFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[InitialFactPassengerTicket_YearlyFact];
+IF OBJECT_ID('[DW].[LoadFactPassengerActivity_Yearly]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFactPassengerActivity_Yearly];
+IF OBJECT_ID('[DW].[InitialFactPassengerActivity_Yearly]', 'P') IS NOT NULL DROP PROCEDURE [DW].[InitialFactPassengerActivity_Yearly];
 
 -- PerformanceMart
 IF OBJECT_ID('[DW].[LoadFactFlightPerformance]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFactFlightPerformance];
 IF OBJECT_ID('[DW].[InitialFactFlightPerformance]', 'P') IS NOT NULL DROP PROCEDURE [DW].[InitialFactFlightPerformance];
 
 -- MaintenanceMart
-IF OBJECT_ID('[DW].[LoadFactAircraftHealthSnapshot_PeriodicSnapshot]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFactAircraftHealthSnapshot_PeriodicSnapshot];
-IF OBJECT_ID('[DW].[InitialFactAircraftHealthSnapshot_PeriodicSnapshot]', 'P') IS NOT NULL DROP PROCEDURE [DW].[InitialFactAircraftHealthSnapshot_PeriodicSnapshot];
+-- IF OBJECT_ID('[DW].[LoadFactAircraftHealthSnapshot_PeriodicSnapshot]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFactAircraftHealthSnapshot_PeriodicSnapshot];
+-- IF OBJECT_ID('[DW].[InitialFactAircraftHealthSnapshot_PeriodicSnapshot]', 'P') IS NOT NULL DROP PROCEDURE [DW].[InitialFactAircraftHealthSnapshot_PeriodicSnapshot];
 
-IF OBJECT_ID('[DW].[LoadFactMaintenanceEvent_Transactional]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFactMaintenanceEvent_Transactional];
-IF OBJECT_ID('[DW].[InitialFactMaintenanceEvent_Transactional]', 'P') IS NOT NULL DROP PROCEDURE [DW].[InitialFactMaintenanceEvent_Transactional];
+-- IF OBJECT_ID('[DW].[LoadFactMaintenanceEvent_Transactional]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFactMaintenanceEvent_Transactional];
+-- IF OBJECT_ID('[DW].[InitialFactMaintenanceEvent_Transactional]', 'P') IS NOT NULL DROP PROCEDURE [DW].[InitialFactMaintenanceEvent_Transactional];
 
-IF OBJECT_ID('[DW].[LoadFactPartReplacement_Transactional]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFactPartReplacement_Transactional];
-IF OBJECT_ID('[DW].[InitialFactPartReplacement_Transactional]', 'P') IS NOT NULL DROP PROCEDURE [DW].[InitialFactPartReplacement_Transactional];
+-- IF OBJECT_ID('[DW].[LoadFactPartReplacement_Transactional]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFactPartReplacement_Transactional];
+-- IF OBJECT_ID('[DW].[InitialFactPartReplacement_Transactional]', 'P') IS NOT NULL DROP PROCEDURE [DW].[InitialFactPartReplacement_Transactional];
+
+IF OBJECT_ID('[DW].[Main_Fact_Initial_ETL]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Main_Fact_Initial_ETL];
+
 
 -- ====== Main ETL wrapper proc if any ======
 IF OBJECT_ID('[DW].[ALL_Initial_ETL]', 'P') IS NOT NULL DROP PROCEDURE [DW].[ALL_Initial_ETL];

@@ -83,9 +83,10 @@
       "Datawarehouse/Dimensions/Create_Technician_Dim.sql",
 
       
-      "Datawarehouse/ALL_Initial_ETL.sql"
+      "Datawarehouse/ALL_Dim_Initial_ETL.sql"
     ],
     "facts": {
+      
       "LoyaltyMart": [
         "Datawarehouse/Facts/LoyaltyMart/Create_LoyaltyPointTransaction_TransactionalFact.sql",
         "Datawarehouse/Facts/LoyaltyMart/Initial_LoyaltyPointTransaction_TransactionalFact.sql",
@@ -113,7 +114,9 @@
         "Datawarehouse/Facts/RevenueMart/ETL_PassengerTicket_TransactionalFact.sql",
         "Datawarehouse/Facts/RevenueMart/Create_PassengerTicket_YearlyFact.sql",
         "Datawarehouse/Facts/RevenueMart/Initial_PassengerTicket_YearlyFact.sql",
-        "Datawarehouse/Facts/RevenueMart/ETL_PassengerTicket_YearlyFact.sql"
+        "Datawarehouse/Facts/RevenueMart/ETL_PassengerTicket_YearlyFact.sql",
+
+        "Datawarehouse/ALL_Fact_Initial_ETL.sql"
       ]
     }
   },
