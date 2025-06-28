@@ -15,7 +15,7 @@ DB_CONFIG = {
 
 SA_ETL_FILE = os.path.join("Staging Area", "ETL_LoyaltyTier.sql")
 DW_ETL_FILE = os.path.join("Datawarehouse", "Dimensions", "ETL_LoyaltyTier_Dim.sql")
-LOG_FILE = os.path.join("Test", "scd2_loyaltytier_test.log")
+LOG_FILE = os.path.join("Test Scripts", "scd2_loyaltytier_test.log")
 
 # ------------ UTILITIES ---------------
 def get_connection():
