@@ -8,7 +8,6 @@ BEGIN
         @RowsAffected  INT,
         @LogID         BIGINT;
 
-    -- 1) Assume fatal: insert initial log entry
     INSERT INTO [SA].[ETL_Log] (
         ProcedureName,
         SourceTable,
@@ -27,7 +26,6 @@ BEGIN
     SET @LogID = SCOPE_IDENTITY();
 
     BEGIN TRY
-        -- 2) Perform the merge
         MERGE [SA].[FlightDetail] AS TARGET
         USING [Source].[FlightDetail] AS SOURCE
           ON TARGET.FlightDetailID = SOURCE.FlightDetailID
@@ -93,7 +91,6 @@ BEGIN
 
         SET @RowsAffected = @@ROWCOUNT;
 
-        -- 3) Update log to Success
         UPDATE [SA].[ETL_Log]
         SET
             ChangeDescription = CONCAT('Merge complete: rows affected=', @RowsAffected),
@@ -104,7 +101,6 @@ BEGIN
 
     END TRY
     BEGIN CATCH
-        -- 4) Update log to Error
         UPDATE [SA].[ETL_Log]
         SET
             ChangeDescription = 'Merge failed',

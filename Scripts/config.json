@@ -110,12 +110,12 @@
         "Datawarehouse/Facts/PerformanceMart/Create_FlightPerformance_TransactionalFact.sql",
         "Datawarehouse/Facts/PerformanceMart/Initial_FlightPerformance_TransactionalFact.sql",
         "Datawarehouse/Facts/PerformanceMart/ETL_FlightPerformance_TransactionalFact.sql",
-        "Datawarehouse/Facts/PerformanceMart/Create_FlightPerformance_DailylFact.sql",
-        "Datawarehouse/Facts/PerformanceMart/Initial_FlightPerformance_DailylFact.sql",
-        "Datawarehouse/Facts/PerformanceMart/ETL_FlightPerformance_DailylFact.sql",
-        "Datawarehouse/Facts/PerformanceMart/Create_FlightPerformance_ACCFact.sql",
-        "Datawarehouse/Facts/PerformanceMart/Initial_FlightPerformance_ACCFact.sql",
-        "Datawarehouse/Facts/PerformanceMart/ETL_FlightPerformance_ACCFact.sql",
+        "Datawarehouse/Facts/PerformanceMart/Create_FlightDelay_DailyFact.sql",
+        "Datawarehouse/Facts/PerformanceMart/Initial_FlightDelay_DailyFact.sql",
+        "Datawarehouse/Facts/PerformanceMart/ETL_FlightDelay_DailyFact.sql",
+        "Datawarehouse/Facts/PerformanceMart/Create_FlightDelay_ACCFact.sql",
+        "Datawarehouse/Facts/PerformanceMart/Initial_FlightDelay_ACCFact.sql",
+        "Datawarehouse/Facts/PerformanceMart/ETL_FlightDelay_ACCFact.sql",
         "Datawarehouse/Facts/PerformanceMart/Create_AirlineAndAirport_Factless.sql",
         "Datawarehouse/Facts/PerformanceMart/Initial_AirlineAndAirport_Factless.sql",
         "Datawarehouse/Facts/PerformanceMart/ETL_AirlineAndAirport_Factless.sql"
@@ -133,6 +133,8 @@
         "Datawarehouse/Facts/RevenueMart/Create_PassengerActivity_YearlyFact.sql",
         "Datawarehouse/Facts/RevenueMart/Initial_PassengerActivity_YearlyFact.sql",
         "Datawarehouse/Facts/RevenueMart/ETL_PassengerActivity_YearlyFact.sql",
+
+        "Datawarehouse/Facts/MaintenanceMart/Initial_MaintenanceEvent_TransactionalFact.sql",
 
         "Datawarehouse/ALL_Fact_Initial_ETL.sql"
       ]

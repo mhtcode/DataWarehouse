@@ -8,7 +8,6 @@ BEGIN
         @RowsAffected INT,
         @LogID        BIGINT;
 
-    -- 1) Assume fatal: insert initial log entry
     INSERT INTO [SA].[ETL_Log] (
         ProcedureName,
         SourceTable,
@@ -27,12 +26,10 @@ BEGIN
     SET @LogID = SCOPE_IDENTITY();
 
     BEGIN TRY
-        -- 2) Perform the merge
         MERGE [SA].[Airline] AS TARGET
         USING [Source].[Airline] AS SOURCE
           ON TARGET.AirlineID = SOURCE.AirlineID
 
-        -- 1) UPDATE existing rows when *any* source column changed (only current IATA code included)
         WHEN MATCHED AND EXISTS (
             SELECT 
                 SOURCE.Name,
@@ -62,7 +59,6 @@ BEGIN
                 TARGET.Current_IATA_Code          = SOURCE.Current_IATA_Code,
                 TARGET.StagingLastUpdateTimestampUTC = GETUTCDATE()
 
-        -- 2) INSERT brand-new airlines, only including current IATA code
         WHEN NOT MATCHED BY TARGET THEN
             INSERT (
                 AirlineID,
@@ -90,7 +86,6 @@ BEGIN
 
         SET @RowsAffected = @@ROWCOUNT;
 
-        -- 3) Update log to Success
         UPDATE [SA].[ETL_Log]
         SET
             ChangeDescription = CONCAT('Merge complete: rows affected=', @RowsAffected),
@@ -101,7 +96,6 @@ BEGIN
 
     END TRY
     BEGIN CATCH
-        -- 4) Update log to Error
         UPDATE [SA].[ETL_Log]
         SET
             ChangeDescription = 'Merge failed',

@@ -8,7 +8,6 @@ BEGIN
         @RowsAffected INT,
         @LogID        BIGINT;
 
-    -- 1. Insert initial log entry
     INSERT INTO [SA].[ETL_Log] (
         ProcedureName,
         SourceTable,
@@ -27,7 +26,6 @@ BEGIN
     SET @LogID = SCOPE_IDENTITY();
 
     BEGIN TRY
-        -- 2. Perform the MERGE
         MERGE [SA].[MaintenanceType] AS TARGET
         USING [Source].[MaintenanceType] AS SOURCE
           ON TARGET.MaintenanceTypeID = SOURCE.MaintenanceTypeID
@@ -64,7 +62,6 @@ BEGIN
 
         SET @RowsAffected = @@ROWCOUNT;
 
-        -- 3. Update log to Success
         UPDATE [SA].[ETL_Log]
         SET
             ChangeDescription = CONCAT('Merge complete: rows affected=', @RowsAffected),

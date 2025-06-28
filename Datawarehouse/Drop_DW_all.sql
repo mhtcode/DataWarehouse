@@ -14,8 +14,8 @@ DROP TABLE IF EXISTS [DW].[PartReplacement_TransactionalFact];
 
 -- PerformanceMart
 DROP TABLE IF EXISTS [DW].[FlightPerformance_TransactionalFact];
-DROP TABLE IF EXISTS [DW].[FlightPerformance_DailyFact];
-DROP TABLE IF EXISTS [DW].[FlightPerformance_ACCFact];
+DROP TABLE IF EXISTS [DW].[FlightDelay_DailyFact];
+DROP TABLE IF EXISTS [DW].[FlightDelay_ACCFact];
 DROP TABLE IF EXISTS [DW].[AirlineAndAirport_Factless];
 
 -- RevenueMart
@@ -166,11 +166,11 @@ IF OBJECT_ID('[DW].[Initial_PassengerActivity_YearlyFact]', 'P') IS NOT NULL DRO
 IF OBJECT_ID('[DW].[Load_FlightPerformance_TransactionalFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Load_FlightPerformance_TransactionalFact];
 IF OBJECT_ID('[DW].[Initial_FlightPerformance_TransactionalFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Initial_FlightPerformance_TransactionalFact];
 
-IF OBJECT_ID('[DW].[Load_FlightPerformance_DailyFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Load_FlightPerformance_DailyFact];
-IF OBJECT_ID('[DW].[Initial_FlightPerformance_DailyFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Initial_FlightPerformance_DailyFact];
+IF OBJECT_ID('[DW].[Load_FlightDelay_DailyFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Load_FlightDelay_DailyFact];
+IF OBJECT_ID('[DW].[Initial_FlightDelay_DailyFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Initial_FlightDelay_DailyFact];
 
-IF OBJECT_ID('[DW].[Load_FlightPerformance_ACCFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Load_FlightPerformance_ACCFact];
-IF OBJECT_ID('[DW].[Initial_FlightPerformance_ACCFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Initial_FlightPerformance_ACCFact];
+IF OBJECT_ID('[DW].[Load_FlightDelay_ACCFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Load_FlightDelay_ACCFact];
+IF OBJECT_ID('[DW].[Initial_FlightDelay_ACCFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Initial_FlightDelay_ACCFact];
 
 IF OBJECT_ID('[DW].[Load_AirlineAndAirport_Factless]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Load_AirlineAndAirport_Factless];
 IF OBJECT_ID('[DW].[Initial_AirlineAndAirport_Factless]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Initial_AirlineAndAirport_Factless];
