@@ -36,7 +36,7 @@ BEGIN
             sa.PointConversionRateID,
             sa.ConversionRate,
             sa.CurrencyCode,
-            COALESCE(sa.StagingLoadTimestampUTC, GETDATE()),
+            '1950-01-01 00:00:00',
             NULL,    -- No end date at initial
             1        -- All are current at initial load
         FROM SA.PointConversionRate sa;

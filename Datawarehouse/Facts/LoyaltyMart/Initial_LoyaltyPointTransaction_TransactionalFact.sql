@@ -135,3 +135,12 @@ BEGIN
 	SET NOCOUNT OFF;
 END
 GO
+
+SELECT 
+    PointsTransactionID,
+    TransactionDate,
+    PointConversionRateID 
+FROM 
+    SA.PointsTransaction
+WHERE 
+    PointsTransactionID = 1;

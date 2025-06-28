@@ -17,7 +17,7 @@ BEGIN
 		
 		-- Use a MERGE statement to efficiently synchronize the target table.
 		-- This will INSERT new flights, and UPDATE the status of existing flights if it changes.
-		MERGE [DW].[FlightOperationFlag_Factless] AS Target
+		MERGE [DW].[FlightOperation_Factless] AS Target
 		USING (
 			SELECT
 				fd.FlightDetailID AS FlightKey,

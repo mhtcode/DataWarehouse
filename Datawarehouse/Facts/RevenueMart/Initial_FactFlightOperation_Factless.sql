@@ -14,7 +14,7 @@ BEGIN
 
 	BEGIN TRY
 		-- Perform a simple insert for the initial load.
-		INSERT INTO [DW].[FlightOperationFlag_Factless] (
+		INSERT INTO [DW].[FlightOperation_Factless] (
 			FlightKey,
 			SourceAirportKey,
 			DestinationAirportKey,

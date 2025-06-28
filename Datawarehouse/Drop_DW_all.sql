@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS [DW].[FactPartReplacement_Transactional];
 DROP TABLE IF EXISTS [DW].[FactFlightPerformance_Transactional];
 
 -- RevenueMart
-DROP TABLE IF EXISTS [DW].[FlightOperationFlag_Factless];
+DROP TABLE IF EXISTS [DW].[FactFlightOperation_Factless];
 DROP TABLE IF EXISTS [DW].[FactPassengerLifetimeActivity];
 DROP TABLE IF EXISTS [DW].[FactPassengerTicket_Transactional];
 DROP TABLE IF EXISTS [DW].[FactPassengerActivity_Yearly];
