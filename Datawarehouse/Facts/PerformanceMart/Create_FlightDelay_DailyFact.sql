@@ -18,17 +18,17 @@ CREATE TABLE [DW].[FlightDelay_DailyFact] (
 GO
 
 CREATE NONCLUSTERED INDEX IX_FlightDelay_DailyFact_DateID
-ON [DW].[FlightDelay_ACCFact] (DateID);
+ON [DW].[FlightDelay_DailyFact] (DateID);
 GO
 
 CREATE NONCLUSTERED INDEX IX_FlightDelay_DailyFact_AirlineID
-ON [DW].[FlightDelay_ACCFact] (AirlineID);
+ON [DW].[FlightDelay_DailyFact] (AirlineID);
 GO
 
 CREATE NONCLUSTERED INDEX IX_FlightDelay_DailyFact_DepartureAirportID
-ON [DW].[FlightDelay_ACCFact] (DepartureAirportID);
+ON [DW].[FlightDelay_DailyFact] (DepartureAirportID);
 GO
 
 CREATE NONCLUSTERED INDEX IX_FlightDelay_DailyFact_ArrivalAirportID
-ON [DW].[FlightDelay_ACCFact] (ArrivalAirportID);
+ON [DW].[FlightDelay_DailyFact] (ArrivalAirportID);
 GO
