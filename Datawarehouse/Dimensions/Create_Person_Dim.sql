@@ -18,3 +18,24 @@ CREATE TABLE [DW].[DimPerson] (
   [PassportNumberIsCurrent]  BIT             NOT NULL
 );
 GO
+
+CREATE NONCLUSTERED INDEX IX_DimPerson_BusinessKey_SCD
+ON [DW].[DimPerson] (PersonID, EffectiveFrom, EffectiveTo);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimPerson_Country_City
+ON [DW].[DimPerson] (Country, City);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimPerson_Name
+ON [DW].[DimPerson] (Name);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimPerson_NationalCode
+ON [DW].[DimPerson] (NationalCode);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimPerson_PassportNumberIsCurrent
+ON [DW].[DimPerson] (PassportNumberIsCurrent)
+WHERE PassportNumberIsCurrent = 1;
+GO

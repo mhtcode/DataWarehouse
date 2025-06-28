@@ -10,3 +10,15 @@ CREATE TABLE [DW].[DimAirline] (
   [IATA_Code_Changed_Date] DATE NULL       -- When change happened
 );
 GO
+
+REATE NONCLUSTERED INDEX IX_DimAirline_Country
+ON [DW].[DimAirline] (Country);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimAirline_Name
+ON [DW].[DimAirline] (Name);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimAirline_Current_IATA_Code
+ON [DW].[DimAirline] (Current_IATA_Code);
+GO

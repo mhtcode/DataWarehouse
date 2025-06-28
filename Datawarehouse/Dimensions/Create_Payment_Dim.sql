@@ -5,3 +5,16 @@ CREATE TABLE [DW].[DimPayment] (
   [PaymentTimestamp] datetime
 )
 GO
+
+
+CREATE NONCLUSTERED INDEX IX_DimPayment_PaymentStatus
+ON [DW].[DimPayment] (PaymentStatus);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimPayment_PaymentMethod
+ON [DW].[DimPayment] (PaymentMethod);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimPayment_PaymentTimestamp
+ON [DW].[DimPayment] (PaymentTimestamp);
+GO

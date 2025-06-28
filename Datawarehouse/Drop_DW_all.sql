@@ -23,6 +23,7 @@ DROP TABLE IF EXISTS [DW].[DimPerson];
 DROP TABLE IF EXISTS [DW].[DimPointConversionRate];
 DROP TABLE IF EXISTS [DW].[DimServiceOffering];
 DROP TABLE IF EXISTS [DW].[DimTechnician];
+DROP TABLE IF EXISTS [DW].[DimTravelClass];
 
 -- Drop all Temp tables
 DROP TABLE IF EXISTS [DW].[Temp_Account_table];
@@ -53,7 +54,7 @@ DROP TABLE IF EXISTS [DW].[Temp_EnrichedPersonData];
 DROP TABLE IF EXISTS [DW].[Temp_DailyFlightOperations];
 DROP TABLE IF EXISTS [DW].[Temp_EnrichedFlightPerformanceData];
 DROP TABLE IF EXISTS [DW].[Temp_LifetimeSourceData];
-
+DROP TABLE IF EXISTS [DW].[Temp_TravelClass_Dim]
 
 
 -- Drop ETL Log table (after everything else)

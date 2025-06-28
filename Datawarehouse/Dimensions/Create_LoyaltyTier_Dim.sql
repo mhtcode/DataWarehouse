@@ -10,3 +10,16 @@ CREATE TABLE [DW].[DimLoyaltyTier] (
 );
 GO
 
+CREATE NONCLUSTERED INDEX IX_DimLoyaltyTier_BusinessKey_SCD
+ON [DW].[DimLoyaltyTier] (LoyaltyTierID, EffectiveFrom, EffectiveTo);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimLoyaltyTier_Name
+ON [DW].[DimLoyaltyTier] (Name);
+GO
+
+
+CREATE NONCLUSTERED INDEX IX_DimLoyaltyTier_MinPointsIsCurrent
+ON [DW].[DimLoyaltyTier] (MinPointsIsCurrent)
+WHERE MinPointsIsCurrent = 1; -- A filtered index is most efficient here.
+GO

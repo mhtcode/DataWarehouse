@@ -20,7 +20,8 @@ BEGIN
         (N'Initial_Payment_Dim'),
         (N'Initial_Person_Dim'),
         (N'Initial_PointConversionRate_Dim'),
-        (N'Initial_ServiceOffering_Dim');
+        (N'Initial_ServiceOffering_Dim'),
+        (N'Initial_TravelClass_Dim');
 
     DECLARE @ProcName NVARCHAR(128), @sql NVARCHAR(300);
 

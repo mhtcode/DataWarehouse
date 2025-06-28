@@ -62,10 +62,11 @@ BEGIN TRY
 			END
 
 			-- STEP B: Load Flight-Enriched Data (Unchanged)
-			INSERT INTO [DW].[Temp_EnrichedFlightData] (PaymentID, FlightDateKey, FlightKey, AircraftKey, AirlineKey, SourceAirportKey, DestinationAirportKey, FlightClassPrice, FlightCost, KilometersFlown)
+			INSERT INTO [DW].[Temp_EnrichedFlightData] (PaymentID, FlightDateKey, FlightKey, AircraftKey, AirlineKey, SourceAirportKey, DestinationAirportKey, FlightClassPrice, FlightCost, KilometersFlown, TravelClassKey)
 			SELECT dp.PaymentID, fd.DepartureDateTime, fd.FlightDetailID, ac.AircraftID, ac.AirlineID, fd.DepartureAirportID, fd.DestinationAirportID, tc.BaseCost,
-				   CASE WHEN ISNULL(fd.FlightCapacity, 0) > 0 THEN ISNULL(fd.TotalCost, 0) / fd.FlightCapacity ELSE 0 END,
-				   fd.DistanceKM
+			CASE WHEN ISNULL(fd.FlightCapacity, 0) > 0 THEN ISNULL(fd.TotalCost, 0) / fd.FlightCapacity ELSE 0 END,
+			fd.DistanceKM,
+                      tc.TravelClassID -- MODIFIED: Added TravelClassKey
 			FROM [DW].[Temp_DailyPayments] dp
 			INNER JOIN [SA].[FlightDetail] fd ON dp.FlightDetailID = fd.FlightDetailID
 			INNER JOIN [SA].[Aircraft] ac ON fd.AircraftID = ac.AircraftID
@@ -96,11 +97,11 @@ BEGIN TRY
 				AND dp.PaymentDateTime < ISNULL(TicketHolderDim.EffectiveTo, '9999-12-31');
 
 			-- STEP D: Final Assembly and Insert into Fact Table (Unchanged)
-			INSERT INTO [DW].[FactPassengerTicket_Transactional] ([PaymentDateKey], [FlightDateKey], [BuyerPersonKey], [TicketHolderPersonKey], [PaymentKey], [FlightKey], [AircraftKey], [AirlineKey], [SourceAirportKey], [DestinationAirportKey], [ServiceOfferingKey], [TicketRealPrice], [TaxAmount], [DiscountAmount], [TicketPrice], [FlightCost], [FlightClassPrice], [FlightRevenue], [KilometersFlown])
+			INSERT INTO [DW].[FactPassengerTicket_Transactional] ([PaymentDateKey], [FlightDateKey], [BuyerPersonKey], [TicketHolderPersonKey], [PaymentKey], [FlightKey], [AircraftKey], [AirlineKey], [SourceAirportKey], [DestinationAirportKey], [TravelClassKey], [TicketRealPrice], [TaxAmount], [DiscountAmount], [TicketPrice], [FlightCost], [FlightClassPrice], [FlightRevenue], [KilometersFlown])
 			SELECT
 				dp.PaymentDateTime, fd.FlightDateKey, pd.BuyerPersonKey, pd.TicketHolderPersonKey,
 				dp.PaymentID, fd.FlightKey, fd.AircraftKey, fd.AirlineKey, fd.SourceAirportKey,
-				fd.DestinationAirportKey, NULL,
+				fd.DestinationAirportKey, fd.TravelClassKey,
 				ISNULL(dp.RealPrice, 0),
 				ISNULL(dp.TicketPrice, 0) * (ISNULL(dp.Tax, 0) / 100.0),
 				ISNULL(dp.Discount, 0),

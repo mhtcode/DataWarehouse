@@ -11,3 +11,11 @@ CREATE TABLE [DW].[DimAirport] (
   [Longitude] DECIMAL(9,6)
 );
 GO
+
+CREATE NONCLUSTERED INDEX IX_DimAirport_Country_City
+ON [DW].[DimAirport] (Country, City);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimAirport_IATACode
+ON [DW].[DimAirport] (IATACode);
+GO

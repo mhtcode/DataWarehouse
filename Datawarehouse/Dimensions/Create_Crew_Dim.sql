@@ -13,3 +13,19 @@ CREATE TABLE [DW].[DimCrew] (
   [Role] nvarchar(255)
 )
 GO
+
+CREATE NONCLUSTERED INDEX IX_DimCrew_Role
+ON [DW].[DimCrew] (Role);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimCrew_Country_City
+ON [DW].[DimCrew] (Country, City);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimCrew_Name
+ON [DW].[DimCrew] (Name);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimCrew_NAT_CODE
+ON [DW].[DimCrew] (NAT_CODE);
+GO
