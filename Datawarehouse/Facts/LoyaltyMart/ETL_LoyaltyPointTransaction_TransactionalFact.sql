@@ -58,12 +58,12 @@ BEGIN
             INSERT INTO [DW].[Temp_DailyLoyaltyTransactions]
             (
                 PointsTransactionID, AccountID, TransactionDate, LoyaltyTransactionTypeID, 
-                PointsChange, BalanceAfterTransaction, USDValue, ConversionRate, 
+                PointsChange, BalanceAfterTransaction, CurrencyValue, ConversionRate, 
                 PointConversionRateID, ServiceOfferingID, FlightDetailID
             )
             SELECT 
                 PointsTransactionID, AccountID, TransactionDate, LoyaltyTransactionTypeID, 
-                PointsChange, BalanceAfterTransaction, USDValue, ConversionRate, 
+                PointsChange, BalanceAfterTransaction, CurrencyValue, ConversionRate, 
                 PointConversionRateID, ServiceOfferingID, FlightDetailID
             FROM [SA].[PointsTransaction]
             WHERE CAST(TransactionDate AS DATE) = @CurrentDate;
@@ -85,7 +85,7 @@ BEGIN
 
             INSERT INTO [DW].[Temp_EnrichedLoyaltyData] (
                 TransactionDateKey, PersonKey, AccountKey, LoyaltyTierKey, TransactionTypeKey, 
-                ConversionRateKey, FlightKey, ServiceOfferingKey, PointsChange, USDValue, 
+                ConversionRateKey, FlightKey, ServiceOfferingKey, PointsChange, CurrencyValue, 
                 ConversionRateSnapshot, BalanceAfterTransaction
             )
             SELECT
@@ -100,7 +100,7 @@ BEGIN
                 ISNULL(dso.ServiceOfferingID, -1),
                 -- Measures
                 pt.PointsChange,
-                pt.USDValue,
+                pt.CurrencyValue,
                 ISNULL(dcr.Rate, pt.ConversionRate),  -- fallback to staging value if no match
                 pt.BalanceAfterTransaction
             FROM [DW].[Temp_DailyLoyaltyTransactions] pt
@@ -129,14 +129,14 @@ BEGIN
             INSERT INTO [DW].[FactLoyaltyPointTransaction_Transactional] (
                 TransactionDateKey, PersonKey, AccountKey, LoyaltyTierKey, TransactionTypeKey,
                 ConversionRateKey, FlightKey, ServiceOfferingKey, PointsEarned, PointsRedeemed,
-                USDValue, ConversionRateSnapshot, BalanceAfterTransaction
+                CurrencyValue, ConversionRateSnapshot, BalanceAfterTransaction
             )
             SELECT
                 ed.TransactionDateKey, ed.PersonKey, ed.AccountKey, ed.LoyaltyTierKey, ed.TransactionTypeKey,
                 ed.ConversionRateKey, ed.FlightKey, ed.ServiceOfferingKey,
                 CASE WHEN ed.PointsChange > 0 THEN ed.PointsChange ELSE 0 END,
                 CASE WHEN ed.PointsChange < 0 THEN ABS(ed.PointsChange) ELSE 0 END,
-                ed.USDValue,
+                ed.CurrencyValue,
                 ed.ConversionRateSnapshot,
                 ed.BalanceAfterTransaction
             FROM [DW].[Temp_EnrichedLoyaltyData] ed;

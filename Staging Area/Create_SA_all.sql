@@ -302,7 +302,7 @@ CREATE TABLE [SA].[PointsTransaction] (
   [LoyaltyTransactionTypeID] INT NOT NULL,
   [PointsChange] DECIMAL(18,2) NOT NULL,
   [BalanceAfterTransaction] DECIMAL(18,2) NOT NULL,
-  [USDValue] DECIMAL(18,2),
+  [CurrencyValue] DECIMAL(18,2),
   [ConversionRate] DECIMAL(18,6),
   [PointConversionRateID] INT,
   [Description] NVARCHAR(200),

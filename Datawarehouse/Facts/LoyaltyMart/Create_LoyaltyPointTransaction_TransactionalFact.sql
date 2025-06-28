@@ -12,7 +12,7 @@ CREATE TABLE [DW].[FactLoyaltyPointTransaction_Transactional] (
     -- Business Measures
     [PointsEarned] decimal(18,2) NULL,                  -- If PointsTransaction.PointsChange > 0, set to PointsChange; otherwise, NULL or 0
     [PointsRedeemed] decimal(18,2) NULL,                -- If PointsTransaction.PointsChange < 0, set to ABS(PointsChange); otherwise, NULL or 0
-    [USDValue] decimal(18,2) NULL,                      -- Direct from PointsTransaction.USDValue
+    [CurrencyValue] decimal(18,2) NULL,                 -- Direct from PointsTransaction.CurrencyValue
     [ConversionRateSnapshot] decimal(18,6) NULL,        -- Direct from PointsTransaction.ConversionRate
     [BalanceAfterTransaction] decimal(18,2) NULL,       -- Direct from PointsTransaction.BalanceAfterTransaction
 )

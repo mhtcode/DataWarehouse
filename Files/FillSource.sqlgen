@@ -7557,7 +7557,7 @@ Version:4.7.1.6606-->
           </Generator>
         </value>
         <value version="1" type="SDGField">
-          <Name>USDValue</Name>
+          <Name>CurrencyValue</Name>
           <FieldType>Generated</FieldType>
           <PrimaryKey>False</PrimaryKey>
           <ForeignKey>False</ForeignKey>
