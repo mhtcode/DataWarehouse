@@ -7,3 +7,16 @@ CREATE TABLE [DW].[DimPart] (
   [Category] nvarchar(255)
 )
 GO
+
+
+CREATE NONCLUSTERED INDEX IX_DimPart_PartNumber
+ON [DW].[DimPart] (PartNumber);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimPart_Manufacturer
+ON [DW].[DimPart] (Manufacturer);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimPart_Category
+ON [DW].[DimPart] (Category);
+GO

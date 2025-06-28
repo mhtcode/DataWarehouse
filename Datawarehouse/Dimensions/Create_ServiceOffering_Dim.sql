@@ -7,3 +7,11 @@ CREATE TABLE [DW].[DimServiceOffering] (
   [ItemsSummary] NVARCHAR(400)            -- Computed from SA relations, comma separated
 );
 GO
+
+CREATE NONCLUSTERED INDEX IX_DimServiceOffering_OfferingName
+ON [DW].[DimServiceOffering] (OfferingName);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimServiceOffering_TravelClassName
+ON [DW].[DimServiceOffering] (TravelClassName);
+GO

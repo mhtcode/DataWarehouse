@@ -8,3 +8,16 @@ CREATE TABLE [DW].[DimPointConversionRate] (
     IsCurrent              BIT NOT NULL
 );
 GO
+
+CREATE NONCLUSTERED INDEX IX_DimPointConversionRate_BusinessKey_SCD
+ON [DW].[DimPointConversionRate] (PointConversionRateID, EffectiveFrom, EffectiveTo);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimPointConversionRate_Currency
+ON [DW].[DimPointConversionRate] (Currency);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimPointConversionRate_IsCurrent
+ON [DW].[DimPointConversionRate] (IsCurrent)
+WHERE IsCurrent = 1;
+GO

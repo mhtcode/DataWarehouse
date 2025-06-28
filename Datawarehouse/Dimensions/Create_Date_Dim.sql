@@ -24,3 +24,24 @@ CREATE TABLE [DW].[DimDate] (
   [PersianCalendarSemester] int,
 )
 GO
+
+CREATE NONCLUSTERED INDEX IX_DimDate_GregorianHierarchy
+ON [DW].[DimDate] (CalendarYear, MonthNumberOfYear, DayNumberOfMonth);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimDate_PersianHierarchy
+ON [DW].[DimDate] (PersianCalendarYear, PersianMonthNumberOfYear, PersianDayNumberOfMonth);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimDate_FullDateAlternateKey
+ON [DW].[DimDate] (FullDateAlternateKey);
+GO
+
+DROP INDEX IF EXISTS IX_DimDate_GregorianHierarchy ON [DW].[DimDate];
+GO
+
+DROP INDEX IF EXISTS IX_DimDate_PersianHierarchy ON [DW].[DimDate];
+GO
+
+DROP INDEX IF EXISTS IX_DimDate_FullDateAlternateKey ON [DW].[DimDate];
+GO

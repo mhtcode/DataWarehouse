@@ -5,3 +5,15 @@ CREATE TABLE [DW].[DimAccount] (
   [LoyaltyTierName] NVARCHAR(50)         -- From SA.LoyaltyTier
 )
 GO
+
+CREATE NONCLUSTERED INDEX IX_DimAccount_LoyaltyTierName
+ON [DW].[DimAccount] (LoyaltyTierName);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimAccount_PassengerName
+ON [DW].[DimAccount] (PassengerName);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimAccount_RegistrationDate
+ON [DW].[DimAccount] (RegistrationDate);
+GO

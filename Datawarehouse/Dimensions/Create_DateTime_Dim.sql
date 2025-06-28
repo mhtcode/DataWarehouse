@@ -27,3 +27,19 @@ CREATE TABLE [DW].[DimDateTime] (
   [Minute] int
 )
 GO
+
+CREATE NONCLUSTERED INDEX IX_DimDateTime_GregorianHierarchy
+ON [DW].[DimDateTime] (CalendarYear, MonthNumberOfYear, DayNumberOfMonth);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimDateTime_PersianHierarchy
+ON [DW].[DimDateTime] (PersianCalendarYear, PersianMonthNumberOfYear, PersianDayNumberOfMonth);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimDateTime_FullDateAlternateKey
+ON [DW].[DimDateTime] (FullDateAlternateKey);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimDateTime_TimeHierarchy
+ON [DW].[DimDateTime] (Hour, Minute);
+GO

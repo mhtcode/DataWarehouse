@@ -4,3 +4,7 @@ CREATE TABLE [DW].[DimFlightOperationType] (
   [OperationTypeDescription] NVARCHAR(255) NULL
 );
 GO
+
+CREATE NONCLUSTERED INDEX IX_DimFlightOperationType_OperationTypeName
+ON [DW].[DimFlightOperationType] (OperationTypeName);
+GO

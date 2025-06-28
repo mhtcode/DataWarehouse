@@ -10,3 +10,19 @@ CREATE TABLE [DW].[DimAirlineAirportService] (
     [PassengerServiceRate] DECIMAL(18,4)
 );
 GO
+
+CREATE NONCLUSTERED INDEX IX_DimAirlineAirportService_BusinessKeys
+ON [DW].[DimAirlineAirportService] (ServiceTypeCode, FlightTypeCode);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimAirlineAirportService_ServiceTypeName
+ON [DW].[DimAirlineAirportService] (ServiceTypeName);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimAirlineAirportService_FlightTypeName
+ON [DW].[DimAirlineAirportService] (FlightTypeName);
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimAirlineAirportService_ContractDates
+ON [DW].[DimAirlineAirportService] (ContractStartDate, ContractEndDate);
+GO
