@@ -5,9 +5,9 @@ CREATE TABLE [DW].[DimMaintenanceLocation] (
   [City] nvarchar(255),
   [Country] nvarchar(255),
   [Inhouse_Flag] bit,
-  [Effective_Date] date,
-  [Expiry_Date] date,
-  [IsCurrent] bit
+  [EffectiveFrom] date,
+  [EffectiveTo] date,
+  [CityIsCurrent] bit
 )
 GO
 
@@ -30,6 +30,6 @@ GO
 -- Index on Current Flag
 -- A filtered index is highly efficient for queries that only need the current version of each location.
 CREATE NONCLUSTERED INDEX IX_DimMaintenanceLocation_IsCurrent
-ON [DW].[DimMaintenanceLocation] (IsCurrent)
+ON [DW].[DimMaintenanceLocation] (CityIsCurrent)
 WHERE IsCurrent = 1;
 GO
