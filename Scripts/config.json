@@ -93,7 +93,13 @@
         "Datawarehouse/Facts/LoyaltyMart/ETL_LoyaltyPointTransaction_TransactionalFact.sql",
         "Datawarehouse/Facts/LoyaltyMart/Create_CrewAssignmentEvent_Factless.sql",
         "Datawarehouse/Facts/LoyaltyMart/Initial_CrewAssignmentEvent_Factless.sql",
-        "Datawarehouse/Facts/LoyaltyMart/ETL_CrewAssignmentEvent_Factless.sql"
+        "Datawarehouse/Facts/LoyaltyMart/ETL_CrewAssignmentEvent_Factless.sql",
+        "Datawarehouse/Facts/LoyaltyMart/Create_PersonPointTransactions_MonthlyFact.sql",
+        "Datawarehouse/Facts/LoyaltyMart/Initial_PersonPointTransactions_MonthlyFact.sql",
+        "Datawarehouse/Facts/LoyaltyMart/ETL_PersonPointTransactions_MonthlyFact.sql",
+        "Datawarehouse/Facts/LoyaltyMart/Create_PersonPointTransactions_ACCFact.sql",
+        "Datawarehouse/Facts/LoyaltyMart/Initial_PersonPointTransactions_ACCFact.sql",
+        "Datawarehouse/Facts/LoyaltyMart/ETL_PersonPointTransactions_ACCFact.sql"
       ],
       "MaintenanceMart": [
         "Datawarehouse/Facts/MaintenanceMart/Create_AircraftHealth_MonthlyFact.sql",
@@ -103,7 +109,16 @@
       "PerformanceMart": [
         "Datawarehouse/Facts/PerformanceMart/Create_FlightPerformance_TransactionalFact.sql",
         "Datawarehouse/Facts/PerformanceMart/Initial_FlightPerformance_TransactionalFact.sql",
-        "Datawarehouse/Facts/PerformanceMart/ETL_FlightPerformance_TransactionalFact.sql"
+        "Datawarehouse/Facts/PerformanceMart/ETL_FlightPerformance_TransactionalFact.sql",
+        "Datawarehouse/Facts/PerformanceMart/Create_FlightPerformance_DailylFact.sql",
+        "Datawarehouse/Facts/PerformanceMart/Initial_FlightPerformance_DailylFact.sql",
+        "Datawarehouse/Facts/PerformanceMart/ETL_FlightPerformance_DailylFact.sql",
+        "Datawarehouse/Facts/PerformanceMart/Create_FlightPerformance_ACCFact.sql",
+        "Datawarehouse/Facts/PerformanceMart/Initial_FlightPerformance_ACCFact.sql",
+        "Datawarehouse/Facts/PerformanceMart/ETL_FlightPerformance_ACCFact.sql",
+        "Datawarehouse/Facts/PerformanceMart/Create_AirlineAndAirport_Factless.sql",
+        "Datawarehouse/Facts/PerformanceMart/Initial_AirlineAndAirport_Factless.sql",
+        "Datawarehouse/Facts/PerformanceMart/ETL_AirlineAndAirport_Factless.sql"
       ],
       "RevenueMart": [
         "Datawarehouse/Facts/RevenueMart/Create_FlightOperation_Factless.sql",
