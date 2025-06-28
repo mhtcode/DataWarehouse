@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE [DW].[LoadFactLoyaltyPointTransaction]
+CREATE OR ALTER PROCEDURE [DW].[LoadLoyaltyPointTransactionFact]
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -10,7 +10,7 @@ BEGIN
     SELECT 
         @StartDate = MAX(CAST(TransactionDateKey AS DATE))
     FROM 
-        [DW].[FactLoyaltyPointTransaction_Transactional];
+        [DW].[LoyaltyPointTransaction_TransactionalFact];
 
     -- 2. Determine the max date available in the staging (TransactionDate = datetime)
     SELECT 
@@ -29,7 +29,7 @@ BEGIN
 
     IF @StartDate >= @EndDate
     BEGIN
-        RAISERROR('FactLoyaltyPointTransaction_Transactional table is up to date!', 0, 1) WITH NOWAIT;
+        RAISERROR('LoyaltyPointTransaction_TransactionalFact table is up to date!', 0, 1) WITH NOWAIT;
         RETURN;
     END
 
@@ -44,7 +44,7 @@ BEGIN
         INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
         VALUES (
             'LoadFactLoyaltyPointTransaction', 
-            'FactLoyaltyPointTransaction_Transactional', 
+            'LoyaltyPointTransaction_TransactionalFact', 
             'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), 
             @StartTime, 'Running'
         );
@@ -126,7 +126,7 @@ BEGIN
             LEFT JOIN [DW].[DimServiceOffering] dso ON pt.ServiceOfferingID = dso.ServiceOfferingID;
 
             -- STEP C: Final Insert into the fact table
-            INSERT INTO [DW].[FactLoyaltyPointTransaction_Transactional] (
+            INSERT INTO [DW].[LoyaltyPointTransaction_TransactionalFact] (
                 TransactionDateKey, PersonKey, AccountKey, LoyaltyTierKey, TransactionTypeKey,
                 ConversionRateKey, FlightKey, ServiceOfferingKey, PointsEarned, PointsRedeemed,
                 CurrencyValue, ConversionRateSnapshot, BalanceAfterTransaction
@@ -168,7 +168,7 @@ BEGIN
         SET @CurrentDate = DATEADD(day, 1, @CurrentDate);
     END;
 
-    RAISERROR('FactLoyaltyPointTransaction_Transactional loading process has completed.', 0, 1) WITH NOWAIT;
+    RAISERROR('LoyaltyPointTransaction_TransactionalFact loading process has completed.', 0, 1) WITH NOWAIT;
     SET NOCOUNT OFF;
 END
 GO

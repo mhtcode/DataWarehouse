@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE [DW].[InitialFactLoyaltyPointTransaction]
+CREATE OR ALTER PROCEDURE [DW].[InitialLoyaltyPointTransactionFact]
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -28,13 +28,13 @@ BEGIN
 		DECLARE @RowCount INT;
 
 		INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
-		VALUES ('InitialFactLoyaltyPointTransaction', 'FactLoyaltyPointTransaction_Transactional', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
+		VALUES ('InitialLoyaltyPointTransactionFact', 'LoyaltyPointTransaction_TransactionalFact', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
 		
 		SET @LogID = SCOPE_IDENTITY();
 
 		BEGIN TRY
 			-- For idempotency, delete any records from the fact table for the date being processed.
-			DELETE FROM [DW].[FactLoyaltyPointTransaction_Transactional]
+			DELETE FROM [DW].[LoyaltyPointTransaction_TransactionalFact]
 			WHERE CAST([TransactionDateKey] AS DATE) = @CurrentDate;
 			
 			-- STEP A: Stage the daily loyalty transactions.
@@ -97,7 +97,7 @@ BEGIN
 			LEFT JOIN [DW].[DimServiceOffering] dso ON pt.ServiceOfferingID = dso.ServiceOfferingID;
 
 			-- STEP C: Final Insert into the fact table, calculating earned/redeemed points.
-			INSERT INTO [DW].[FactLoyaltyPointTransaction_Transactional] (
+			INSERT INTO [DW].[LoyaltyPointTransaction_TransactionalFact] (
                 TransactionDateKey, PersonKey, AccountKey, LoyaltyTierKey, TransactionTypeKey,
                 ConversionRateKey, FlightKey, ServiceOfferingKey, PointsEarned, PointsRedeemed,
                 CurrencyValue, ConversionRateSnapshot, BalanceAfterTransaction
@@ -131,7 +131,7 @@ BEGIN
 		SET @CurrentDate = DATEADD(day, 1, @CurrentDate);
 	END;
 
-	RAISERROR('InitialFactLoyaltyPointTransaction loading process has completed.', 0, 1) WITH NOWAIT;
+	RAISERROR('InitialLoyaltyPointTransactionFact loading process has completed.', 0, 1) WITH NOWAIT;
 	SET NOCOUNT OFF;
 END
 GO

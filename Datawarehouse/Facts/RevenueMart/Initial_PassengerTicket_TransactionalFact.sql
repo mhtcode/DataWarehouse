@@ -27,7 +27,7 @@ BEGIN
 		DECLARE @RowCount INT;
 
 		INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
-		VALUES ('InitialFactPassengerTicket', 'FactPassengerTicket_Transactional', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
+		VALUES ('InitialFactPassengerTicket', 'PassengerTicket_TransactionalFact', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
 		
 		SET @LogID = SCOPE_IDENTITY();
 
@@ -82,7 +82,7 @@ BEGIN
 				AND dp.PaymentDateTime < ISNULL(TicketHolderDim.EffectiveTo, '9999-12-31');
 
 			-- STEP D: Final Assembly and Insert into Fact Table (Unchanged)
-			INSERT INTO [DW].[FactPassengerTicket_Transactional] ([PaymentDateKey], [FlightDateKey], [BuyerPersonKey], [TicketHolderPersonKey], [PaymentKey], [FlightKey], [AircraftKey], [AirlineKey], [SourceAirportKey], [DestinationAirportKey], [TravelClassKey], [TicketRealPrice], [TaxAmount], [DiscountAmount], [TicketPrice], [FlightCost], [FlightClassPrice], [FlightRevenue], [KilometersFlown])
+			INSERT INTO [DW].[PassengerTicket_TransactionalFact] ([PaymentDateKey], [FlightDateKey], [BuyerPersonKey], [TicketHolderPersonKey], [PaymentKey], [FlightKey], [AircraftKey], [AirlineKey], [SourceAirportKey], [DestinationAirportKey], [TravelClassKey], [TicketRealPrice], [TaxAmount], [DiscountAmount], [TicketPrice], [FlightCost], [FlightClassPrice], [FlightRevenue], [KilometersFlown])
 			SELECT
 				dp.PaymentDateTime, fd.FlightDateKey, pd.BuyerPersonKey, pd.TicketHolderPersonKey,
 				dp.PaymentID, fd.FlightKey, fd.AircraftKey, fd.AirlineKey, fd.SourceAirportKey,
