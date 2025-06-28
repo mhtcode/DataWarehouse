@@ -1,4 +1,4 @@
-CREATE TABLE [DW].[FactPassengerLifetimeActivity] (
+CREATE TABLE [DW].[PassengerLifetimeActivityFact] (
     [PersonKey]              INT PRIMARY KEY,       -- The CURRENT surrogate key for the person
     [TotalTicketValue]       INT NULL,
     [TotalAmountPaid]        DECIMAL(18, 2) NULL,

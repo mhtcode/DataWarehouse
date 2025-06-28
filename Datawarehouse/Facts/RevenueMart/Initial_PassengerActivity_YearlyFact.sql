@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE [DW].[LoadFactPassengerActivity_Yearly]
+CREATE OR ALTER PROCEDURE [DW].[InitialPassengerActivity_YearlyFact]
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -9,24 +9,14 @@ BEGIN
 
 	-- Determine the date range from the transactional fact table
 	SELECT 
+		@StartDate = MIN(FlightDateKey),
 		@EndDate = MAX(FlightDateKey)
 	FROM 
-		[DW].[FactPassengerTicket_Transactional];
+		[DW].[PassengerTicket_TransactionalFact];
 	
-    SELECT 
-        @StartDate = MAX(CAST(YearID AS DATE))
-    FROM 
-        [DW].[FactPassengerActivity_Yearly]
-
 	IF @StartDate IS NULL
 	BEGIN
-		RAISERROR('No data found in FactPassengerTicket_Transactional to process.', 0, 1) WITH NOWAIT;
-		RETURN;
-	END
-
-    IF @StartDate >= @EndDate
-	BEGIN
-		RAISERROR('The FactPassengerActivity_Yearly table is up to date!', 0, 1) WITH NOWAIT;
+		RAISERROR('No data found in PassengerTicket_TransactionalFact to process.', 0, 1) WITH NOWAIT;
 		RETURN;
 	END
 
@@ -41,7 +31,7 @@ BEGIN
 		DECLARE @RowCount INT;
 
 		INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
-		VALUES ('LoadFactPassengerActivity_Yearly', 'FactPassengerActivity_Yearly', 'Procedure started for year: ' + CAST(@CurrentYear AS VARCHAR), @StartTime, 'Running');
+		VALUES ('InitialPassengerActivity_YearlyFact', 'PassengerActivity_YearlyFact', 'Procedure started for year: ' + CAST(@CurrentYear AS VARCHAR), @StartTime, 'Running');
 			
 		SET @LogID = SCOPE_IDENTITY();
 
@@ -60,7 +50,7 @@ BEGIN
 					MAX(fptt.kilometersFlown) AS MaxFlightDistanceKM,
 					MIN(fptt.kilometersFlown) AS MinFlightDistanceKM
 				FROM
-					[DW].[FactPassengerTicket_Transactional] fptt
+					[DW].[PassengerTicket_TransactionalFact] fptt
 				-- MODIFICATION: Join to DimPayment to filter out non-completed payments.
 				INNER JOIN
 					[DW].[DimPayment] dp ON fptt.PaymentKey = dp.PaymentKey
@@ -71,7 +61,7 @@ BEGIN
 					fptt.TicketHolderPersonKey
 			)
 			-- Final insert into the snapshot table
-			INSERT INTO [DW].[FactPassengerActivity_Yearly] (
+			INSERT INTO [DW].[PassengerActivity_YearlyFact] (
 				YearID,
 				PersonKey,
 				YearlyTicketValue,
@@ -119,7 +109,7 @@ BEGIN
 
 	END; -- End of WHILE loop
 
-	RAISERROR('FactPassengerActivity_Yearly loading process has completed.', 0, 1) WITH NOWAIT;
+	RAISERROR('PassengerActivity_YearlyFact loading process has completed.', 0, 1) WITH NOWAIT;
 	SET NOCOUNT OFF;
 END
 GO

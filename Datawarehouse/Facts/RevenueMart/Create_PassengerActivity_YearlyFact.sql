@@ -1,4 +1,4 @@
-CREATE TABLE [DW].[FactPassengerActivity_Yearly] (
+CREATE TABLE [DW].[PassengerActivity_YearlyFact] (
   [YearID] date, --first day of year
   [PersonKey] int, -- The ticket holder
   [YearlyTicketValue] decimal(18,2),  -- Sum of TotalAmountPaid

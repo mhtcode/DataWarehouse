@@ -15,7 +15,7 @@ BEGIN
     SELECT 
         @StartDate = MAX(CAST(PaymentDateKey AS DATE))
     FROM 
-        [DW].[FactPassengerTicket_Transactional]
+        [DW].[PassengerTicket_TransactionalFact]
 
 	-- Exit if there is no data to process
 	IF @StartDate IS NULL
@@ -26,7 +26,7 @@ BEGIN
 
 	IF @StartDate >= @EndDate
 	BEGIN
-		RAISERROR('The FactPassengerTicket_Transactional table is up to date!', 0, 1) WITH NOWAIT;
+		RAISERROR('The PassengerTicket_TransactionalFact table is up to date!', 0, 1) WITH NOWAIT;
 		RETURN;
 	END
 
@@ -41,7 +41,7 @@ BEGIN
 
 		-- Log the start of the process for the current day
 		INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
-		VALUES ('LoadFactPassengerTicket', 'FactPassengerTicket_Transactional', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
+		VALUES ('LoadFactPassengerTicket', 'PassengerTicket_TransactionalFact', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
 		
 		-- Capture the LogID for this specific run
 		SET @LogID = SCOPE_IDENTITY();
@@ -97,7 +97,7 @@ BEGIN TRY
 				AND dp.PaymentDateTime < ISNULL(TicketHolderDim.EffectiveTo, '9999-12-31');
 
 			-- STEP D: Final Assembly and Insert into Fact Table (Unchanged)
-			INSERT INTO [DW].[FactPassengerTicket_Transactional] ([PaymentDateKey], [FlightDateKey], [BuyerPersonKey], [TicketHolderPersonKey], [PaymentKey], [FlightKey], [AircraftKey], [AirlineKey], [SourceAirportKey], [DestinationAirportKey], [TravelClassKey], [TicketRealPrice], [TaxAmount], [DiscountAmount], [TicketPrice], [FlightCost], [FlightClassPrice], [FlightRevenue], [KilometersFlown])
+			INSERT INTO [DW].[PassengerTicket_TransactionalFact] ([PaymentDateKey], [FlightDateKey], [BuyerPersonKey], [TicketHolderPersonKey], [PaymentKey], [FlightKey], [AircraftKey], [AirlineKey], [SourceAirportKey], [DestinationAirportKey], [TravelClassKey], [TicketRealPrice], [TaxAmount], [DiscountAmount], [TicketPrice], [FlightCost], [FlightClassPrice], [FlightRevenue], [KilometersFlown])
 			SELECT
 				dp.PaymentDateTime, fd.FlightDateKey, pd.BuyerPersonKey, pd.TicketHolderPersonKey,
 				dp.PaymentID, fd.FlightKey, fd.AircraftKey, fd.AirlineKey, fd.SourceAirportKey,
@@ -139,7 +139,7 @@ BEGIN TRY
 		SET @CurrentDate = DATEADD(day, 1, @CurrentDate);
 	END;
 
-	RAISERROR('FactPassengerTicket_Transactional table loading process has completed.', 0, 1) WITH NOWAIT;
+	RAISERROR('PassengerTicket_TransactionalFact table loading process has completed.', 0, 1) WITH NOWAIT;
 	SET NOCOUNT OFF;
 END
 GO

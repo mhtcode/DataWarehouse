@@ -1,4 +1,4 @@
-CREATE TABLE [DW].[FactPartReplacement_Transactional] (
+CREATE TABLE [DW].[PartReplacement_TransactionalFact] (
     -- Dimensional Keys
     [AircraftID]                INT NOT NULL,   -- FK to DW.DimAircraft.AircraftID, from SA.PartReplacement.AircraftID
     [PartID]                    INT NOT NULL,   -- FK to DW.DimPart.PartID, from SA.PartReplacement.PartID

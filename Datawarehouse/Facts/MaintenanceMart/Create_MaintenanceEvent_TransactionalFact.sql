@@ -1,4 +1,4 @@
-CREATE TABLE [DW].[FactMaintenanceEvent_Transactional] (
+CREATE TABLE [DW].[MaintenanceEvent_TransactionalFact] (
     -- Dimensional Keys
     [AircraftID]                INT NOT NULL,   -- FK to DW.DimAircraft.AircraftID, from SA.MaintenanceEvent.AircraftID
     [MaintenanceTypeID]         INT NOT NULL,   -- FK to DW.DimMaintenanceType.MaintenanceTypeID, from SA.MaintenanceEvent.MaintenanceTypeID

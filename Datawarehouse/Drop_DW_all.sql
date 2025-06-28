@@ -1,7 +1,7 @@
 -- ========== DROP ALL FACT TABLES ==========
 
 -- LoyaltyMart
-DROP TABLE IF EXISTS [DW].[FactLoyaltyPointTransaction_Transactional];
+DROP TABLE IF EXISTS [DW].[LoyaltyPointTransaction_TransactionalFact];
 
 -- MaintenanceMart
 DROP TABLE IF EXISTS [DW].[FactAircraftHealthSnapshot_Monthly];
@@ -12,10 +12,10 @@ DROP TABLE IF EXISTS [DW].[FactPartReplacement_Transactional];
 DROP TABLE IF EXISTS [DW].[FactFlightPerformance_Transactional];
 
 -- RevenueMart
-DROP TABLE IF EXISTS [DW].[FactFlightOperation_Factless];
-DROP TABLE IF EXISTS [DW].[FactPassengerLifetimeActivity];
-DROP TABLE IF EXISTS [DW].[FactPassengerTicket_Transactional];
-DROP TABLE IF EXISTS [DW].[FactPassengerActivity_Yearly];
+DROP TABLE IF EXISTS [DW].[FlightOperation_FactlessFact];
+DROP TABLE IF EXISTS [DW].[PassengerLifetimeActivityFact];
+DROP TABLE IF EXISTS [DW].[PassengerTicket_TransactionalFact];
+DROP TABLE IF EXISTS [DW].[PassengerActivity_YearlyFact];
 
 -- ========== DROP ALL DIMENSION TABLES ==========
 DROP TABLE IF EXISTS [DW].[DimAccount];
@@ -128,8 +128,8 @@ IF OBJECT_ID('[DW].[Main_Dim_Initial_ETL]', 'P') IS NOT NULL DROP PROCEDURE [DW]
 -- ====== FACT Initial & ETL Procedures ======
 
 -- LoyaltyMart
-IF OBJECT_ID('[DW].[LoadFactLoyaltyPointTransaction]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFactLoyaltyPointTransaction];
-IF OBJECT_ID('[DW].[InitialFactLoyaltyPointTransaction]', 'P') IS NOT NULL DROP PROCEDURE [DW].[InitialFactLoyaltyPointTransaction];
+IF OBJECT_ID('[DW].[LoadLoyaltyPointTransactionFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadLoyaltyPointTransactionFact];
+IF OBJECT_ID('[DW].[InitialLoyaltyPointTransactionFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[InitialLoyaltyPointTransactionFact];
 
 -- RevenueMart
 IF OBJECT_ID('[DW].[LoadFlightOperationFactless]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFlightOperationFactless];
