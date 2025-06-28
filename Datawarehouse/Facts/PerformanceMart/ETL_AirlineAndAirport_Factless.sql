@@ -14,7 +14,6 @@ BEGIN
 
 	BEGIN TRY
 		
-		-- Use a MERGE statement to efficiently synchronize the target table.
 		MERGE [DW].[AirlineAndAirport_Factless] AS Target
 		USING (
 			-- The source is the complete, distinct set of current relationships
@@ -33,7 +32,6 @@ BEGIN
 				
 				UNION
 
-				-- Select all arrival relationships
 				SELECT
 					ac.AirlineID,
 					fd.DestinationAirportID AS AirportID
@@ -45,7 +43,6 @@ BEGIN
 		) AS Source
 		ON (Target.AirlineID = Source.AirlineID AND Target.AirportID = Source.AirportID)
 
-		-- Action for new relationships: INSERT a new record.
 		WHEN NOT MATCHED BY TARGET THEN
 			INSERT (
 				AirlineID,
@@ -55,7 +52,6 @@ BEGIN
 				Source.AirlineID,
 				Source.AirportID
 			)
-        -- Action for relationships that have been removed from the source data
         WHEN NOT MATCHED BY SOURCE THEN
             DELETE;
 

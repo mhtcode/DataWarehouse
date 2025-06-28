@@ -12,3 +12,11 @@ CREATE TABLE [DW].[PassengerActivity_YearlyFact] (
   [YearlyMinFlightDistance] decimal(18,2)  -- MIN(MilesFlown)
 )
 GO
+
+CREATE NONCLUSTERED INDEX IX_PassengerActivity_ACCFact_PersonKey
+ON [DW].[PassengerActivity_ACCFact] (PersonKey);
+GO
+
+CREATE NONCLUSTERED INDEX IX_PassengerActivity_ACCFact_YearID
+ON [DW].[PassengerActivity_ACCFact] (YearID);
+GO

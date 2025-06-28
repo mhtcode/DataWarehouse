@@ -6,7 +6,6 @@ BEGIN
 	DECLARE @StartDate date;
 	DECLARE @EndDate date;
 
-	-- Determine the date range from the operational source data.
 	SELECT 
 		@StartDate = MIN(CAST(ActualDepartureDateTime AS DATE)),
 		@EndDate = MAX(CAST(ActualDepartureDateTime AS DATE))
@@ -35,7 +34,6 @@ BEGIN
 		SET @LogID = SCOPE_IDENTITY();
 
 		BEGIN TRY
-			-- Aggregate directly from the source tables for the current date in the loop.
 			WITH DailyAggregates AS (
 				SELECT
 					ac.AirlineID,
@@ -59,7 +57,6 @@ BEGIN
 					fd.DepartureAirportID,
 					fd.DestinationAirportID
 			)
-			-- Final insert with calculated rates
 			INSERT INTO [DW].[FlightDelay_DailyFact] (
 				DateID, AirlineID, DepartureAirportID, ArrivalAirportID, DailyFlightsNumber,
 				DailyDelayedFlightsNumber, DailyCancelledFlightsNumber, DailyAvgDepartureDelayMinutes,
@@ -68,9 +65,8 @@ BEGIN
 			SELECT
 				@CurrentDate, agg.AirlineID, agg.DepartureAirportID, agg.DestinationAirportID, agg.DailyFlightsNumber,
 				agg.DailyDelayedFlightsNumber, agg.DailyCancelledFlightsNumber, agg.DailyAvgDepartureDelayMinutes,
-				agg.DailyAvgDepartureDelayMinutes, -- Assuming Arrival Delay is the same as Departure Delay from the source
+				agg.DailyAvgDepartureDelayMinutes,
 				agg.DailyMaxDelayMinutes,
-				-- Calculate rates, handling division by zero.
 				CASE WHEN agg.DailyFlightsNumber > 0 THEN CAST(agg.DailyDelayedFlightsNumber AS FLOAT) / agg.DailyFlightsNumber ELSE 0 END,
 				CASE WHEN agg.DailyFlightsNumber > 0 THEN CAST(agg.DailyFlightsNumber - agg.DailyDelayedFlightsNumber - agg.DailyCancelledFlightsNumber AS FLOAT) / agg.DailyFlightsNumber * 100.0 ELSE 0 END
 			FROM
@@ -87,7 +83,6 @@ BEGIN
 			THROW;
 		END CATCH
 
-		-- Increment the date to process the next day
 		SET @CurrentDate = DATEADD(day, 1, @CurrentDate);
 	END;
 

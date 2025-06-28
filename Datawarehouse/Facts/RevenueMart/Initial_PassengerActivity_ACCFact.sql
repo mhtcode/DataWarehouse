@@ -13,7 +13,9 @@ BEGIN
 	SET @LogID = SCOPE_IDENTITY();
 
 	BEGIN TRY
-		-- CTEs for aggregation (same as incremental load)
+
+		TRUNCATE TABLE [DW].[Temp_LifetimeSourceData];
+
 		WITH LifetimeSummableAggregates AS (
 			SELECT PersonKey, SUM(YearlyFlights) AS TotalFlights, SUM(YearlyTicketValue) AS TotalAmountPaid, SUM(YearlyMilesFlown) AS TotalMilesFlown, SUM(YearlyDiscountAmount) AS TotalDiscountAmount, MAX(YearlyMaxFlightDistance) AS MaxFlightDistance, MIN(YearlyMinFlightDistance) AS MinFlightDistance
 			FROM [DW].[FactPassengerActivity_Yearly]
@@ -28,7 +30,6 @@ BEGIN
             WHERE dp.PaymentStatus = 'Completed'
             GROUP BY current_person.PersonKey
         )
-		-- Simple INSERT for the initial load
 		INSERT INTO [DW].[PassengerActivity_ACCFact] (
 			PersonKey, TotalTicketValue, TotalAmountPaid, TotalMilesFlown, TotalDiscountAmount,
 			AverageTicketPrice, TotalDistinctAirlinesUsed, TotalDistinctRoutesFlown,
@@ -40,9 +41,6 @@ BEGIN
 			da.DistinctAirlinesUsed, da.DistinctRoutesFlown, sa.TotalFlights, sa.MaxFlightDistance, sa.MinFlightDistance
 		FROM LifetimeSummableAggregates sa
         LEFT JOIN LifetimeDistinctAggregates da ON sa.PersonKey = da.PersonKey;
-
-		-- Perform a full TRUNCATE for the initial load.
-		TRUNCATE TABLE [DW].[Temp_LifetimeSourceData];
 
 		SET @RowCount = @@ROWCOUNT;
 		UPDATE DW.ETL_Log SET ChangeDescription = 'Initial full load complete', RowsAffected = @RowCount, DurationSec = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()), Status = 'Success' WHERE LogID = @LogID;

@@ -14,8 +14,6 @@ BEGIN
 
 	BEGIN TRY
 		
-		-- Use a MERGE statement to efficiently synchronize the target table.
-		-- This will INSERT new assignments, and DELETE assignments that no longer exist in the source.
 		MERGE [DW].[CrewAssignmentEvent_Factless] AS Target
 		USING (
 			SELECT
@@ -34,7 +32,6 @@ BEGIN
 		) AS Source
 		ON (Target.FlightID = Source.FlightDetailID AND Target.CrewID = Source.CrewMemberID)
 
-		-- Action for new assignments: INSERT a new record.
 		WHEN NOT MATCHED BY TARGET THEN
 			INSERT (
 				FlightID,
@@ -52,7 +49,6 @@ BEGIN
 				Source.AirlineID,
 				Source.CrewMemberID
 			)
-        -- Action for assignments that have been removed from the source
         WHEN NOT MATCHED BY SOURCE THEN
             DELETE;
 

@@ -32,7 +32,6 @@ BEGIN
 		SET @LogID = SCOPE_IDENTITY();
 
 		BEGIN TRY			
-			-- STEP A: Load Core Transactions (Unchanged)
 			INSERT INTO [DW].[Temp_DailyPayments] (PaymentID, ReservationID, BuyerID, RealPrice, TicketPrice, Discount, Tax, PaymentDateTime, TicketHolderPassengerID, FlightDetailID, SeatDetailID)
 			SELECT p.PaymentID, r.ReservationID, p.BuyerID, p.RealPrice, p.TicketPrice, p.Discount, p.Tax, p.PaymentDateTime, r.PassengerID, r.FlightDetailID, r.SeatDetailID
 			FROM [SA].[Payment] p
@@ -46,23 +45,17 @@ BEGIN
 				CONTINUE;
 			END
 
-			-- STEP B: Load Flight-Enriched Data (Unchanged)
 			INSERT INTO [DW].[Temp_EnrichedFlightData] (PaymentID, FlightDateKey, FlightKey, AircraftKey, AirlineKey, SourceAirportKey, DestinationAirportKey, FlightClassPrice, FlightCost, KilometersFlown, TravelClassKey)
 			SELECT dp.PaymentID, fd.DepartureDateTime, fd.FlightDetailID, ac.AircraftID, ac.AirlineID, fd.DepartureAirportID, fd.DestinationAirportID, tc.BaseCost,
 			CASE WHEN ISNULL(fd.FlightCapacity, 0) > 0 THEN ISNULL(fd.TotalCost, 0) / fd.FlightCapacity ELSE 0 END,
 			fd.DistanceKM,
-                      tc.TravelClassID -- MODIFIED: Added TravelClassKey
+                      tc.TravelClassID 
 			FROM [DW].[Temp_DailyPayments] dp
 			INNER JOIN [SA].[FlightDetail] fd ON dp.FlightDetailID = fd.FlightDetailID
 			INNER JOIN [SA].[Aircraft] ac ON fd.AircraftID = ac.AircraftID
 			INNER JOIN [SA].[SeatDetail] sd ON dp.SeatDetailID = sd.SeatDetailID
 			INNER JOIN [SA].[TravelClass] tc ON sd.TravelClassID = tc.TravelClassID;
 			
-			-- ####################################################################################
-			-- STEP C: Load Person-Enriched Data (MODIFIED FOR SCD TYPE 2)
-			-- This step now joins to the DimPerson table to find the correct surrogate key
-			-- based on the PaymentDateTime.
-			-- ####################################################################################
 			INSERT INTO [DW].[Temp_EnrichedPersonData] (PaymentID, BuyerPersonKey, TicketHolderPersonKey)
 			SELECT
 				dp.PaymentID,
@@ -70,18 +63,15 @@ BEGIN
 				TicketHolderDim.PersonKey
 			FROM 
 				[DW].[Temp_DailyPayments] dp
-			-- Join to find the correct historical version for the BUYER
 			INNER JOIN [SA].[Passenger] BuyerPassenger ON dp.BuyerID = BuyerPassenger.PassengerID
 			INNER JOIN [DW].[DimPerson] BuyerDim ON BuyerPassenger.PersonID = BuyerDim.PersonID
 				AND dp.PaymentDateTime >= BuyerDim.EffectiveFrom 
 				AND dp.PaymentDateTime < ISNULL(BuyerDim.EffectiveTo, '9999-12-31')
-			-- Join to find the correct historical version for the TICKET HOLDER
 			INNER JOIN [SA].[Passenger] TicketHolderPassenger ON dp.TicketHolderPassengerID = TicketHolderPassenger.PassengerID
 			INNER JOIN [DW].[DimPerson] TicketHolderDim ON TicketHolderPassenger.PersonID = TicketHolderDim.PersonID
 				AND dp.PaymentDateTime >= TicketHolderDim.EffectiveFrom 
 				AND dp.PaymentDateTime < ISNULL(TicketHolderDim.EffectiveTo, '9999-12-31');
 
-			-- STEP D: Final Assembly and Insert into Fact Table (Unchanged)
 			INSERT INTO [DW].[PassengerTicket_TransactionalFact] ([PaymentDateKey], [FlightDateKey], [BuyerPersonKey], [TicketHolderPersonKey], [PaymentKey], [FlightKey], [AircraftKey], [AirlineKey], [SourceAirportKey], [DestinationAirportKey], [TravelClassKey], [TicketRealPrice], [TaxAmount], [DiscountAmount], [TicketPrice], [FlightCost], [FlightClassPrice], [FlightRevenue], [KilometersFlown])
 			SELECT
 				dp.PaymentDateTime, fd.FlightDateKey, pd.BuyerPersonKey, pd.TicketHolderPersonKey,

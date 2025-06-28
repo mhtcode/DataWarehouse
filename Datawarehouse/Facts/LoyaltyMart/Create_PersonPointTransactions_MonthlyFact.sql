@@ -10,3 +10,15 @@ CREATE TABLE [DW].[PersonPointTransactions_MonthlyFact] (
   [MonthlyDistinctFlightsEarnedOn] int
 )
 GO
+
+CREATE NONCLUSTERED INDEX IX_PersonPointTransactions_MonthlyFact_PersonKey
+ON [DW].[PersonPointTransactions_MonthlyFact] (PersonKey);
+GO
+
+CREATE NONCLUSTERED INDEX IX_PersonPointTransactions_MonthlyFact_LoyaltyTierKey
+ON [DW].[PersonPointTransactions_MonthlyFact] (LoyaltyTierKey);
+GO
+
+CREATE NONCLUSTERED INDEX IX_PersonPointTransactions_MonthlyFact_MonthID
+ON [DW].[PersonPointTransactions_MonthlyFact] (MonthID);
+GO
