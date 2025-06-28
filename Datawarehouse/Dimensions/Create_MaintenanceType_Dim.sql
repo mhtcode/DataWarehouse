@@ -1,8 +1,8 @@
 CREATE TABLE [DW].[DimMaintenanceType] (
   [MaintenanceTypeID] integer PRIMARY KEY,
-  [Name] nvarchar(255),
-  [Category] nvarchar(255),
-  [Description] nvarchar(255)
+  [Name] nvarchar(500),
+  [Category] nvarchar(500),
+  [Description] nvarchar(500)
 )
 GO
 

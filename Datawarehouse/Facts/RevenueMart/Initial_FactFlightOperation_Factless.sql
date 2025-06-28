@@ -8,13 +8,13 @@ BEGIN
 	DECLARE @RowCount INT;
 
 	INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
-	VALUES ('InitialFlightOperationFactless', 'FlightOperation_Factless', 'Procedure started for initial full load', @StartTime, 'Running');
+	VALUES ('InitialFlightOperationFactless', 'FactFlightOperation_Factless', 'Procedure started for initial full load', @StartTime, 'Running');
 		
 	SET @LogID = SCOPE_IDENTITY();
 
 	BEGIN TRY
 		-- Perform a simple insert for the initial load.
-		INSERT INTO [DW].[FlightOperation_Factless] (
+		INSERT INTO [DW].[FactFlightOperation_Factless] (
 			FlightKey,
 			SourceAirportKey,
 			DestinationAirportKey,
@@ -53,7 +53,7 @@ BEGIN
 		THROW;
 	END CATCH
 
-	RAISERROR('Initial FlightOperation_Factless loading process has completed.', 0, 1) WITH NOWAIT;
+	RAISERROR('Initial FactFlightOperation_Factless loading process has completed.', 0, 1) WITH NOWAIT;
 	SET NOCOUNT OFF;
 END
 GO

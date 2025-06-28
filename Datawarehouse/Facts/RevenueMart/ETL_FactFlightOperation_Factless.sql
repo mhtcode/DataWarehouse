@@ -9,7 +9,7 @@ BEGIN
 	DECLARE @RowCount INT;
 
 	INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
-	VALUES ('LoadFlightOperationFactless', 'FlightOperation_Factless', 'Procedure started for incremental merge', @StartTime, 'Running');
+	VALUES ('LoadFlightOperationFactless', 'FactFlightOperation_Factless', 'Procedure started for incremental merge', @StartTime, 'Running');
 		
 	SET @LogID = SCOPE_IDENTITY();
 
@@ -17,7 +17,7 @@ BEGIN
 		
 		-- Use a MERGE statement to efficiently synchronize the target table.
 		-- This will INSERT new flights, and UPDATE the status of existing flights if it changes.
-		MERGE [DW].[FlightOperation_Factless] AS Target
+		MERGE [DW].[FactFlightOperation_Factless] AS Target
 		USING (
 			SELECT
 				fd.FlightDetailID AS FlightKey,
