@@ -8,8 +8,8 @@ BEGIN
 
 	-- Determine the date range from the actual departure dates in the flight operations table.
 	SELECT 
-		@StartDate = MIN(CAST(ActualDepartureDateTime AS DATE)),
-		@EndDate = MAX(CAST(ActualDepartureDateTime AS DATE))
+		@StartDate = MIN(CAST(ActualDepartureId AS DATE)),
+		@EndDate = MAX(CAST(ActualDepartureId AS DATE))
 	FROM 
 		[SA].[FlightOperation];
 
@@ -31,7 +31,7 @@ BEGIN
 
 		-- Log the start of the process for the current day
 		INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
-		VALUES ('InitialFlightPerformance_TransactionalFact', 'FlightPerformance_TransactionalFact', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
+		VALUES ('Initial_FlightPerformance_TransactionalFact', 'FlightPerformance_TransactionalFact', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
 		
 		SET @LogID = SCOPE_IDENTITY();
 
@@ -113,9 +113,3 @@ BEGIN
 	SET NOCOUNT OFF;
 END
 GO
-
-exec [DW].[InitialFlightPerformance_TransactionalFact]
-
-drop table [DW].[FlightPerformance_TransactionalFact]
-
-select * from [DW].[FlightPerformance_TransactionalFact]

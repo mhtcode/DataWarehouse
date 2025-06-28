@@ -7,24 +7,24 @@ import re
 CONFIG_PATH = os.path.join('Scripts', 'config.json')
 MAKE_DB_SCRIPT = os.path.join('Scripts', 'makeDB.py')
 
-def fix_bulk_insert_path():
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    csv_path = os.path.abspath(os.path.join(script_dir, '..', 'Files', 'Date1.CSV'))
-    sql_path = os.path.abspath(os.path.join(script_dir, '..', 'Datawarehouse', 'Dimensions', 'Initial_Date_Dim.sql'))
-    if not os.path.isfile(csv_path):
-        print(f"ERROR: {csv_path} does not exist! Bulk insert path not updated.")
-        return
-    if not os.path.isfile(sql_path):
-        print(f"ERROR: {sql_path} does not exist! Bulk insert path not updated.")
-        return
-    with open(sql_path, 'r', encoding='utf-8') as f:
-        sql = f.read()
-    pattern = r"FROM\s+'[^']*Date1\.CSV'"
-    replacement = f"FROM '{csv_path.replace(os.sep, '\\\\')}'"
-    new_sql = re.sub(pattern, replacement, sql)
-    with open(sql_path, 'w', encoding='utf-8') as f:
-        f.write(new_sql)
-    print(f"BULK INSERT path updated in {sql_path}.")
+# def fix_bulk_insert_path():
+#     script_dir = os.path.dirname(os.path.abspath(__file__))
+#     csv_path = os.path.abspath(os.path.join(script_dir, '..', 'Files', 'Date1.CSV'))
+#     sql_path = os.path.abspath(os.path.join(script_dir, '..', 'Datawarehouse', 'Dimensions', 'Initial_Date_Dim.sql'))
+#     if not os.path.isfile(csv_path):
+#         print(f"ERROR: {csv_path} does not exist! Bulk insert path not updated.")
+#         return
+#     if not os.path.isfile(sql_path):
+#         print(f"ERROR: {sql_path} does not exist! Bulk insert path not updated.")
+#         return
+#     with open(sql_path, 'r', encoding='utf-8') as f:
+#         sql = f.read()
+#     pattern = r"FROM\s+'[^']*Date1\.CSV'"
+#     replacement = f"FROM '{csv_path.replace(os.sep, '\\\\')}'"
+#     new_sql = re.sub(pattern, replacement, sql)
+#     with open(sql_path, 'w', encoding='utf-8') as f:
+#         f.write(new_sql)
+#     print(f"BULK INSERT path updated in {sql_path}.")
 
 def print_welcome():
     print("=" * 70)
@@ -278,6 +278,6 @@ def main_menu():
 
 
 if __name__ == "__main__":
-    fix_bulk_insert_path()
+    # fix_bulk_insert_path()
     print_welcome()
     main_menu()

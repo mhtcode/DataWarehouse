@@ -7,21 +7,21 @@ BEGIN
     DECLARE @procs TABLE (ProcName NVARCHAR(128));
     INSERT INTO @procs (ProcName) VALUES
         -- LoyaltyMart
-        (N'InitialLoyaltyPointTransactionFact'),
+        (N'Initial_LoyaltyPoint_TransactionalFact'),
 
         -- MaintenanceMart
-        (N'InitialFactAircraftHealthSnapshot_PeriodicSnapshot'),
-        (N'InitialFactMaintenanceEvent_Transactional'),
-        (N'InitialFactPartReplacement_Transactional'),
+        (N'Initial_FactAircraftHealth_MonthlyFact'),
+        (N'Initial_FactMaintenanceEvent_TransactionalFact'),
+        (N'Initial_FactPartReplacement_TransactionalFact'),
 
         -- PerformanceMart
-        (N'InitialFactFlightPerformance'),
+        (N'Initial_FlightPerformance_TransactionalFact'),
 
         -- RevenueMart
-        (N'InitialFlightOperation_Factless'),
-        (N'InitialPassengerTicket_ACCFact'),
-        (N'InitialPassengerTicket_TransactionalFact'),
-        (N'InitialPassengerTicket_YearlyFact');
+        (N'Initial_FlightOperation_Factless'),
+        (N'Initial_PassengerTicket_ACCFact'),
+        (N'Initial_PassengerTicket_TransactionalFact'),
+        (N'Initial_PassengerTicket_YearlyFact');
 
     DECLARE @ProcName NVARCHAR(128), @sql NVARCHAR(300);
 

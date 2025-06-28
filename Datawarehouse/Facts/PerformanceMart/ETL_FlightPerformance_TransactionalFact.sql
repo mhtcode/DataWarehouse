@@ -9,7 +9,7 @@ BEGIN
 	-- Determine the date range from the actual departure dates in the flight operations table.
 
     SELECT 
-        @StartDate = MAX(CAST(ActualDepartureDateTime AS DATE))
+        @StartDate = MAX(CAST(ActualDepartureId AS DATE))
     FROM 
         [DW].[FlightPerformance_TransactionalFact];
 

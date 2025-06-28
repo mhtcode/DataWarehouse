@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS [DW].[FlightPerformance_TransactionalFact];
 
 -- RevenueMart
 DROP TABLE IF EXISTS [DW].[FlightOperation_Factless];
-DROP TABLE IF EXISTS [DW].[PassengerLifetimeActivityFact];
+DROP TABLE IF EXISTS [DW].[PassengerActivity_ACCFact];
 DROP TABLE IF EXISTS [DW].[PassengerTicket_TransactionalFact];
 DROP TABLE IF EXISTS [DW].[PassengerActivity_YearlyFact];
 
@@ -128,8 +128,8 @@ IF OBJECT_ID('[DW].[Main_Dim_Initial_ETL]', 'P') IS NOT NULL DROP PROCEDURE [DW]
 -- ====== FACT Initial & ETL Procedures ======
 
 -- LoyaltyMart
-IF OBJECT_ID('[DW].[Load_LoyaltyPoint_TransactionFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Load_LoyaltyPoint_TransactionFact];
-IF OBJECT_ID('[DW].[Initial_LoyaltyPoint_TransactionFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Initial_LoyaltyPoint_TransactionFact];
+IF OBJECT_ID('[DW].[Load_LoyaltyPoint_TransactionalFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Load_LoyaltyPoint_TransactionalFact];
+IF OBJECT_ID('[DW].[Initial_LoyaltyPoint_TransactionalFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Initial_LoyaltyPoint_TransactionalFact];
 
 -- RevenueMart
 IF OBJECT_ID('[DW].[Load_FlightOperation_Factless]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Load_FlightOperation_Factless];
