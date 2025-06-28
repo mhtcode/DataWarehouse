@@ -9,3 +9,11 @@ CREATE TABLE [DW].[PersonPointTransactions_ACCFact] (
   [TotalDistinctFlightsEarnedOn] int
 )
 GO
+
+CREATE NONCLUSTERED INDEX IX_PersonPointTransactions_ACCFact_LoyaltyTierKey
+ON [DW].[PersonPointTransactions_ACCFact] (LoyaltyTierKey);
+GO
+
+CREATE NONCLUSTERED INDEX IX_PersonPointTransactions_ACCFact_PersonKey
+ON [DW].[PersonPointTransactions_ACCFact] (PersonKey);
+GO
