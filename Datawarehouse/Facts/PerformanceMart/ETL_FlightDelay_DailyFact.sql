@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE [DW].[LoadFlightDelay_DailyFact]
+CREATE OR ALTER PROCEDURE [DW].[Load_FlightDelay_DailyFact]
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -33,7 +33,7 @@ BEGIN
 		DECLARE @RowCount INT;
 
 		INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
-		VALUES ('LoadFlightDelay_DailyFact', 'FlightDelay_DailyFact', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
+		VALUES ('Load_FlightDelay_DailyFact', 'FlightDelay_DailyFact', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
 			
 		SET @LogID = SCOPE_IDENTITY();
 
