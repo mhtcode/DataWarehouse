@@ -11,7 +11,7 @@ CREATE TABLE [DW].[DimAirline] (
 );
 GO
 
-REATE NONCLUSTERED INDEX IX_DimAirline_Country
+CREATE NONCLUSTERED INDEX IX_DimAirline_Country
 ON [DW].[DimAirline] (Country);
 GO
 
