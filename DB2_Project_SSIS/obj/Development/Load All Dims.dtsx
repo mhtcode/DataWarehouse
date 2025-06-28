@@ -1,0 +1,3111 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="6/28/2025 6:50:25 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="MASIH"
+  DTS:CreatorName="MASIH\Zer0ne"
+  DTS:DTSID="{206A4370-98FF-4A5A-B86C-315B7CD49A16}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="16.0.5685.0"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Package"
+  DTS:PackageType="5"
+  DTS:VersionBuild="22"
+  DTS:VersionGUID="{16EF4944-28F2-420C-AF62-7784FE10E2FE}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Data Connection]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{F78D8E58-3E4D-43FB-8EF3-FFDEB730CB45}"
+      DTS:ObjectName="Data Connection">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Initial Catalog=DB2_Project;Provider=MSOLEDBSQL.1;Integrated Security=SSPI;Application Name=SSIS-Package-{F78D8E58-3E4D-43FB-8EF3-FFDEB730CB45}Data Connection;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Data Connection 1]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{C957BDAA-BCE9-4D89-A150-F15B9A23596C}"
+      DTS:ObjectName="Data Connection 1">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Initial Catalog=DB2_Project;Provider=MSOLEDBSQL.1;Integrated Security=SSPI;Application Name=SSIS-Package-{C957BDAA-BCE9-4D89-A150-F15B9A23596C}Data Connection 1;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[LocalHost.DB2_Project]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{C11A2402-322E-451F-93CD-900BA497E5C5}"
+      DTS:ObjectName="LocalHost.DB2_Project">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=.;Initial Catalog=DB2_Project;Provider=SQLOLEDB.1;Integrated Security=SSPI;Application Name=SSIS-Package-{C11A2402-322E-451F-93CD-900BA497E5C5}LocalHost.DB2_Project;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[LocalHost.DB2_Project 1]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{44A70C01-3A4A-4923-8809-5CAEDEA25E60}"
+      DTS:ObjectName="LocalHost.DB2_Project 1">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=.;Initial Catalog=DB2_Project;Provider=SQLOLEDB.1;Integrated Security=SSPI;Application Name=SSIS-Package-{44A70C01-3A4A-4923-8809-5CAEDEA25E60}LocalHost.DB2_Project 1;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Load Dim MaintenanceLocation SCD2"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{CFEE36AA-9A8C-40B0-9042-1457DF4BF833}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Dim MaintenanceLocation SCD2"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Load Dim MaintenanceLocation SCD2\Derived Column"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+              name="Derived Column"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Derived Column.Inputs[Derived Column Input]"
+                  description="Input to the Derived Column Transformation"
+                  name="Derived Column Input">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Derived Column.Outputs[Derived Column Output]"
+                  description="Default Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  name="Derived Column Output"
+                  synchronousInputId="Package\Load Dim MaintenanceLocation SCD2\Derived Column.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Derived Column.Outputs[Derived Column Output].Columns[CityIsCurrent]"
+                      dataType="bool"
+                      description="CityIsCurrent"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Derived Column.Outputs[Derived Column Output].Columns[CityIsCurrent]"
+                      name="CityIsCurrent"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">(DT_BOOL)("0")</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">(DT_BOOL)("0")</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Derived Column.Outputs[Derived Column Error Output]"
+                  description="Error Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Derived Column Error Output"
+                  synchronousInputId="Package\Load Dim MaintenanceLocation SCD2\Derived Column.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load Dim MaintenanceLocation SCD2\Derived Column 1"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+              name="Derived Column 1"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Derived Column 1.Inputs[Derived Column Input]"
+                  description="Input to the Derived Column Transformation"
+                  name="Derived Column Input">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Derived Column 1.Outputs[Derived Column Output]"
+                  description="Default Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  name="Derived Column Output"
+                  synchronousInputId="Package\Load Dim MaintenanceLocation SCD2\Derived Column 1.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Derived Column 1.Outputs[Derived Column Output].Columns[CityIsCurrent]"
+                      dataType="bool"
+                      description="CityIsCurrent"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Derived Column 1.Outputs[Derived Column Output].Columns[CityIsCurrent]"
+                      name="CityIsCurrent"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">(DT_BOOL)("1")</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">(DT_BOOL)("1")</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Derived Column 1.Outputs[Derived Column Error Output]"
+                  description="Error Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Derived Column Error Output"
+                  synchronousInputId="Package\Load Dim MaintenanceLocation SCD2\Derived Column 1.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Derived Column 1.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Derived Column 1.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Derived Column 1.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Derived Column 1.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="Insert Destination"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[DW].[DimMaintenanceLocation]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[Data Connection]"
+                  connectionManagerRefId="Package.ConnectionManagers[Data Connection]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input].Columns[LocationID]"
+                      cachedDataType="wstr"
+                      cachedLength="100"
+                      cachedName="LocationID"
+                      externalMetadataColumnId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[LocationID]"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[LocationID]" />
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input].Columns[Name]"
+                      cachedDataType="wstr"
+                      cachedLength="100"
+                      cachedName="Name"
+                      externalMetadataColumnId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[Name]"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[Name]" />
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input].Columns[City]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="City"
+                      externalMetadataColumnId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[City]"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[City]" />
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input].Columns[Country]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="Country"
+                      externalMetadataColumnId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[Country]"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[Country]" />
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input].Columns[CityIsCurrent]"
+                      cachedDataType="bool"
+                      cachedName="CityIsCurrent"
+                      externalMetadataColumnId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[CityIsCurrent]"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Derived Column 1.Outputs[Derived Column Output].Columns[CityIsCurrent]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[LocationKey]"
+                      dataType="i4"
+                      name="LocationKey" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[LocationID]"
+                      dataType="wstr"
+                      length="100"
+                      name="LocationID" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[Name]"
+                      dataType="wstr"
+                      length="255"
+                      name="Name" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[City]"
+                      dataType="wstr"
+                      length="255"
+                      name="City" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[Country]"
+                      dataType="wstr"
+                      length="255"
+                      name="Country" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[Inhouse_Flag]"
+                      dataType="bool"
+                      name="Inhouse_Flag" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[EffectiveFrom]"
+                      dataType="dbDate"
+                      name="EffectiveFrom" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[EffectiveTo]"
+                      dataType="dbDate"
+                      name="EffectiveTo" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[CityIsCurrent]"
+                      dataType="bool"
+                      name="CityIsCurrent" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Command"
+              componentClassID="Microsoft.OLEDBCommand"
+              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
+              description="Runs an SQL statement for each row in a data flow. For example, call a 'new employee setup' stored procedure for each row in the 'new employees' table. Note: running an SQL statement for each row of a large data flow may take a long time."
+              name="OLE DB Command"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">UPDATE [DW].[DimMaintenanceLocation] SET [CityIsCurrent] = ? WHERE [LocationID] = ? AND [CityIsCurrent] = '1'</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Command.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[Data Connection]"
+                  connectionManagerRefId="Package.ConnectionManagers[Data Connection]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Command.Inputs[OLE DB Command Input]"
+                  errorOrTruncationOperation="Command Execution"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Command Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Command.Inputs[OLE DB Command Input].Columns[LocationID]"
+                      cachedDataType="wstr"
+                      cachedLength="100"
+                      cachedName="LocationID"
+                      externalMetadataColumnId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_1]"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[LocationID]" />
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Command.Inputs[OLE DB Command Input].Columns[CityIsCurrent]"
+                      cachedDataType="bool"
+                      cachedName="CityIsCurrent"
+                      externalMetadataColumnId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Derived Column.Outputs[Derived Column Output].Columns[CityIsCurrent]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      dataType="bool"
+                      name="Param_0">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_1]"
+                      dataType="wstr"
+                      length="100"
+                      name="Param_1">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Command.Outputs[OLE DB Command Output]"
+                  exclusionGroup="1"
+                  name="OLE DB Command Output"
+                  synchronousInputId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Command.Inputs[OLE DB Command Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Command.Outputs[OLE DB Command Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Command Error Output"
+                  synchronousInputId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Command.Inputs[OLE DB Command Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="OLE DB Source"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[SA].[MaintenanceLocation]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[Data Connection]"
+                  connectionManagerRefId="Package.ConnectionManagers[Data Connection]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[LocationID]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[LocationID]"
+                      length="100"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[LocationID]"
+                      name="LocationID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[Name]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Name]"
+                      length="100"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[Name]"
+                      name="Name"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[City]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[City]"
+                      length="50"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[City]"
+                      name="City"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[Country]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Country]"
+                      length="50"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[Country]"
+                      name="Country"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[InhouseFlag]"
+                      dataType="bool"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[InhouseFlag]"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[InhouseFlag]"
+                      name="InhouseFlag"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[StagingLoadTimestampUTC]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[StagingLoadTimestampUTC]"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[StagingLoadTimestampUTC]"
+                      name="StagingLoadTimestampUTC"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[StagingLastUpdateTimestampUTC]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[StagingLastUpdateTimestampUTC]"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[StagingLastUpdateTimestampUTC]"
+                      name="StagingLastUpdateTimestampUTC"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[SourceSystem]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SourceSystem]"
+                      length="200"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[SourceSystem]"
+                      name="SourceSystem"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[LocationID]"
+                      dataType="wstr"
+                      length="100"
+                      name="LocationID" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Name]"
+                      dataType="wstr"
+                      length="100"
+                      name="Name" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[City]"
+                      dataType="wstr"
+                      length="50"
+                      name="City" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Country]"
+                      dataType="wstr"
+                      length="50"
+                      name="Country" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[InhouseFlag]"
+                      dataType="bool"
+                      name="InhouseFlag" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[StagingLoadTimestampUTC]"
+                      dataType="dbTimeStamp"
+                      name="StagingLoadTimestampUTC" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[StagingLastUpdateTimestampUTC]"
+                      dataType="dbTimeStamp"
+                      name="StagingLastUpdateTimestampUTC" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[SourceSystem]"
+                      dataType="wstr"
+                      length="200"
+                      name="SourceSystem" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[LocationID]"
+                      dataType="wstr"
+                      length="100"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[LocationID]"
+                      name="LocationID" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Name]"
+                      dataType="wstr"
+                      length="100"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Name]"
+                      name="Name" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[City]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[City]"
+                      name="City" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Country]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Country]"
+                      name="Country" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[InhouseFlag]"
+                      dataType="bool"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[InhouseFlag]"
+                      name="InhouseFlag" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[StagingLoadTimestampUTC]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[StagingLoadTimestampUTC]"
+                      name="StagingLoadTimestampUTC" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[StagingLastUpdateTimestampUTC]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[StagingLastUpdateTimestampUTC]"
+                      name="StagingLastUpdateTimestampUTC" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SourceSystem]"
+                      dataType="wstr"
+                      length="200"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[SourceSystem]"
+                      name="SourceSystem" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension"
+              componentClassID="Microsoft.SCD"
+              contactInfo="Slowly Changing Dimension;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;3"
+              description="Updates a SQL Server Analysis Services data warehouse dimension. Update dimension records that are already present and  insert dimension records that aren't. For example, update the DimProduct table of the AdventureWorksDW OLAP database with data from the Products table in the AdventureWorks OLTP database."
+              name="Slowly Changing Dimension"
+              version="3">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Specifies the SELECT statement used to create a schema rowset."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT [City], [Country], [LocationID], [Name],[CityIsCurrent] FROM [DW].[DimMaintenanceLocation]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the WHERE clause in the SELECT statement that selects the current row among rows with identical business keys."
+                  name="CurrentRowWhere">[CityIsCurrent] = '1'</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether historical attribute updates are directed to the transformation output for changing attribute updates."
+                  name="UpdateChangingAttributeHistory">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the transformation fails when columns with fixed attributes contain changes."
+                  name="FailOnFixedAttributeChange">true</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the column name for the inferred member."
+                  name="InferredMemberIndicator"></property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether inferred member updates are detected."
+                  name="EnableInferredMember">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the transformation fails when a lookup of an existing record fails."
+                  name="FailOnLookupFailure">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies that all rows in the input are new or the transformation detects the change type."
+                  name="IncomingRowChangeType"
+                  typeConverter="IncomingRowChangeType">1</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Connections[LookupConnection]"
+                  connectionManagerID="Package.ConnectionManagers[Data Connection]"
+                  connectionManagerRefId="Package.ConnectionManagers[Data Connection]"
+                  description="Defines the connection to use for lookups in the dimension table"
+                  name="LookupConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]"
+                  name="Slowly Changing Dimension Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input].Columns[City]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="City"
+                      externalMetadataColumnId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input].ExternalColumns[City]"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[City]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          name="ColumnType"
+                          typeConverter="ColumnType">3</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input].Columns[Country]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="Country"
+                      externalMetadataColumnId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input].ExternalColumns[Country]"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[Country]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          name="ColumnType"
+                          typeConverter="ColumnType">4</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input].Columns[LocationID]"
+                      cachedDataType="wstr"
+                      cachedLength="100"
+                      cachedName="LocationID"
+                      externalMetadataColumnId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input].ExternalColumns[LocationID]"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[LocationID]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          name="ColumnType"
+                          typeConverter="ColumnType">1</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input].Columns[Name]"
+                      cachedDataType="wstr"
+                      cachedLength="100"
+                      cachedName="Name"
+                      externalMetadataColumnId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input].ExternalColumns[Name]"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[Name]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          name="ColumnType"
+                          typeConverter="ColumnType">4</property>
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input].ExternalColumns[City]"
+                      dataType="wstr"
+                      length="255"
+                      name="City" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input].ExternalColumns[Country]"
+                      dataType="wstr"
+                      length="255"
+                      name="Country" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input].ExternalColumns[LocationID]"
+                      dataType="wstr"
+                      length="100"
+                      name="LocationID" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input].ExternalColumns[Name]"
+                      dataType="wstr"
+                      length="255"
+                      name="Name" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input].ExternalColumns[CityIsCurrent]"
+                      dataType="bool"
+                      name="CityIsCurrent" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Outputs[Unchanged Output]"
+                  description="Unchanged rows"
+                  exclusionGroup="1"
+                  name="Unchanged Output"
+                  synchronousInputId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Outputs[New Output]"
+                  description="New rows"
+                  exclusionGroup="1"
+                  name="New Output"
+                  synchronousInputId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Outputs[Fixed Attribute Output]"
+                  description="Rows with changes in columns tagged FixedAttribute"
+                  exclusionGroup="1"
+                  name="Fixed Attribute Output"
+                  synchronousInputId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Outputs[Changing Attribute Updates Output]"
+                  description="These rows contain new information for ChangingAttribute (Type 1) column changes"
+                  exclusionGroup="1"
+                  name="Changing Attribute Updates Output"
+                  synchronousInputId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Outputs[Historical Attribute Inserts Output]"
+                  description="HistoricalAttribute (Type 2) changes result in these new rows"
+                  exclusionGroup="2"
+                  name="Historical Attribute Inserts Output"
+                  synchronousInputId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Outputs[Inferred Member Updates Output]"
+                  description="Information to update unpopulated initial dimension row"
+                  exclusionGroup="1"
+                  name="Inferred Member Updates Output"
+                  synchronousInputId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load Dim MaintenanceLocation SCD2\Union All"
+              componentClassID="Microsoft.UnionAll"
+              contactInfo="Union All;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+              description="Combines rows from multiple data flows without sorting. For example, add rows back to a data flow after correction of errors. If sorting is important, we recommend using the Merge transformation."
+              name="Union All"
+              version="1">
+              <inputs>
+                <input
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 1]"
+                  name="Union All Input 1">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 1].Columns[LocationID]"
+                      cachedDataType="wstr"
+                      cachedLength="100"
+                      cachedName="LocationID"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[LocationID]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[LocationID]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 1].Columns[Name]"
+                      cachedDataType="wstr"
+                      cachedLength="100"
+                      cachedName="Name"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[Name]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[Name]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 1].Columns[City]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="City"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[City]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[City]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 1].Columns[Country]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="Country"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[Country]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[Country]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 1].Columns[InhouseFlag]"
+                      cachedDataType="bool"
+                      cachedName="InhouseFlag"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[InhouseFlag]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[InhouseFlag]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 1].Columns[StagingLoadTimestampUTC]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="StagingLoadTimestampUTC"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[StagingLoadTimestampUTC]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[StagingLoadTimestampUTC]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 1].Columns[StagingLastUpdateTimestampUTC]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="StagingLastUpdateTimestampUTC"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[StagingLastUpdateTimestampUTC]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[StagingLastUpdateTimestampUTC]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 1].Columns[SourceSystem]"
+                      cachedDataType="wstr"
+                      cachedLength="200"
+                      cachedName="SourceSystem"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[SourceSystem]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[SourceSystem]}</property>
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+                <input
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 2]"
+                  hasSideEffects="true"
+                  name="Union All Input 2">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 2].Columns[LocationID]"
+                      cachedDataType="wstr"
+                      cachedLength="100"
+                      cachedName="LocationID"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[LocationID]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[LocationID]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 2].Columns[Name]"
+                      cachedDataType="wstr"
+                      cachedLength="100"
+                      cachedName="Name"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[Name]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[Name]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 2].Columns[City]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="City"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[City]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[City]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 2].Columns[Country]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="Country"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[Country]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[Country]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 2].Columns[InhouseFlag]"
+                      cachedDataType="bool"
+                      cachedName="InhouseFlag"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[InhouseFlag]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[InhouseFlag]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 2].Columns[StagingLoadTimestampUTC]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="StagingLoadTimestampUTC"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[StagingLoadTimestampUTC]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[StagingLoadTimestampUTC]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 2].Columns[StagingLastUpdateTimestampUTC]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="StagingLastUpdateTimestampUTC"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[StagingLastUpdateTimestampUTC]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[StagingLastUpdateTimestampUTC]}</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 2].Columns[SourceSystem]"
+                      cachedDataType="wstr"
+                      cachedLength="200"
+                      cachedName="SourceSystem"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output].Columns[SourceSystem]">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Output column lineage ID"
+                          name="OutputColumnLineageID">#{Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[SourceSystem]}</property>
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+                <input
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 3]"
+                  dangling="true"
+                  hasSideEffects="true"
+                  name="Union All Input 3">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1]"
+                  name="Union All Output 1">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[LocationID]"
+                      dataType="wstr"
+                      length="100"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[LocationID]"
+                      name="LocationID" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[Name]"
+                      dataType="wstr"
+                      length="100"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[Name]"
+                      name="Name" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[City]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[City]"
+                      name="City" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[Country]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[Country]"
+                      name="Country" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[InhouseFlag]"
+                      dataType="bool"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[InhouseFlag]"
+                      name="InhouseFlag" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[StagingLoadTimestampUTC]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[StagingLoadTimestampUTC]"
+                      name="StagingLoadTimestampUTC" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[StagingLastUpdateTimestampUTC]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[StagingLastUpdateTimestampUTC]"
+                      name="StagingLastUpdateTimestampUTC" />
+                    <outputColumn
+                      refId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[SourceSystem]"
+                      dataType="wstr"
+                      length="200"
+                      lineageId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1].Columns[SourceSystem]"
+                      name="SourceSystem" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Load Dim MaintenanceLocation SCD2.Paths[Derived Column Output]"
+              endId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Command.Inputs[OLE DB Command Input]"
+              name="Derived Column Output"
+              startId="Package\Load Dim MaintenanceLocation SCD2\Derived Column.Outputs[Derived Column Output]" />
+            <path
+              refId="Package\Load Dim MaintenanceLocation SCD2.Paths[Derived Column Output1]"
+              endId="Package\Load Dim MaintenanceLocation SCD2\Insert Destination.Inputs[OLE DB Destination Input]"
+              name="Derived Column Output"
+              startId="Package\Load Dim MaintenanceLocation SCD2\Derived Column 1.Outputs[Derived Column Output]" />
+            <path
+              refId="Package\Load Dim MaintenanceLocation SCD2.Paths[Historical Attribute Inserts Output]"
+              endId="Package\Load Dim MaintenanceLocation SCD2\Derived Column.Inputs[Derived Column Input]"
+              name="Historical Attribute Inserts Output"
+              startId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Outputs[Historical Attribute Inserts Output]" />
+            <path
+              refId="Package\Load Dim MaintenanceLocation SCD2.Paths[New Output]"
+              endId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 1]"
+              name="New Output"
+              startId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Outputs[New Output]" />
+            <path
+              refId="Package\Load Dim MaintenanceLocation SCD2.Paths[OLE DB Command Output]"
+              endId="Package\Load Dim MaintenanceLocation SCD2\Union All.Inputs[Union All Input 2]"
+              name="OLE DB Command Output"
+              startId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Command.Outputs[OLE DB Command Output]" />
+            <path
+              refId="Package\Load Dim MaintenanceLocation SCD2.Paths[OLE DB Source Output]"
+              endId="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]"
+              name="OLE DB Source Output"
+              startId="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source.Outputs[OLE DB Source Output]" />
+            <path
+              refId="Package\Load Dim MaintenanceLocation SCD2.Paths[Union All Output 1]"
+              endId="Package\Load Dim MaintenanceLocation SCD2\Derived Column 1.Inputs[Derived Column Input]"
+              name="Union All Output 1"
+              startId="Package\Load Dim MaintenanceLocation SCD2\Union All.Outputs[Union All Output 1]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load Dim Part SCD1"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{06D3FDEB-A098-4817-A54E-34FDBF3C8E57}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Dim Part SCD1"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Load Dim Part SCD1\DwPart"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="DwPart"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[DW].[DimPart]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Dim Part SCD1\DwPart.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[Data Connection]"
+                  connectionManagerRefId="Package.ConnectionManagers[Data Connection]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input].Columns[Name]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Name"
+                      externalMetadataColumnId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input].ExternalColumns[Name]"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[Name]" />
+                    <inputColumn
+                      refId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input].Columns[PartNumber]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="PartNumber"
+                      externalMetadataColumnId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input].ExternalColumns[PartNumber]"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[PartNumber]" />
+                    <inputColumn
+                      refId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input].Columns[Manufacturer]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Manufacturer"
+                      externalMetadataColumnId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input].ExternalColumns[Manufacturer]"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[Manufacturer]" />
+                    <inputColumn
+                      refId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input].Columns[Category]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Category"
+                      externalMetadataColumnId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input].ExternalColumns[Category]"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[Category]" />
+                    <inputColumn
+                      refId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input].Columns[PartID]"
+                      cachedDataType="i4"
+                      cachedName="PartID"
+                      externalMetadataColumnId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input].ExternalColumns[PartID]"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[PartID]" />
+                    <inputColumn
+                      refId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input].Columns[WarrantyPeriodMonths]"
+                      cachedDataType="i4"
+                      cachedName="WarrantyPeriodMonths"
+                      externalMetadataColumnId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input].ExternalColumns[Warranty_Period_Months]"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[WarrantyPeriodMonths]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input].ExternalColumns[Name]"
+                      dataType="wstr"
+                      length="255"
+                      name="Name" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input].ExternalColumns[PartNumber]"
+                      dataType="wstr"
+                      length="255"
+                      name="PartNumber" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input].ExternalColumns[Manufacturer]"
+                      dataType="wstr"
+                      length="255"
+                      name="Manufacturer" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input].ExternalColumns[Warranty_Period_Months]"
+                      dataType="i4"
+                      name="Warranty_Period_Months" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input].ExternalColumns[Category]"
+                      dataType="wstr"
+                      length="255"
+                      name="Category" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input].ExternalColumns[PartID]"
+                      dataType="i4"
+                      name="PartID" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load Dim Part SCD1\DwPart.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\DwPart.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Dim Part SCD1\DwPart.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\DwPart.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Dim Part SCD1\DwPart.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load Dim Part SCD1\SaPart"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="SaPart"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[SA].[Part]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load Dim Part SCD1\SaPart.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[Data Connection]"
+                  connectionManagerRefId="Package.ConnectionManagers[Data Connection]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[Name]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].ExternalColumns[Name]"
+                      length="255"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[Name]"
+                      name="Name"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[PartNumber]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].ExternalColumns[PartNumber]"
+                      length="255"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[PartNumber]"
+                      name="PartNumber"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[Manufacturer]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].ExternalColumns[Manufacturer]"
+                      length="255"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[Manufacturer]"
+                      name="Manufacturer"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[Category]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].ExternalColumns[Category]"
+                      length="255"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[Category]"
+                      name="Category"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[PartID]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].ExternalColumns[PartID]"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[PartID]"
+                      name="PartID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[WarrantyPeriodMonths]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].ExternalColumns[WarrantyPeriodMonths]"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[WarrantyPeriodMonths]"
+                      name="WarrantyPeriodMonths"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[StagingLoadTimestampUTC]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].ExternalColumns[StagingLoadTimestampUTC]"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[StagingLoadTimestampUTC]"
+                      name="StagingLoadTimestampUTC"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[StagingLastUpdateTimestampUTC]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].ExternalColumns[StagingLastUpdateTimestampUTC]"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[StagingLastUpdateTimestampUTC]"
+                      name="StagingLastUpdateTimestampUTC"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[SourceSystem]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].ExternalColumns[SourceSystem]"
+                      length="200"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].Columns[SourceSystem]"
+                      name="SourceSystem"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].ExternalColumns[Name]"
+                      dataType="wstr"
+                      length="100"
+                      name="Name" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].ExternalColumns[PartNumber]"
+                      dataType="wstr"
+                      length="50"
+                      name="PartNumber" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].ExternalColumns[Manufacturer]"
+                      dataType="wstr"
+                      length="100"
+                      name="Manufacturer" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].ExternalColumns[Category]"
+                      dataType="wstr"
+                      length="50"
+                      name="Category" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].ExternalColumns[PartID]"
+                      dataType="i4"
+                      name="PartID" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].ExternalColumns[WarrantyPeriodMonths]"
+                      dataType="i4"
+                      name="WarrantyPeriodMonths" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].ExternalColumns[StagingLoadTimestampUTC]"
+                      dataType="dbTimeStamp"
+                      name="StagingLoadTimestampUTC" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].ExternalColumns[StagingLastUpdateTimestampUTC]"
+                      dataType="dbTimeStamp"
+                      name="StagingLastUpdateTimestampUTC" />
+                    <externalMetadataColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output].ExternalColumns[SourceSystem]"
+                      dataType="wstr"
+                      length="200"
+                      name="SourceSystem" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[PartID]"
+                      dataType="i4"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[PartID]"
+                      name="PartID" />
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[Name]"
+                      dataType="wstr"
+                      length="100"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[Name]"
+                      name="Name" />
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[PartNumber]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[PartNumber]"
+                      name="PartNumber" />
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[Manufacturer]"
+                      dataType="wstr"
+                      length="100"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[Manufacturer]"
+                      name="Manufacturer" />
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[WarrantyPeriodMonths]"
+                      dataType="i4"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[WarrantyPeriodMonths]"
+                      name="WarrantyPeriodMonths" />
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[Category]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[Category]"
+                      name="Category" />
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[StagingLoadTimestampUTC]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[StagingLoadTimestampUTC]"
+                      name="StagingLoadTimestampUTC" />
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[StagingLastUpdateTimestampUTC]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[StagingLastUpdateTimestampUTC]"
+                      name="StagingLastUpdateTimestampUTC" />
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[SourceSystem]"
+                      dataType="wstr"
+                      length="200"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[SourceSystem]"
+                      name="SourceSystem" />
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Load Dim Part SCD1.Paths[OLE DB Source Output]"
+              endId="Package\Load Dim Part SCD1\DwPart.Inputs[OLE DB Destination Input]"
+              name="OLE DB Source Output"
+              startId="Package\Load Dim Part SCD1\SaPart.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load DimMaintenanceType SCD1"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{4E9FA76C-310A-463A-8CB9-674DC4C3FAE3}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load DimMaintenanceType SCD1"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="DWDimMaintenanceType"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[DW].[DimMaintenanceType]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[Data Connection 1]"
+                  connectionManagerRefId="Package.ConnectionManagers[Data Connection 1]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Inputs[OLE DB Destination Input].Columns[MaintenanceTypeID]"
+                      cachedDataType="i4"
+                      cachedName="MaintenanceTypeID"
+                      externalMetadataColumnId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Inputs[OLE DB Destination Input].ExternalColumns[MaintenanceTypeID]"
+                      lineageId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].Columns[MaintenanceTypeID]" />
+                    <inputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Inputs[OLE DB Destination Input].Columns[Name]"
+                      cachedDataType="wstr"
+                      cachedLength="100"
+                      cachedName="Name"
+                      externalMetadataColumnId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Inputs[OLE DB Destination Input].ExternalColumns[Name]"
+                      lineageId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].Columns[Name]" />
+                    <inputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Inputs[OLE DB Destination Input].Columns[Category]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="Category"
+                      externalMetadataColumnId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Inputs[OLE DB Destination Input].ExternalColumns[Category]"
+                      lineageId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].Columns[Category]" />
+                    <inputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Inputs[OLE DB Destination Input].Columns[Description]"
+                      cachedDataType="wstr"
+                      cachedLength="500"
+                      cachedName="Description"
+                      externalMetadataColumnId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Inputs[OLE DB Destination Input].ExternalColumns[Description]"
+                      lineageId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].Columns[Description]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Inputs[OLE DB Destination Input].ExternalColumns[MaintenanceTypeID]"
+                      dataType="i4"
+                      name="MaintenanceTypeID" />
+                    <externalMetadataColumn
+                      refId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Inputs[OLE DB Destination Input].ExternalColumns[Name]"
+                      dataType="wstr"
+                      length="500"
+                      name="Name" />
+                    <externalMetadataColumn
+                      refId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Inputs[OLE DB Destination Input].ExternalColumns[Category]"
+                      dataType="wstr"
+                      length="500"
+                      name="Category" />
+                    <externalMetadataColumn
+                      refId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Inputs[OLE DB Destination Input].ExternalColumns[Description]"
+                      dataType="wstr"
+                      length="500"
+                      name="Description" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="SAMaintenanceType"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[SA].[MaintenanceType]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[Data Connection]"
+                  connectionManagerRefId="Package.ConnectionManagers[Data Connection]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].Columns[MaintenanceTypeID]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].ExternalColumns[MaintenanceTypeID]"
+                      lineageId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].Columns[MaintenanceTypeID]"
+                      name="MaintenanceTypeID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].Columns[Name]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].ExternalColumns[Name]"
+                      length="100"
+                      lineageId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].Columns[Name]"
+                      name="Name"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].Columns[Category]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].ExternalColumns[Category]"
+                      length="50"
+                      lineageId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].Columns[Category]"
+                      name="Category"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].Columns[Description]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].ExternalColumns[Description]"
+                      length="500"
+                      lineageId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].Columns[Description]"
+                      name="Description"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].Columns[StagingLoadTimestampUTC]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].ExternalColumns[StagingLoadTimestampUTC]"
+                      lineageId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].Columns[StagingLoadTimestampUTC]"
+                      name="StagingLoadTimestampUTC"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].Columns[StagingLastUpdateTimestampUTC]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].ExternalColumns[StagingLastUpdateTimestampUTC]"
+                      lineageId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].Columns[StagingLastUpdateTimestampUTC]"
+                      name="StagingLastUpdateTimestampUTC"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].Columns[SourceSystem]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].ExternalColumns[SourceSystem]"
+                      length="200"
+                      lineageId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].Columns[SourceSystem]"
+                      name="SourceSystem"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].ExternalColumns[MaintenanceTypeID]"
+                      dataType="i4"
+                      name="MaintenanceTypeID" />
+                    <externalMetadataColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].ExternalColumns[Name]"
+                      dataType="wstr"
+                      length="100"
+                      name="Name" />
+                    <externalMetadataColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].ExternalColumns[Category]"
+                      dataType="wstr"
+                      length="50"
+                      name="Category" />
+                    <externalMetadataColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].ExternalColumns[Description]"
+                      dataType="wstr"
+                      length="500"
+                      name="Description" />
+                    <externalMetadataColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].ExternalColumns[StagingLoadTimestampUTC]"
+                      dataType="dbTimeStamp"
+                      name="StagingLoadTimestampUTC" />
+                    <externalMetadataColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].ExternalColumns[StagingLastUpdateTimestampUTC]"
+                      dataType="dbTimeStamp"
+                      name="StagingLastUpdateTimestampUTC" />
+                    <externalMetadataColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output].ExternalColumns[SourceSystem]"
+                      dataType="wstr"
+                      length="200"
+                      name="SourceSystem" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Error Output].Columns[MaintenanceTypeID]"
+                      dataType="i4"
+                      lineageId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Error Output].Columns[MaintenanceTypeID]"
+                      name="MaintenanceTypeID" />
+                    <outputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Error Output].Columns[Name]"
+                      dataType="wstr"
+                      length="100"
+                      lineageId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Error Output].Columns[Name]"
+                      name="Name" />
+                    <outputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Error Output].Columns[Category]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Error Output].Columns[Category]"
+                      name="Category" />
+                    <outputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Error Output].Columns[Description]"
+                      dataType="wstr"
+                      length="500"
+                      lineageId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Error Output].Columns[Description]"
+                      name="Description" />
+                    <outputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Error Output].Columns[StagingLoadTimestampUTC]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Error Output].Columns[StagingLoadTimestampUTC]"
+                      name="StagingLoadTimestampUTC" />
+                    <outputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Error Output].Columns[StagingLastUpdateTimestampUTC]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Error Output].Columns[StagingLastUpdateTimestampUTC]"
+                      name="StagingLastUpdateTimestampUTC" />
+                    <outputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Error Output].Columns[SourceSystem]"
+                      dataType="wstr"
+                      length="200"
+                      lineageId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Error Output].Columns[SourceSystem]"
+                      name="SourceSystem" />
+                    <outputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Load DimMaintenanceType SCD1.Paths[OLE DB Source Output]"
+              endId="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType.Inputs[OLE DB Destination Input]"
+              name="OLE DB Source Output"
+              startId="Package\Load DimMaintenanceType SCD1\SAMaintenanceType.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load DimTechnician SCD1"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{99BAFB70-A1EB-40DE-8B46-9B5ADA34A38F}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load DimTechnician SCD1"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Load DimTechnician SCD1\DimTechnecian"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="DimTechnecian"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[DW].[DimTechnician]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load DimTechnician SCD1\DimTechnecian.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[Data Connection]"
+                  connectionManagerRefId="Package.ConnectionManagers[Data Connection]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load DimTechnician SCD1\DimTechnecian.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load DimTechnician SCD1\DimTechnecian.Inputs[OLE DB Destination Input].Columns[PersonID]"
+                      cachedDataType="i4"
+                      cachedName="PersonID"
+                      externalMetadataColumnId="Package\Load DimTechnician SCD1\DimTechnecian.Inputs[OLE DB Destination Input].ExternalColumns[PersonID]"
+                      lineageId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].Columns[PersonID]" />
+                    <inputColumn
+                      refId="Package\Load DimTechnician SCD1\DimTechnecian.Inputs[OLE DB Destination Input].Columns[Specialty]"
+                      cachedDataType="wstr"
+                      cachedLength="100"
+                      cachedName="Specialty"
+                      externalMetadataColumnId="Package\Load DimTechnician SCD1\DimTechnecian.Inputs[OLE DB Destination Input].ExternalColumns[Specialty]"
+                      lineageId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].Columns[Specialty]" />
+                    <inputColumn
+                      refId="Package\Load DimTechnician SCD1\DimTechnecian.Inputs[OLE DB Destination Input].Columns[Technician_ID]"
+                      cachedDataType="i4"
+                      cachedName="Technician_ID"
+                      externalMetadataColumnId="Package\Load DimTechnician SCD1\DimTechnecian.Inputs[OLE DB Destination Input].ExternalColumns[Technician_ID]"
+                      lineageId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].Columns[Technician_ID]" />
+                    <inputColumn
+                      refId="Package\Load DimTechnician SCD1\DimTechnecian.Inputs[OLE DB Destination Input].Columns[Name]"
+                      cachedDataType="wstr"
+                      cachedLength="100"
+                      cachedName="Name"
+                      externalMetadataColumnId="Package\Load DimTechnician SCD1\DimTechnecian.Inputs[OLE DB Destination Input].ExternalColumns[Name]"
+                      lineageId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].Columns[Name]" />
+                    <inputColumn
+                      refId="Package\Load DimTechnician SCD1\DimTechnecian.Inputs[OLE DB Destination Input].Columns[Phone]"
+                      cachedDataType="wstr"
+                      cachedLength="20"
+                      cachedName="Phone"
+                      externalMetadataColumnId="Package\Load DimTechnician SCD1\DimTechnecian.Inputs[OLE DB Destination Input].ExternalColumns[Phone]"
+                      lineageId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].Columns[Phone]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load DimTechnician SCD1\DimTechnecian.Inputs[OLE DB Destination Input].ExternalColumns[Technician_ID]"
+                      dataType="i4"
+                      name="Technician_ID" />
+                    <externalMetadataColumn
+                      refId="Package\Load DimTechnician SCD1\DimTechnecian.Inputs[OLE DB Destination Input].ExternalColumns[Name]"
+                      dataType="i4"
+                      name="Name" />
+                    <externalMetadataColumn
+                      refId="Package\Load DimTechnician SCD1\DimTechnecian.Inputs[OLE DB Destination Input].ExternalColumns[PersonID]"
+                      dataType="i4"
+                      name="PersonID" />
+                    <externalMetadataColumn
+                      refId="Package\Load DimTechnician SCD1\DimTechnecian.Inputs[OLE DB Destination Input].ExternalColumns[Phone]"
+                      dataType="i4"
+                      name="Phone" />
+                    <externalMetadataColumn
+                      refId="Package\Load DimTechnician SCD1\DimTechnecian.Inputs[OLE DB Destination Input].ExternalColumns[Specialty]"
+                      dataType="wstr"
+                      length="100"
+                      name="Specialty" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load DimTechnician SCD1\DimTechnecian.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Load DimTechnician SCD1\DimTechnecian.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load DimTechnician SCD1\DimTechnecian.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load DimTechnician SCD1\DimTechnecian.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load DimTechnician SCD1\DimTechnecian.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load DimTechnician SCD1\DimTechnecian.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load DimTechnician SCD1\OLE DB Source"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="OLE DB Source"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[SA].[Technician]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT 
+    t.TechnicianID       AS Technician_ID,
+    t.PersonID,
+    p.Name,
+    p.Phone,
+    t.Specialty
+FROM SA.Technician t
+JOIN SA.Person p ON t.PersonID = p.PersonID</property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">2</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load DimTechnician SCD1\OLE DB Source.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[Data Connection]"
+                  connectionManagerRefId="Package.ConnectionManagers[Data Connection]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].Columns[PersonID]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PersonID]"
+                      lineageId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].Columns[PersonID]"
+                      name="PersonID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].Columns[Specialty]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Specialty]"
+                      length="100"
+                      lineageId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].Columns[Specialty]"
+                      name="Specialty"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].Columns[Technician_ID]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Technician_ID]"
+                      lineageId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].Columns[Technician_ID]"
+                      name="Technician_ID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].Columns[Name]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Name]"
+                      length="100"
+                      lineageId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].Columns[Name]"
+                      name="Name"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].Columns[Phone]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Phone]"
+                      length="20"
+                      lineageId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].Columns[Phone]"
+                      name="Phone"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PersonID]"
+                      dataType="i4"
+                      name="PersonID" />
+                    <externalMetadataColumn
+                      refId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Specialty]"
+                      dataType="wstr"
+                      length="100"
+                      name="Specialty" />
+                    <externalMetadataColumn
+                      refId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Technician_ID]"
+                      dataType="i4"
+                      name="Technician_ID" />
+                    <externalMetadataColumn
+                      refId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Name]"
+                      dataType="wstr"
+                      length="100"
+                      name="Name" />
+                    <externalMetadataColumn
+                      refId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Phone]"
+                      dataType="wstr"
+                      length="20"
+                      name="Phone" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Technician_ID]"
+                      dataType="i4"
+                      lineageId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Technician_ID]"
+                      name="Technician_ID" />
+                    <outputColumn
+                      refId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PersonID]"
+                      dataType="i4"
+                      lineageId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PersonID]"
+                      name="PersonID" />
+                    <outputColumn
+                      refId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Name]"
+                      dataType="wstr"
+                      length="100"
+                      lineageId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Name]"
+                      name="Name" />
+                    <outputColumn
+                      refId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Phone]"
+                      dataType="wstr"
+                      length="20"
+                      lineageId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Phone]"
+                      name="Phone" />
+                    <outputColumn
+                      refId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Specialty]"
+                      dataType="wstr"
+                      length="100"
+                      lineageId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Specialty]"
+                      name="Specialty" />
+                    <outputColumn
+                      refId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Load DimTechnician SCD1.Paths[OLE DB Source Output]"
+              endId="Package\Load DimTechnician SCD1\DimTechnecian.Inputs[OLE DB Destination Input]"
+              name="OLE DB Source Output"
+              startId="Package\Load DimTechnician SCD1\OLE DB Source.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="234.4,41.6"
+          Id="Package\Load DimMaintenanceType SCD1"
+          TopLeft="50.7142858222432,126.176470477637" />
+        <NodeLayout
+          Size="201.6,41.6"
+          Id="Package\Load DimTechnician SCD1"
+          TopLeft="291.428572048946,125.411764595954" />
+        <NodeLayout
+          Size="173.6,41.6"
+          Id="Package\Load Dim Part SCD1"
+          TopLeft="503.5714296434,125.411764595954" />
+        <NodeLayout
+          Size="253.6,41.6"
+          Id="Package\Load Dim MaintenanceLocation SCD2"
+          TopLeft="115.714285960611,223.294117451333" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Load DimMaintenanceType SCD1">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="173.6,41.6"
+          Id="Package\Load DimMaintenanceType SCD1\SAMaintenanceType"
+          TopLeft="146.428571740279,35.9411764390844" />
+        <NodeLayout
+          Size="196,41.6"
+          Id="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType"
+          TopLeft="145.000000308667,168.882352798404" />
+        <EdgeLayout
+          Id="Package\Load DimMaintenanceType SCD1.Paths[OLE DB Source Output]"
+          TopLeft="233.228571740279,77.5411764390844">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="9.77142856838759,91.3411763593194"
+              Start="0,0"
+              End="9.77142856838759,83.8411763593194">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,41.6705881796597" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,41.6705881796597"
+                    Point2="0,45.6705881796597"
+                    Point3="4,45.6705881796597" />
+                  <mssgle:LineSegment
+                    End="5.77142856838759,45.6705881796597" />
+                  <mssgle:CubicBezierSegment
+                    Point1="5.77142856838759,45.6705881796597"
+                    Point2="9.77142856838759,45.6705881796597"
+                    Point3="9.77142856838759,49.6705881796597" />
+                  <mssgle:LineSegment
+                    End="9.77142856838759,83.8411763593194" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load DimMaintenanceType SCD1\DWDimMaintenanceType">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load DimMaintenanceType SCD1\SAMaintenanceType">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Load DimTechnician SCD1">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="149.6,41.6"
+          Id="Package\Load DimTechnician SCD1\OLE DB Source"
+          TopLeft="173.999997407198,120.99999819696" />
+        <NodeLayout
+          Size="150.4,41.6"
+          Id="Package\Load DimTechnician SCD1\DimTechnecian"
+          TopLeft="159.999997615814,236.999996468425" />
+        <EdgeLayout
+          Id="Package\Load DimTechnician SCD1.Paths[OLE DB Source Output]"
+          TopLeft="248.799997407198,162.59999819696">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-13.5999997913837,74.3999982714653"
+              Start="0,0"
+              End="-13.5999997913837,66.8999982714653">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,33.1999991357327" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,33.1999991357327"
+                    Point2="0,37.1999991357327"
+                    Point3="-4,37.1999991357327" />
+                  <mssgle:LineSegment
+                    End="-9.59999979138365,37.1999991357327" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-9.59999979138365,37.1999991357327"
+                    Point2="-13.5999997913837,37.1999991357327"
+                    Point3="-13.5999997913837,41.1999991357327" />
+                  <mssgle:LineSegment
+                    End="-13.5999997913837,66.8999982714653" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load DimTechnician SCD1\OLE DB Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load DimTechnician SCD1\DimTechnecian">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Load Dim Part SCD1">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="108.8,41.6"
+          Id="Package\Load Dim Part SCD1\SaPart"
+          TopLeft="244.999996349216,143.999997854233" />
+        <NodeLayout
+          Size="112.8,41.6"
+          Id="Package\Load Dim Part SCD1\DwPart"
+          TopLeft="266.99999602139,266.99999602139" />
+        <EdgeLayout
+          Id="Package\Load Dim Part SCD1.Paths[OLE DB Source Output]"
+          TopLeft="299.399996349216,185.599997854233">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="23.9999996721744,81.3999981671572"
+              Start="0,0"
+              End="23.9999996721744,73.8999981671572">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,36.6999990835786" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,36.6999990835786"
+                    Point2="0,40.6999990835786"
+                    Point3="4,40.6999990835786" />
+                  <mssgle:LineSegment
+                    End="19.9999996721744,40.6999990835786" />
+                  <mssgle:CubicBezierSegment
+                    Point1="19.9999996721744,40.6999990835786"
+                    Point2="23.9999996721744,40.6999990835786"
+                    Point3="23.9999996721744,44.6999990835786" />
+                  <mssgle:LineSegment
+                    End="23.9999996721744,73.8999981671572" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Dim Part SCD1\SaPart">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Dim Part SCD1\DwPart">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Load Dim MaintenanceLocation SCD2">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="149.6,41.6"
+          Id="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source"
+          TopLeft="156.1,5.49999999999995" />
+        <NodeLayout
+          Size="208,41.6"
+          Id="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension"
+          TopLeft="126.9,107.1" />
+        <EdgeLayout
+          Id="Package\Load Dim MaintenanceLocation SCD2.Paths[OLE DB Source Output]"
+          TopLeft="230.9,47.1">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="152.8,41.6"
+          Id="Package\Load Dim MaintenanceLocation SCD2\Derived Column"
+          TopLeft="17.5,208.7" />
+        <EdgeLayout
+          Id="Package\Load Dim MaintenanceLocation SCD2.Paths[Historical Attribute Inserts Output]"
+          TopLeft="197.566666666667,148.7">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-103.666666666667,59.9999999999999"
+              Start="0,0"
+              End="-103.666666666667,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,20.2748091603053" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,20.2748091603053"
+                    Point2="0,24.2748091603053"
+                    Point3="-4,24.2748091603053" />
+                  <mssgle:LineSegment
+                    End="-99.6666666666667,24.2748091603053" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-99.6666666666667,24.2748091603053"
+                    Point2="-103.666666666667,24.2748091603053"
+                    Point3="-103.666666666667,28.2748091603053" />
+                  <mssgle:LineSegment
+                    End="-103.666666666667,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-126.889720052083,29.2748091603053,150.1127734375,11.609375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="164.8,41.6"
+          Id="Package\Load Dim MaintenanceLocation SCD2\OLE DB Command"
+          TopLeft="5.50000000000003,310.3" />
+        <EdgeLayout
+          Id="Package\Load Dim MaintenanceLocation SCD2.Paths[Derived Column Output]"
+          TopLeft="90.9,250.3">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="120,41.6"
+          Id="Package\Load Dim MaintenanceLocation SCD2\Union All"
+          TopLeft="170.9,411.9" />
+        <EdgeLayout
+          Id="Package\Load Dim MaintenanceLocation SCD2.Paths[New Output]"
+          TopLeft="264.233333333333,148.7">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-14.6666666666666,263.2"
+              Start="0,0"
+              End="-14.6666666666666,255.7">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,126.695815115553" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,126.695815115553"
+                    Point2="0,130.695815115553"
+                    Point3="-4,130.695815115553" />
+                  <mssgle:LineSegment
+                    End="-10.6666666666666,130.695815115553" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-10.6666666666666,130.695815115553"
+                    Point2="-14.6666666666666,130.695815115553"
+                    Point3="-14.6666666666666,134.695815115553" />
+                  <mssgle:LineSegment
+                    End="-14.6666666666666,255.7" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-34.4247200520833,135.695815115553,54.1827734375,11.43359375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Dim MaintenanceLocation SCD2.Paths[OLE DB Command Output]"
+          TopLeft="87.9,351.9">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="124.333333333333,59.9999999999999"
+              Start="0,0"
+              End="124.333333333333,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,31.5263157894736" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,31.5263157894736"
+                    Point2="0,35.5263157894736"
+                    Point3="4,35.5263157894736" />
+                  <mssgle:LineSegment
+                    End="120.333333333333,35.5263157894736" />
+                  <mssgle:CubicBezierSegment
+                    Point1="120.333333333333,35.5263157894736"
+                    Point2="124.333333333333,35.5263157894736"
+                    Point3="124.333333333333,39.5263157894736" />
+                  <mssgle:LineSegment
+                    End="124.333333333333,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="162.4,41.6"
+          Id="Package\Load Dim MaintenanceLocation SCD2\Derived Column 1"
+          TopLeft="149.7,513.5" />
+        <EdgeLayout
+          Id="Package\Load Dim MaintenanceLocation SCD2.Paths[Union All Output 1]"
+          TopLeft="230.9,453.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="162.4,41.6"
+          Id="Package\Load Dim MaintenanceLocation SCD2\Insert Destination"
+          TopLeft="149.7,615.099999999999" />
+        <EdgeLayout
+          Id="Package\Load Dim MaintenanceLocation SCD2.Paths[Derived Column Output1]"
+          TopLeft="230.9,555.1">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Dim MaintenanceLocation SCD2\OLE DB Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Dim MaintenanceLocation SCD2\Slowly Changing Dimension">
+    <Properties>
+      <Property>
+        <Name>SCDMetadata</Name>
+        <Value
+          type="q2:string">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SCDWizardMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;ConnectionID&gt;{F78D8E58-3E4D-43FB-8EF3-FFDEB730CB45}&lt;/ConnectionID&gt;
+  &lt;TableName&gt;[DW].[DimMaintenanceLocation]&lt;/TableName&gt;
+  &lt;InputToColumnsCollection&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[City]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;City&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;HistoricalAttribute&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Country]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Country&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;FixedAttribute&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[LocationID]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;LocationID&lt;/ColumnName&gt;
+      &lt;KeyType&gt;BusinessKey&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;OLE DB Source.Outputs[OLE DB Source Output].Columns[Name]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;Name&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;FixedAttribute&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+  &lt;/InputToColumnsCollection&gt;
+  &lt;GeneratedComponentsIdentificationStrings&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;Derived Column&lt;/anyType&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;OLE DB Command&lt;/anyType&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;Union All&lt;/anyType&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;Derived Column 1&lt;/anyType&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;Insert Destination&lt;/anyType&gt;
+  &lt;/GeneratedComponentsIdentificationStrings&gt;
+  &lt;FailFixedAttribute&gt;true&lt;/FailFixedAttribute&gt;
+  &lt;FailChangeAttribute&gt;false&lt;/FailChangeAttribute&gt;
+  &lt;UseStartEndDate&gt;false&lt;/UseStartEndDate&gt;
+  &lt;CurrentIndicatorColumn&gt;CityIsCurrent&lt;/CurrentIndicatorColumn&gt;
+  &lt;InferredIndicatorColumn /&gt;
+  &lt;ValueCurrent&gt;1&lt;/ValueCurrent&gt;
+  &lt;ValueExpired&gt;0&lt;/ValueExpired&gt;
+  &lt;StartDateColumn /&gt;
+  &lt;EndDateColumn /&gt;
+  &lt;DateVariable /&gt;
+  &lt;EnableInferredSupport&gt;false&lt;/EnableInferredSupport&gt;
+&lt;/SCDWizardMetadata&gt;</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

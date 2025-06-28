@@ -186,7 +186,7 @@ GO
 
 -- MaintenanceLocation
 CREATE TABLE [SA].[MaintenanceLocation] (
-  [MaintenanceLocationID] nvarchar(100) PRIMARY KEY,
+  [LocationID] nvarchar(100) PRIMARY KEY,
   [Name] nvarchar(100),
   [City] nvarchar(50),
   [Country] nvarchar(50),
@@ -398,7 +398,7 @@ CREATE TABLE [SA].[MaintenanceEvent] (
   [MaintenanceEventID] INT PRIMARY KEY,
   [AircraftID] INT NOT NULL,
   [MaintenanceTypeID] INT NOT NULL,
-  [MaintenanceLocationID] NVARCHAR(100) NOT NULL,
+  [LocationID] NVARCHAR(100) NOT NULL,
   [TechnicianID] INT NOT NULL,
   [MaintenanceDate] DATE NOT NULL,
   [DowntimeHours] FLOAT,
@@ -420,7 +420,7 @@ CREATE TABLE [SA].[PartReplacement] (
   [PartReplacementID] INT PRIMARY KEY,
   [AircraftID] INT NOT NULL,
   [PartID] INT NOT NULL,
-  [MaintenanceLocationID] NVARCHAR(100) NOT NULL,
+  [LocationID] NVARCHAR(100) NOT NULL,
   [ReplacementDate] DATE NOT NULL,
   [Quantity] INT NOT NULL,
   [PartCost] DECIMAL(18,2),

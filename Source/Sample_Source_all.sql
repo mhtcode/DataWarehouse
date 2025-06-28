@@ -380,7 +380,7 @@ INSERT INTO [Source].[Technician] (TechnicianID, PersonID, Specialty) VALUES
 (6,  6,  'C - Contract');
 
 
-INSERT INTO [Source].[MaintenanceEvent] (MaintenanceEventID, AircraftID, MaintenanceTypeID, MaintenanceLocationID, TechnicianID, MaintenanceDate, DowntimeHours, LaborHours, LaborCost, TotalPartsCost, TotalMaintenanceCost, DistinctIssuesSolved, Description) VALUES
+INSERT INTO [Source].[MaintenanceEvent] (MaintenanceEventID, AircraftID, MaintenanceTypeID, LocationID, TechnicianID, MaintenanceDate, DowntimeHours, LaborHours, LaborCost, TotalPartsCost, TotalMaintenanceCost, DistinctIssuesSolved, Description) VALUES
 (1, 1, 1, 'DXB-MX', 1, '2009-05-15', 6.5, 6.0, 1200.00, 3200.00, 4400.00, 2, 'Engine Check and minor leak fix'),
 (2, 2, 2, 'LHR-MX', 2, '2009-10-03', 4.0, 3.5, 750.00, 1100.00, 1850.00, 1, 'Landing gear inspection'),
 (3, 3, 3, 'JFK-MX', 3, '2010-02-20', 8.0, 8.0, 2200.00, 500.00, 2700.00, 3, 'Cabin systems update, seat electronics fixed'),
@@ -403,9 +403,9 @@ INSERT INTO [Source].[MaintenanceEvent] (MaintenanceEventID, AircraftID, Mainten
 (20, 8, 5, 'HND-MX', 5, '2014-07-30', 4.6, 4.3, 860.00, 610.00, 1470.00, 1, 'Fuel valve and pipeline check');
 
 
-INSERT INTO [Source].[PartReplacement] (PartReplacementID, AircraftID, PartID, MaintenanceLocationID, ReplacementDate, Quantity, PartCost, TotalPartCost) VALUES
-(1, 1, 1, 'DXB-MX', '2009-05-15', 1, 2500.00, 2500.00),
-(2, 2, 2, 'LHR-MX', '2009-10-03', 1, 650.00, 650.00),
+INSERT INTO [Source].[PartReplacement] (PartReplacementID, AircraftID, PartID, LocationID, ReplacementDate, Quantity, PartCost, TotalPartCost) VALUES
+(1, 1, 1, 'DXB-MX', '2010-05-15', 1, 2500.00, 2500.00),
+(2, 2, 2, 'LHR-MX', '2010-10-03', 1, 650.00, 650.00),
 (3, 3, 3, 'JFK-MX', '2010-02-20', 2, 450.00, 900.00),
 (4, 4, 4, 'CDG-MX', '2010-07-05', 3, 70.00, 210.00),
 (5, 5, 5, 'HND-MX', '2010-12-16', 1, 330.00, 330.00),
@@ -426,7 +426,7 @@ INSERT INTO [Source].[PartReplacement] (PartReplacementID, AircraftID, PartID, M
 (20, 8, 5, 'HND-MX', '2014-07-30', 1, 355.00, 355.00);
 
 
-INSERT INTO [Source].[MaintenanceLocation] (MaintenanceLocationID, Name, City, Country, InhouseFlag) VALUES
+INSERT INTO [Source].[MaintenanceLocation] (LocationID, Name, City, Country, InhouseFlag) VALUES
 ('DXB-MX', 'Dubai Maintenance Hangar', 'Dubai', 'UAE', 1),
 ('LHR-MX', 'Heathrow Service Bay', 'London', 'UK', 1),
 ('JFK-MX', 'JFK Technical Center', 'New York', 'USA', 0),

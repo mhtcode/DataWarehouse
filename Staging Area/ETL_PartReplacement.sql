@@ -32,17 +32,17 @@ BEGIN
 
         WHEN MATCHED AND EXISTS (
             SELECT
-                SOURCE.AircraftID, SOURCE.PartID, SOURCE.MaintenanceLocationID, SOURCE.ReplacementDate,
+                SOURCE.AircraftID, SOURCE.PartID, SOURCE.LocationID, SOURCE.ReplacementDate,
                 SOURCE.Quantity, SOURCE.PartCost, SOURCE.TotalPartCost
             EXCEPT
             SELECT
-                TARGET.AircraftID, TARGET.PartID, TARGET.MaintenanceLocationID, TARGET.ReplacementDate,
+                TARGET.AircraftID, TARGET.PartID, TARGET.LocationID, TARGET.ReplacementDate,
                 TARGET.Quantity, TARGET.PartCost, TARGET.TotalPartCost
         ) THEN
             UPDATE SET
                 TARGET.AircraftID = SOURCE.AircraftID,
                 TARGET.PartID = SOURCE.PartID,
-                TARGET.MaintenanceLocationID = SOURCE.MaintenanceLocationID,
+                TARGET.LocationID = SOURCE.LocationID,
                 TARGET.ReplacementDate = SOURCE.ReplacementDate,
                 TARGET.Quantity = SOURCE.Quantity,
                 TARGET.PartCost = SOURCE.PartCost,
@@ -51,10 +51,10 @@ BEGIN
 
         WHEN NOT MATCHED BY TARGET THEN
             INSERT (
-                PartReplacementID, AircraftID, PartID, MaintenanceLocationID, ReplacementDate,
+                PartReplacementID, AircraftID, PartID, LocationID, ReplacementDate,
                 Quantity, PartCost, TotalPartCost, StagingLoadTimestampUTC, SourceSystem
             ) VALUES (
-                SOURCE.PartReplacementID, SOURCE.AircraftID, SOURCE.PartID, SOURCE.MaintenanceLocationID, SOURCE.ReplacementDate,
+                SOURCE.PartReplacementID, SOURCE.AircraftID, SOURCE.PartID, SOURCE.LocationID, SOURCE.ReplacementDate,
                 SOURCE.Quantity, SOURCE.PartCost, SOURCE.TotalPartCost, GETUTCDATE(), 'OperationalDB'
             );
 
