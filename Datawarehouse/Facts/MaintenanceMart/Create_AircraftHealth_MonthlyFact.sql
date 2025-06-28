@@ -1,4 +1,4 @@
-CREATE TABLE [DW].[FactAircraftHealth_Monthly] (
+CREATE TABLE [DW].[AircraftHealth_MonthlyFact] (
     -- Dimensional Keys
     [SnapshotDateKey]               INT NOT NULL,   -- FK to DW.DimDateTime.DateKey, from ETL snapshot date
     [AircraftID]                    INT NOT NULL,   -- FK to DW.DimAircraft.AircraftID, from SA or derived

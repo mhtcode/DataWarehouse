@@ -1,4 +1,4 @@
-CREATE TABLE [DW].[FactFlightPerformance] (
+CREATE TABLE [DW].[FlightPerformance_TransactionalFact] (
     [ScheduledDepartureId] DATETIME NULL,  -- from SA.FlightDetail.ScheduledDepartureDateTime
     [ScheduledArrivalId]   DATETIME NULL,  -- from SA.FlightDetail.ScheduledArrivalDateTime
 

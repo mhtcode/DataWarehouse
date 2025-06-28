@@ -93,9 +93,9 @@
         "Datawarehouse/Facts/LoyaltyMart/ETL_LoyaltyPointTransaction_TransactionalFact.sql"
       ],
       "MaintenanceMart": [
-        "Datawarehouse/Facts/MaintenanceMart/Create_FactAircraftHealthSnapshot_PeriodicSnapshot.sql",
-        "Datawarehouse/Facts/MaintenanceMart/Create_FactMaintenanceEvent_Transactional.sql",
-        "Datawarehouse/Facts/MaintenanceMart/Create_FactPartReplacement_Transactional.sql"
+        "Datawarehouse/Facts/MaintenanceMart/Create_AircraftHealth_MonthlyFact.sql",
+        "Datawarehouse/Facts/MaintenanceMart/Create_MaintenanceEvent_TransactionalFact.sql",
+        "Datawarehouse/Facts/MaintenanceMart/Create_PartReplacement_TransactionalFact.sql"
       ],
       "PerformanceMart": [
         "Datawarehouse/Facts/PerformanceMart/Create_FlightPerformance_TransactionalFact.sql",
@@ -103,18 +103,18 @@
         "Datawarehouse/Facts/PerformanceMart/ETL_FlightPerformance_TransactionalFact.sql"
       ],
       "RevenueMart": [
-        "Datawarehouse/Facts/RevenueMart/Create_FactFlightOperation_Factless.sql",
-        "Datawarehouse/Facts/RevenueMart/Initial_FactFlightOperation_Factless.sql",
-        "Datawarehouse/Facts/RevenueMart/ETL_FactFlightOperation_Factless.sql",
-        "Datawarehouse/Facts/RevenueMart/Create_PassengerTicket_ACCFact.sql",
-        "Datawarehouse/Facts/RevenueMart/Initial_PassengerTicket_ACCFact.sql",
-        "Datawarehouse/Facts/RevenueMart/ETL_PassengerTicket_ACCFact.sql",
+        "Datawarehouse/Facts/RevenueMart/Create_FlightOperation_Factless.sql",
+        "Datawarehouse/Facts/RevenueMart/Initial_FlightOperation_Factless.sql",
+        "Datawarehouse/Facts/RevenueMart/ETL_FlightOperation_Factless.sql",
+        "Datawarehouse/Facts/RevenueMart/Create_PassengerActivity_ACCFact.sql",
+        "Datawarehouse/Facts/RevenueMart/Initial_PassengerActivity_ACCFact.sql",
+        "Datawarehouse/Facts/RevenueMart/ETL_PassengerActivity_ACCFact.sql",
         "Datawarehouse/Facts/RevenueMart/Create_PassengerTicket_TransactionalFact.sql",
         "Datawarehouse/Facts/RevenueMart/Initial_PassengerTicket_TransactionalFact.sql",
         "Datawarehouse/Facts/RevenueMart/ETL_PassengerTicket_TransactionalFact.sql",
-        "Datawarehouse/Facts/RevenueMart/Create_PassengerTicket_YearlyFact.sql",
-        "Datawarehouse/Facts/RevenueMart/Initial_PassengerTicket_YearlyFact.sql",
-        "Datawarehouse/Facts/RevenueMart/ETL_PassengerTicket_YearlyFact.sql",
+        "Datawarehouse/Facts/RevenueMart/Create_PassengerActivity_YearlyFact.sql",
+        "Datawarehouse/Facts/RevenueMart/Initial_PassengerActivity_YearlyFact.sql",
+        "Datawarehouse/Facts/RevenueMart/ETL_PassengerActivity_YearlyFact.sql",
 
         "Datawarehouse/ALL_Fact_Initial_ETL.sql"
       ]

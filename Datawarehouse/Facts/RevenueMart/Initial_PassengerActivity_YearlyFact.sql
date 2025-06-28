@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE [DW].[InitialPassengerActivity_YearlyFact]
+CREATE OR ALTER PROCEDURE [DW].[Initial_PassengerActivity_YearlyFact]
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -31,7 +31,7 @@ BEGIN
 		DECLARE @RowCount INT;
 
 		INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
-		VALUES ('InitialPassengerActivity_YearlyFact', 'PassengerActivity_YearlyFact', 'Procedure started for year: ' + CAST(@CurrentYear AS VARCHAR), @StartTime, 'Running');
+		VALUES ('Initial_PassengerActivity_YearlyFact', 'PassengerActivity_YearlyFact', 'Procedure started for year: ' + CAST(@CurrentYear AS VARCHAR), @StartTime, 'Running');
 			
 		SET @LogID = SCOPE_IDENTITY();
 

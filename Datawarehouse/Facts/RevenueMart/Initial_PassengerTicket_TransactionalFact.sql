@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE [DW].[InitialFactPassengerTicket]
+CREATE OR ALTER PROCEDURE [DW].[Initial_PassengerTicket_TransactionalFact]
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -27,7 +27,7 @@ BEGIN
 		DECLARE @RowCount INT;
 
 		INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
-		VALUES ('InitialFactPassengerTicket', 'PassengerTicket_TransactionalFact', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
+		VALUES ('Initial_PassengerTicket_TransactionalFact', 'PassengerTicket_TransactionalFact', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
 		
 		SET @LogID = SCOPE_IDENTITY();
 

@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE [DW].[LoadFactPassengerLifetimeActivity]
+CREATE OR ALTER PROCEDURE [DW].[Load_PassengerActivity_ACCFact]
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -8,7 +8,7 @@ BEGIN
 	DECLARE @RowCount INT;
 
 	INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
-	VALUES ('LoadFactPassengerLifetimeActivity', 'FactPassengerLifetimeActivity', 'Procedure started for incremental merge', @StartTime, 'Running');
+	VALUES ('Load_PassengerActivity_ACCFact', 'PassengerActivity_ACCFact', 'Procedure started for incremental merge', @StartTime, 'Running');
 		
 	SET @LogID = SCOPE_IDENTITY();
 
@@ -43,7 +43,7 @@ BEGIN
         LEFT JOIN LifetimeDistinctAggregates da ON sa.PersonKey = da.PersonKey;
 
 
-		MERGE [DW].[FactPassengerLifetimeActivity] AS Target
+		MERGE [DW].[PassengerActivity_ACCFact] AS Target
 		USING [DW].[Temp_LifetimeSourceData] AS Source
 		ON (Target.PersonKey = Source.PersonKey)
 		WHEN MATCHED THEN
@@ -81,7 +81,7 @@ BEGIN
 		THROW;
 	END CATCH
 
-	RAISERROR('Incremental FactPassengerLifetimeActivity loading process has completed.', 0, 1) WITH NOWAIT;
+	RAISERROR('Incremental PassengerActivity_ACCFact loading process has completed.', 0, 1) WITH NOWAIT;
 	SET NOCOUNT OFF;
 END
 GO

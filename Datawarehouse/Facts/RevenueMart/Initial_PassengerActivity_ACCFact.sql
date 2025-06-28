@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE [DW].[InitialFactPassengerLifetimeActivity]
+CREATE OR ALTER PROCEDURE [DW].[Initial_PassengerActivity_ACCFact]
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -8,15 +8,11 @@ BEGIN
 	DECLARE @RowCount INT;
 
 	INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
-	VALUES ('InitialFactPassengerLifetimeActivity', 'FactPassengerLifetimeActivity', 'Procedure started for initial full load', @StartTime, 'Running');
+	VALUES ('Initial_PassengerActivity_ACCFact', 'PassengerActivity_ACCFact', 'Procedure started for initial full load', @StartTime, 'Running');
 		
 	SET @LogID = SCOPE_IDENTITY();
 
 	BEGIN TRY
-		-- Perform a full TRUNCATE for the initial load.
-		TRUNCATE TABLE [DW].[FactPassengerLifetimeActivity];
-		TRUNCATE TABLE [DW].[Temp_LifetimeSourceData];
-
 		-- CTEs for aggregation (same as incremental load)
 		WITH LifetimeSummableAggregates AS (
 			SELECT PersonKey, SUM(YearlyFlights) AS TotalFlights, SUM(YearlyTicketValue) AS TotalAmountPaid, SUM(YearlyMilesFlown) AS TotalMilesFlown, SUM(YearlyDiscountAmount) AS TotalDiscountAmount, MAX(YearlyMaxFlightDistance) AS MaxFlightDistance, MIN(YearlyMinFlightDistance) AS MinFlightDistance
@@ -33,7 +29,7 @@ BEGIN
             GROUP BY current_person.PersonKey
         )
 		-- Simple INSERT for the initial load
-		INSERT INTO [DW].[FactPassengerLifetimeActivity] (
+		INSERT INTO [DW].[PassengerActivity_ACCFact] (
 			PersonKey, TotalTicketValue, TotalAmountPaid, TotalMilesFlown, TotalDiscountAmount,
 			AverageTicketPrice, TotalDistinctAirlinesUsed, TotalDistinctRoutesFlown,
 			TotalFlights, MaxFlightDistance, MinFlightDistance
@@ -45,6 +41,9 @@ BEGIN
 		FROM LifetimeSummableAggregates sa
         LEFT JOIN LifetimeDistinctAggregates da ON sa.PersonKey = da.PersonKey;
 
+		-- Perform a full TRUNCATE for the initial load.
+		TRUNCATE TABLE [DW].[Temp_LifetimeSourceData];
+
 		SET @RowCount = @@ROWCOUNT;
 		UPDATE DW.ETL_Log SET ChangeDescription = 'Initial full load complete', RowsAffected = @RowCount, DurationSec = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()), Status = 'Success' WHERE LogID = @LogID;
 
@@ -55,7 +54,7 @@ BEGIN
 		THROW;
 	END CATCH
 
-	RAISERROR('Initial FactPassengerLifetimeActivity loading process has completed.', 0, 1) WITH NOWAIT;
+	RAISERROR('Initial PassengerActivity_ACCFact loading process has completed.', 0, 1) WITH NOWAIT;
 	SET NOCOUNT OFF;
 END
 GO

@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE [DW].[InitialFlightOperationFactless]
+CREATE OR ALTER PROCEDURE [DW].[Initial_FlightOperation_Factless]
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -8,7 +8,7 @@ BEGIN
 	DECLARE @RowCount INT;
 
 	INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
-	VALUES ('InitialFlightOperationFactless', 'FlightOperation_Factless', 'Procedure started for initial full load', @StartTime, 'Running');
+	VALUES ('Initial_FlightOperation_Factless', 'FlightOperation_Factless', 'Procedure started for initial full load', @StartTime, 'Running');
 		
 	SET @LogID = SCOPE_IDENTITY();
 

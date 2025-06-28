@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE [DW].[InitialFactFlightPerformance]
+CREATE OR ALTER PROCEDURE [DW].[Initial_FlightPerformance_TransactionalFact]
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -31,7 +31,7 @@ BEGIN
 
 		-- Log the start of the process for the current day
 		INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
-		VALUES ('InitialFactFlightPerformance', 'FactFlightPerformance', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
+		VALUES ('InitialFlightPerformance_TransactionalFact', 'FlightPerformance_TransactionalFact', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
 		
 		SET @LogID = SCOPE_IDENTITY();
 
@@ -70,7 +70,7 @@ BEGIN
 			
 			-- STEP C: Final Assembly and Insert into Fact Table
 			-- Here we perform the final calculations (DATEDIFF).
-			INSERT INTO [DW].[FactFlightPerformance] (
+			INSERT INTO [DW].[FlightPerformance_TransactionalFact] (
                 ScheduledDepartureId, ScheduledArrivalId, ActualDepartureId, ActualArrivalId,
                 DepartureAirportId, ArrivalAirportId, AircraftId, AirlineId,
                 DepartureDelayMinutes, ArrivalDelayMinutes, FlightDurationActual, FlightDurationScheduled,
@@ -109,13 +109,13 @@ BEGIN
 		SET @CurrentDate = DATEADD(day, 1, @CurrentDate);
 	END;
 
-	RAISERROR('FactFlightPerformance loading process has completed.', 0, 1) WITH NOWAIT;
+	RAISERROR('FlightPerformance_TransactionalFact loading process has completed.', 0, 1) WITH NOWAIT;
 	SET NOCOUNT OFF;
 END
 GO
 
-exec [DW].[InitialFactFlightPerformance]
+exec [DW].[InitialFlightPerformance_TransactionalFact]
 
-drop table [DW].[FactFlightPerformance]
+drop table [DW].[FlightPerformance_TransactionalFact]
 
-select * from [DW].[FactFlightPerformance]
+select * from [DW].[FlightPerformance_TransactionalFact]

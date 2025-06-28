@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE [DW].[LoadFactPassengerTicket]
+CREATE OR ALTER PROCEDURE [DW].[Load_PassengerTicket_TransactionalFact]
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -41,7 +41,7 @@ BEGIN
 
 		-- Log the start of the process for the current day
 		INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
-		VALUES ('LoadFactPassengerTicket', 'PassengerTicket_TransactionalFact', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
+		VALUES ('Load_PassengerTicket_TransactionalFact', 'PassengerTicket_TransactionalFact', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
 		
 		-- Capture the LogID for this specific run
 		SET @LogID = SCOPE_IDENTITY();
