@@ -1,10 +1,10 @@
 CREATE TABLE [DW].[MaintenanceEvent_TransactionalFact] (
     -- Dimensional Keys
     [AircraftID]                INT NOT NULL,   -- FK to DW.DimAircraft.AircraftID, from SA.MaintenanceEvent.AircraftID
-    [MaintenanceTypeID]         INT NOT NULL,   -- FK to DW.DimMaintenanceType.MaintenanceTypeID, from SA.MaintenanceEvent.MaintenanceTypeID
-    [MaintenanceLocationKey]    INT NOT NULL,   -- FK to DW.DimMaintenanceLocation.MaintenanceLocationKey (SCD2), lookup by Location+Date from SA.MaintenanceEvent.LocationID & MaintenanceDate
-    [TechnicianID]              INT NOT NULL,   -- FK to DW.DimTechnician.TechnicianID, from SA.MaintenanceEvent.TechnicianID
-    [MaintenanceDateKey]        INT NOT NULL,   -- FK to DW.DimDateTime.DateKey, from SA.MaintenanceEvent.MaintenanceDate
+    [MaintenanceTypeID]         integer NOT NULL,   -- FK to DW.DimMaintenanceType.MaintenanceTypeID, from SA.MaintenanceEvent.MaintenanceTypeID
+    [LocationKey]    INT NOT NULL,   -- FK to DW.DimMaintenanceLocation.LocationKey (SCD2), lookup by Location+Date from SA.MaintenanceEvent.LocationID & MaintenanceDate
+    [TechnicianID]              integer NOT NULL,   -- FK to DW.DimTechnician.TechnicianID, from SA.MaintenanceEvent.TechnicianID
+    [MaintenanceDateKey]        datetime NOT NULL,   -- FK to DW.DimDateTime.DateKey, from SA.MaintenanceEvent.MaintenanceDate
 
     -- Business Measures
     [DowntimeHours]             FLOAT NULL,         -- Direct from SA.MaintenanceEvent.DowntimeHours

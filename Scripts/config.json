@@ -134,6 +134,8 @@
         "Datawarehouse/Facts/RevenueMart/Initial_PassengerActivity_YearlyFact.sql",
         "Datawarehouse/Facts/RevenueMart/ETL_PassengerActivity_YearlyFact.sql",
 
+        "Datawarehouse/Facts/MaintenanceMart/Initial_MaintenanceEvent_TransactionalFact.sql",
+
         "Datawarehouse/ALL_Fact_Initial_ETL.sql"
       ]
     }

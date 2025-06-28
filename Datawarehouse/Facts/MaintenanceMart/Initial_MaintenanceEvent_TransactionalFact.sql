@@ -3,8 +3,12 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    DECLARE @StartTime DATETIME2(3) = SYSUTCDATETIME(), @RowCount INT, @LogID BIGINT;
+    DECLARE 
+        @StartTime  DATETIME2(3) = SYSUTCDATETIME(),
+        @RowCount   INT,
+        @LogID      BIGINT;
 
+    -- 1. Log procedure start
     INSERT INTO [DW].[ETL_Log] (
         ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
     ) VALUES (
@@ -17,10 +21,14 @@ BEGIN
     SET @LogID = SCOPE_IDENTITY();
 
     BEGIN TRY
+        -- 2. Truncate the fact table for a clean load
+        TRUNCATE TABLE [DW].[MaintenanceEvent_TransactionalFact];
+
+        -- 3. Insert from SA.MaintenanceEvent + SCD2 Dim lookups
         INSERT INTO [DW].[MaintenanceEvent_TransactionalFact] (
             AircraftID,
             MaintenanceTypeID,
-            MaintenanceLocationKey,
+            LocationKey,   -- <-- This now matches [LocationKey]
             TechnicianID,
             MaintenanceDateKey,
             DowntimeHours,
@@ -31,17 +39,11 @@ BEGIN
             DistinctIssuesSolved
         )
         SELECT
-            -- AircraftID: direct FK
             SA.AircraftID,
-            -- MaintenanceTypeID: direct FK
             SA.MaintenanceTypeID,
-            -- MaintenanceLocationKey: SCD2 logic
-            DL.LocationKey,
-            -- TechnicianID: direct FK
+            DL.LocationKey,    -- <-- Fixed column name!
             SA.TechnicianID,
-            -- MaintenanceDateKey: date dimension FK
-            DT.DateKey,
-            -- Measures
+            DT.DateTimeKey,
             SA.DowntimeHours,
             SA.LaborHours,
             SA.LaborCost,
@@ -49,34 +51,33 @@ BEGIN
             SA.TotalMaintenanceCost,
             SA.DistinctIssuesSolved
         FROM [SA].[MaintenanceEvent] SA
-        -- MaintenanceLocationKey SCD2 lookup
+        -- SCD2 lookup for LocationKey (current at MaintenanceDate)
         INNER JOIN [DW].[DimMaintenanceLocation] DL
             ON DL.LocationID = SA.LocationID
             AND SA.MaintenanceDate >= DL.EffectiveFrom
             AND (SA.MaintenanceDate < DL.EffectiveTo OR DL.EffectiveTo IS NULL)
-            AND DL.CityIsCurrent = 1
-        -- Date dimension lookup (convert date to key)
+        -- Date dimension lookup for MaintenanceDateKey
         INNER JOIN [DW].[DimDateTime] DT
-            ON DT.[Date] = SA.MaintenanceDate
-        -- MaintenanceType join is not needed unless you want to validate FK exists.
-        ;
+            ON CAST(DT.DateTimeKey AS DATE) = SA.MaintenanceDate;
 
         SET @RowCount = @@ROWCOUNT;
 
+        -- 4. Log success
         UPDATE [DW].[ETL_Log]
         SET ChangeDescription = CONCAT('Loaded ', @RowCount, ' rows into MaintenanceEvent_TransactionalFact'),
-            RowsAffected = @RowCount,
-            DurationSec = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
-            Status = 'Success'
+            RowsAffected      = @RowCount,
+            DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
+            Status            = 'Success'
         WHERE LogID = @LogID;
 
     END TRY
     BEGIN CATCH
+        DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
         UPDATE [DW].[ETL_Log]
-        SET ChangeDescription = 'Load failed: ' + ERROR_MESSAGE(),
-            DurationSec = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
-            Status = 'Error',
-            Message = ERROR_MESSAGE()
+        SET ChangeDescription = 'Load failed: ' + @ErrMsg,
+            DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
+            Status            = 'Error',
+            Message           = @ErrMsg
         WHERE LogID = @LogID;
         THROW;
     END CATCH

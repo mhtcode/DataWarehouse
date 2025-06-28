@@ -2,7 +2,7 @@ CREATE TABLE [DW].[PartReplacement_TransactionalFact] (
     -- Dimensional Keys
     [AircraftID]                INT NOT NULL,   -- FK to DW.DimAircraft.AircraftID, from SA.PartReplacement.AircraftID
     [PartID]                    INT NOT NULL,   -- FK to DW.DimPart.PartID, from SA.PartReplacement.PartID
-    [MaintenanceLocationKey]    INT NOT NULL,   -- FK to DW.DimMaintenanceLocation.MaintenanceLocationKey (SCD2), lookup by Location+Date from SA.PartReplacement.LocationID & ReplacementDate
+    [LocationKey]    INT NOT NULL,   -- FK to DW.DimMaintenanceLocation.LocationKey (SCD2), lookup by Location+Date from SA.PartReplacement.LocationID & ReplacementDate
     [ReplacementDateKey]        Date NOT NULL,   -- FK to DW.DimDateTime.DateKey, from SA.PartReplacement.ReplacementDate
 
     -- Business Measures
