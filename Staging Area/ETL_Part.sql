@@ -8,7 +8,6 @@ BEGIN
         @RowsAffected INT,
         @LogID        BIGINT;
 
-    -- 1) Initial log entry (assume fatal until done)
     INSERT INTO [SA].[ETL_Log] (
         ProcedureName,
         SourceTable,
@@ -27,12 +26,10 @@ BEGIN
     SET @LogID = SCOPE_IDENTITY();
 
     BEGIN TRY
-        -- 2) MERGE operation for Part
         MERGE [SA].[Part] AS TARGET
         USING [Source].[Part] AS SOURCE
           ON TARGET.PartID = SOURCE.PartID
 
-        -- UPDATE existing rows if any data has changed
         WHEN MATCHED AND EXISTS (
             SELECT 
                 SOURCE.Name,
@@ -57,7 +54,6 @@ BEGIN
                 TARGET.StagingLastUpdateTimestampUTC = GETUTCDATE(),
                 TARGET.SourceSystem               = 'OperationalDB'
 
-        -- INSERT new rows
         WHEN NOT MATCHED BY TARGET THEN
             INSERT (
                 PartID,
@@ -81,7 +77,6 @@ BEGIN
 
         SET @RowsAffected = @@ROWCOUNT;
 
-        -- 3) Update log to Success
         UPDATE [SA].[ETL_Log]
         SET
             ChangeDescription = CONCAT('Merge complete: rows affected=', @RowsAffected),
@@ -92,7 +87,6 @@ BEGIN
 
     END TRY
     BEGIN CATCH
-        -- 4) Log error details
         UPDATE [SA].[ETL_Log]
         SET
             ChangeDescription = 'Merge failed',
