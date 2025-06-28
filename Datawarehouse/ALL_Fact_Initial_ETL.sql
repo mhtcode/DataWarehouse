@@ -10,9 +10,9 @@ BEGIN
         (N'Initial_LoyaltyPoint_TransactionalFact'),
 
         -- MaintenanceMart
-        (N'Initial_FactAircraftHealth_MonthlyFact'),
-        (N'Initial_FactMaintenanceEvent_TransactionalFact'),
-        (N'Initial_FactPartReplacement_TransactionalFact'),
+        (N'Initial_AircraftHealth_MonthlyFact'),
+        (N'Initial_MaintenanceEvent_TransactionalFact'),
+        (N'Initial_PartReplacement_TransactionalFact'),
 
         -- PerformanceMart
         (N'Initial_FlightPerformance_TransactionalFact'),

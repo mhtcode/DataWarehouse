@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE [DW].[Load_FactFlightPerformance_TransactionalFact]
+CREATE OR ALTER PROCEDURE [DW].[Load_FlightPerformance_TransactionalFact]
 AS
 BEGIN
 	SET NOCOUNT ON;
