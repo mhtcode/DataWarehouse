@@ -1,6 +1,6 @@
 CREATE TABLE [DW].[DimMaintenanceLocation] (
-  [MaintenanceLocationKey] integer IDENTITY(1,1) PRIMARY KEY,
-  [MaintenanceLocationID] nvarchar(255),
+  [LocationKey] integer IDENTITY(1,1),
+  [LocationID] nvarchar(100),
   [Name] nvarchar(255),
   [City] nvarchar(255),
   [Country] nvarchar(255),
@@ -12,7 +12,7 @@ CREATE TABLE [DW].[DimMaintenanceLocation] (
 GO
 
 CREATE NONCLUSTERED INDEX IX_DimMaintenanceLocation_BusinessKey_SCD
-ON [DW].[DimMaintenanceLocation] ([MaintenanceLocationID], [Effective_Date], [Expiry_Date]);
+ON [DW].[DimMaintenanceLocation] ([LocationID], [EffectiveFrom], [EffectiveTo]);
 GO
 
 -- Index on Country and City
@@ -31,5 +31,5 @@ GO
 -- A filtered index is highly efficient for queries that only need the current version of each location.
 CREATE NONCLUSTERED INDEX IX_DimMaintenanceLocation_IsCurrent
 ON [DW].[DimMaintenanceLocation] (CityIsCurrent)
-WHERE IsCurrent = 1;
+WHERE CityIsCurrent = 1;
 GO

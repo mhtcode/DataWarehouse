@@ -34,19 +34,19 @@ BEGIN
 
         WHEN MATCHED AND EXISTS (
             SELECT
-                SOURCE.AircraftID, SOURCE.MaintenanceTypeID, SOURCE.MaintenanceLocationID, SOURCE.TechnicianID,
+                SOURCE.AircraftID, SOURCE.MaintenanceTypeID, SOURCE.LocationID, SOURCE.TechnicianID,
                 SOURCE.MaintenanceDate, SOURCE.DowntimeHours, SOURCE.LaborHours, SOURCE.LaborCost, SOURCE.TotalPartsCost,
                 SOURCE.TotalMaintenanceCost, SOURCE.DistinctIssuesSolved, SOURCE.Description
             EXCEPT
             SELECT
-                TARGET.AircraftID, TARGET.MaintenanceTypeID, TARGET.MaintenanceLocationID, TARGET.TechnicianID,
+                TARGET.AircraftID, TARGET.MaintenanceTypeID, TARGET.LocationID, TARGET.TechnicianID,
                 TARGET.MaintenanceDate, TARGET.DowntimeHours, TARGET.LaborHours, TARGET.LaborCost, TARGET.TotalPartsCost,
                 TARGET.TotalMaintenanceCost, TARGET.DistinctIssuesSolved, TARGET.Description
         ) THEN
             UPDATE SET
                 TARGET.AircraftID = SOURCE.AircraftID,
                 TARGET.MaintenanceTypeID = SOURCE.MaintenanceTypeID,
-                TARGET.MaintenanceLocationID = SOURCE.MaintenanceLocationID,
+                TARGET.LocationID = SOURCE.LocationID,
                 TARGET.TechnicianID = SOURCE.TechnicianID,
                 TARGET.MaintenanceDate = SOURCE.MaintenanceDate,
                 TARGET.DowntimeHours = SOURCE.DowntimeHours,
@@ -60,12 +60,12 @@ BEGIN
 
         WHEN NOT MATCHED BY TARGET THEN
             INSERT (
-                MaintenanceEventID, AircraftID, MaintenanceTypeID, MaintenanceLocationID,
+                MaintenanceEventID, AircraftID, MaintenanceTypeID, LocationID,
                 TechnicianID, MaintenanceDate, DowntimeHours, LaborHours, LaborCost,
                 TotalPartsCost, TotalMaintenanceCost, DistinctIssuesSolved, Description,
                 StagingLoadTimestampUTC, SourceSystem
             ) VALUES (
-                SOURCE.MaintenanceEventID, SOURCE.AircraftID, SOURCE.MaintenanceTypeID, SOURCE.MaintenanceLocationID,
+                SOURCE.MaintenanceEventID, SOURCE.AircraftID, SOURCE.MaintenanceTypeID, SOURCE.LocationID,
                 SOURCE.TechnicianID, SOURCE.MaintenanceDate, SOURCE.DowntimeHours, SOURCE.LaborHours, SOURCE.LaborCost,
                 SOURCE.TotalPartsCost, SOURCE.TotalMaintenanceCost, SOURCE.DistinctIssuesSolved, SOURCE.Description,
                 GETUTCDATE(), 'OperationalDB'

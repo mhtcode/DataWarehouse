@@ -30,7 +30,7 @@ BEGIN
         -- 2. Perform the MERGE
         MERGE [SA].[MaintenanceLocation] AS TARGET
         USING [Source].[MaintenanceLocation] AS SOURCE
-          ON TARGET.MaintenanceLocationID = SOURCE.MaintenanceLocationID
+          ON TARGET.LocationID = SOURCE.LocationID
 
         WHEN MATCHED AND EXISTS (
             SELECT
@@ -48,7 +48,7 @@ BEGIN
 
         WHEN NOT MATCHED BY TARGET THEN
             INSERT (
-                MaintenanceLocationID,
+                LocationID,
                 Name,
                 City,
                 Country,
@@ -56,7 +56,7 @@ BEGIN
                 StagingLoadTimestampUTC,
                 SourceSystem
             ) VALUES (
-                SOURCE.MaintenanceLocationID,
+                SOURCE.LocationID,
                 SOURCE.Name,
                 SOURCE.City,
                 SOURCE.Country,
