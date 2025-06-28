@@ -112,7 +112,10 @@
         "Datawarehouse/Facts/PerformanceMart/ETL_FlightPerformance_TransactionalFact.sql",
         "Datawarehouse/Facts/PerformanceMart/Create_FlightPerformance_DailylFact.sql",
         "Datawarehouse/Facts/PerformanceMart/Initial_FlightPerformance_DailylFact.sql",
-        "Datawarehouse/Facts/PerformanceMart/ETL_FlightPerformance_DailylFact.sql"
+        "Datawarehouse/Facts/PerformanceMart/ETL_FlightPerformance_DailylFact.sql",
+        "Datawarehouse/Facts/PerformanceMart/Create_FlightPerformance_ACCFact.sql",
+        "Datawarehouse/Facts/PerformanceMart/Initial_FlightPerformance_ACCFact.sql",
+        "Datawarehouse/Facts/PerformanceMart/ETL_FlightPerformance_ACCFact.sql"
       ],
       "RevenueMart": [
         "Datawarehouse/Facts/RevenueMart/Create_FlightOperation_Factless.sql",

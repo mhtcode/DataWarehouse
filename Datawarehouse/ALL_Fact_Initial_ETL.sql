@@ -20,6 +20,7 @@ BEGIN
         -- PerformanceMart
         (N'Initial_FlightPerformance_TransactionalFact'),
         (N'Initial_FlightPerformance_DailyFact'),
+        (N'Initial_FlightPerformance_ACCFact'),
 
         -- RevenueMart
         (N'Initial_FlightOperation_Factless'),

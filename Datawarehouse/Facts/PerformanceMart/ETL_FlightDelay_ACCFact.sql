@@ -1,85 +1,83 @@
-CREATE OR ALTER PROCEDURE [DW].[LoadFlightDelay_DailyFact]
+CREATE OR ALTER PROCEDURE [DW].[Load_FlightDelay_ACCFact]
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @StartDate date;
-	DECLARE @EndDate date;
+	DECLARE @LogID BIGINT;
+	DECLARE @StartTime DATETIME2(3) = SYSUTCDATETIME();
+	DECLARE @RowCount INT;
 
-	SELECT @EndDate = MAX(CAST(ActualDepartureDateTime AS DATE)) FROM [SA].[FlightOperation];
-	SELECT @StartDate = MAX(SnapshotDateKey) FROM [DW].[FlightDelay_DailyFact];
+	INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
+	VALUES ('Load_FlightDelay_ACCFact', 'FlightDelay_ACCFact', 'Procedure started for incremental merge', @StartTime, 'Running');
+		
+	SET @LogID = SCOPE_IDENTITY();
 
-    IF @StartDate IS NULL
-    BEGIN
-        SELECT @StartDate = MIN(CAST(ActualDepartureDateTime AS DATE)) FROM [SA].[FlightOperation];
-    END
-    ELSE
-    BEGIN
-        SET @StartDate = DATEADD(day, 1, @StartDate);
-    END;
-	
-	IF @StartDate > @EndDate
-	BEGIN
-		RAISERROR('The FlightDelay_DailyFact table is up to date!', 0, 1) WITH NOWAIT;
-		RETURN;
-	END
+	BEGIN TRY
 
-	DECLARE @CurrentDate date = @StartDate;
-	
-	WHILE @CurrentDate <= @EndDate
-	BEGIN
-		DECLARE @LogID BIGINT;
-		DECLARE @StartTime DATETIME2(3) = SYSUTCDATETIME();
-		DECLARE @RowCount INT;
-
-		INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
-		VALUES ('LoadFlightDelay_DailyFact', 'FlightDelay_DailyFact', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
-			
-		SET @LogID = SCOPE_IDENTITY();
-
-		BEGIN TRY
-			DELETE FROM [DW].[FlightDelay_DailyFact] WHERE SnapshotDateKey = @CurrentDate;
-            
-			WITH DailyAggregates AS (
-				SELECT
-					ac.AirlineID, fd.DepartureAirportID, fd.DestinationAirportID,
-					COUNT(*) AS DailyFlightsNumber,
-					SUM(CASE WHEN fo.DelayMinutes > 0 THEN 1 ELSE 0 END) AS DailyDelayedFlightsNumber,
-					SUM(CASE WHEN fo.CancelFlag = 1 THEN 1 ELSE 0 END) AS DailyCancelledFlightsNumber,
-					AVG(CAST(fo.DelayMinutes AS FLOAT)) AS DailyAvgDepartureDelayMinutes,
-					MAX(fo.DelayMinutes) AS DailyMaxDelayMinutes
-				FROM [SA].[FlightOperation] fo
-				INNER JOIN [SA].[FlightDetail] fd ON fo.FlightDetailID = fd.FlightDetailID
-				INNER JOIN [SA].[Aircraft] ac ON fd.AircraftID = ac.AircraftID
-				WHERE CAST(fo.ActualDepartureDateTime AS DATE) = @CurrentDate
-				GROUP BY ac.AirlineID, fd.DepartureAirportID, fd.DestinationAirportID
-			)
-			INSERT INTO [DW].[FlightDelay_DailyFact] (
-				SnapshotDateKey, AirlineID, DepartureAirportID, ArrivalAirportID, DailyFlightsNumber,
-				DailyDelayedFlightsNumber, DailyCancelledFlightsNumber, DailyAvgDepartureDelayMinutes,
-				DailyAvgArrivalDelayMinutes, DailyMaxDelayMinutes, DailyDelayRate, DailyOnTimePercentage
-			)
+		-- Use a MERGE statement to efficiently synchronize the target table.
+		MERGE [DW].[FlightDelay_ACCFact] AS Target
+		USING (
+			-- The source is the full lifetime aggregation from the SA tables
 			SELECT
-				@CurrentDate, agg.AirlineID, agg.DepartureAirportID, agg.DestinationAirportID, agg.DailyFlightsNumber,
-				agg.DailyDelayedFlightsNumber, agg.DailyCancelledFlightsNumber, agg.DailyAvgDepartureDelayMinutes,
-				agg.DailyAvgDepartureDelayMinutes, agg.DailyMaxDelayMinutes,
-				CASE WHEN agg.DailyFlightsNumber > 0 THEN CAST(agg.DailyDelayedFlightsNumber AS FLOAT) / agg.DailyFlightsNumber ELSE 0 END,
-				CASE WHEN agg.DailyFlightsNumber > 0 THEN CAST(agg.DailyFlightsNumber - agg.DailyDelayedFlightsNumber - agg.DailyCancelledFlightsNumber AS FLOAT) / agg.DailyFlightsNumber * 100.0 ELSE 0 END
-			FROM DailyAggregates agg;
+				ac.AirlineID,
+				fd.DepartureAirportID,
+				fd.DestinationAirportID,
+				COUNT(*) AS TotalFlightsNumber,
+				SUM(CASE WHEN fo.DelayMinutes > 0 THEN 1 ELSE 0 END) AS TotalDelayedFlightsNumber,
+				SUM(CASE WHEN fo.CancelFlag = 1 THEN 1 ELSE 0 END) AS TotalCancelledFlightsNumber,
+				AVG(CAST(fo.DelayMinutes AS FLOAT)) AS TotalAvgDepartureDelayMinutes,
+				MAX(fo.DelayMinutes) AS TotalMaxDelayMinutes
+			FROM 
+				[SA].[FlightOperation] fo
+			INNER JOIN 
+				[SA].[FlightDetail] fd ON fo.FlightDetailID = fd.FlightDetailID
+			INNER JOIN
+				[SA].[Aircraft] ac ON fd.AircraftID = ac.AircraftID
+			GROUP BY
+				ac.AirlineID,
+				fd.DepartureAirportID,
+				fd.DestinationAirportID
+		) AS Source
+		ON (Target.AirlineID = Source.AirlineID AND Target.DepartureAirportID = Source.DepartureAirportID AND Target.ArrivalAirportID = Source.DestinationAirportID)
 
-			SET @RowCount = @@ROWCOUNT;
-			UPDATE DW.ETL_Log SET ChangeDescription = 'Load complete for date: ' + CONVERT(varchar, @CurrentDate, 101), RowsAffected = @RowCount, DurationSec = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()), Status = 'Success' WHERE LogID = @LogID;
-		END TRY
-		BEGIN CATCH
-			DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
-			UPDATE DW.ETL_Log SET ChangeDescription = 'Load failed for date: ' + CONVERT(varchar, @CurrentDate, 101), DurationSec = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()), Status = 'Error', Message = @ErrMsg WHERE LogID = @LogID;
-			THROW;
-		END CATCH
+		-- Action for existing routes: UPDATE the summary measures.
+		WHEN MATCHED THEN
+			UPDATE SET
+				Target.TotalFlightsNumber = Source.TotalFlightsNumber,
+				Target.TotalDelayedFlightsNumber = Source.TotalDelayedFlightsNumber,
+				Target.TotalCancelledFlightsNumber = Source.TotalCancelledFlightsNumber,
+				Target.TotalAvgDepartureDelayMinutes = Source.TotalAvgDepartureDelayMinutes,
+				Target.TotalAvgArrivalDelayMinutes = Source.TotalAvgDepartureDelayMinutes,
+				Target.TotalMaxDelayMinutes = Source.TotalMaxDelayMinutes,
+				Target.TotalDelayRate = CASE WHEN Source.TotalFlightsNumber > 0 THEN CAST(Source.TotalDelayedFlightsNumber AS FLOAT) / Source.TotalFlightsNumber ELSE 0 END,
+				Target.TotalOnTimePercentage = CASE WHEN Source.TotalFlightsNumber > 0 THEN CAST(Source.TotalFlightsNumber - Source.TotalDelayedFlightsNumber - Source.TotalCancelledFlightsNumber AS FLOAT) / Source.TotalFlightsNumber * 100.0 ELSE 0 END
 
-		SET @CurrentDate = DATEADD(day, 1, @CurrentDate);
-	END;
+		-- Action for new routes: INSERT a new summary record.
+		WHEN NOT MATCHED BY TARGET THEN
+			INSERT (
+				AirlineID, DepartureAirportID, ArrivalAirportID, TotalFlightsNumber, TotalDelayedFlightsNumber,
+				TotalCancelledFlightsNumber, TotalAvgDepartureDelayMinutes, TotalAvgArrivalDelayMinutes,
+				TotalMaxDelayMinutes, TotalDelayRate, TotalOnTimePercentage
+			)
+			VALUES (
+				Source.AirlineID, Source.DepartureAirportID, Source.DestinationAirportID, Source.TotalFlightsNumber, Source.TotalDelayedFlightsNumber,
+				Source.TotalCancelledFlightsNumber, Source.TotalAvgDepartureDelayMinutes, Source.TotalAvgDepartureDelayMinutes,
+				Source.TotalMaxDelayMinutes,
+				CASE WHEN Source.TotalFlightsNumber > 0 THEN CAST(Source.TotalDelayedFlightsNumber AS FLOAT) / Source.TotalFlightsNumber ELSE 0 END,
+				CASE WHEN Source.TotalFlightsNumber > 0 THEN CAST(Source.TotalFlightsNumber - Source.TotalDelayedFlightsNumber - Source.TotalCancelledFlightsNumber AS FLOAT) / Source.TotalFlightsNumber * 100.0 ELSE 0 END
+			);
 
-	RAISERROR('FlightDelay_DailyFact loading process has completed.', 0, 1) WITH NOWAIT;
+		SET @RowCount = @@ROWCOUNT;
+		UPDATE DW.ETL_Log SET ChangeDescription = 'Incremental merge complete', RowsAffected = @RowCount, DurationSec = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()), Status = 'Success' WHERE LogID = @LogID;
+
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
+		UPDATE DW.ETL_Log SET ChangeDescription = 'Incremental merge failed', DurationSec = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()), Status = 'Error', Message = @ErrMsg WHERE LogID = @LogID;
+		THROW;
+	END CATCH
+
+	RAISERROR('Load_FlightDelay_ACCFact loading process has completed.', 0, 1) WITH NOWAIT;
 	SET NOCOUNT OFF;
 END
 GO
