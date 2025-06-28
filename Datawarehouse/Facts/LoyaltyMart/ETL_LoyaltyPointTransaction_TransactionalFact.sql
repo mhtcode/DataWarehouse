@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE [DW].[LoadLoyaltyPointTransactionFact]
+CREATE OR ALTER PROCEDURE [DW].[Load_LoyaltyPoint_TransactionalFact]
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -43,7 +43,7 @@ BEGIN
 
         INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
         VALUES (
-            'LoadFactLoyaltyPointTransaction', 
+            'Load_FactLoyaltyPointTransaction_TransactionalFact', 
             'LoyaltyPointTransaction_TransactionalFact', 
             'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), 
             @StartTime, 'Running'

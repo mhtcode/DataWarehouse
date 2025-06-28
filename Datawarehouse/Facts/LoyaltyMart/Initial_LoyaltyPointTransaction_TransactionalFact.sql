@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE [DW].[InitialLoyaltyPointTransactionFact]
+CREATE OR ALTER PROCEDURE [DW].[Initial_LoyaltyPoint_TransactionalFact]
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -28,7 +28,7 @@ BEGIN
 		DECLARE @RowCount INT;
 
 		INSERT INTO DW.ETL_Log (ProcedureName, TargetTable, ChangeDescription, ActionTime, Status) 
-		VALUES ('InitialLoyaltyPointTransactionFact', 'LoyaltyPointTransaction_TransactionalFact', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
+		VALUES ('Initial_LoyaltyPoint_TransactionalFact', 'LoyaltyPointTransaction_TransactionalFact', 'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101), @StartTime, 'Running');
 		
 		SET @LogID = SCOPE_IDENTITY();
 
@@ -131,16 +131,7 @@ BEGIN
 		SET @CurrentDate = DATEADD(day, 1, @CurrentDate);
 	END;
 
-	RAISERROR('InitialLoyaltyPointTransactionFact loading process has completed.', 0, 1) WITH NOWAIT;
+	RAISERROR('Initial_LoyaltyPoint_TransactionalFact loading process has completed.', 0, 1) WITH NOWAIT;
 	SET NOCOUNT OFF;
 END
 GO
-
-SELECT 
-    PointsTransactionID,
-    TransactionDate,
-    PointConversionRateID 
-FROM 
-    SA.PointsTransaction
-WHERE 
-    PointsTransactionID = 1;
