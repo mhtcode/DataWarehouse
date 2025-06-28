@@ -14,7 +14,7 @@ BEGIN
 
 	BEGIN TRY
 		-- Perform a simple insert for the initial load.
-		INSERT INTO [DW].[FlightOperation_Factless] (
+		INSERT INTO [DW].[FactFlightOperation_Factless] (
 			FlightKey,
 			SourceAirportKey,
 			DestinationAirportKey,
@@ -53,7 +53,7 @@ BEGIN
 		THROW;
 	END CATCH
 
-	RAISERROR('Initial FlightOperation_Factless loading process has completed.', 0, 1) WITH NOWAIT;
+	RAISERROR('Initial FactFlightOperation_Factless loading process has completed.', 0, 1) WITH NOWAIT;
 	SET NOCOUNT OFF;
 END
 GO
