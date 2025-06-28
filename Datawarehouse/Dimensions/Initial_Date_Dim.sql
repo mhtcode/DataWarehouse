@@ -8,7 +8,8 @@ BEGIN
 	(
 		FIELDTERMINATOR = ',',   
 		ROWTERMINATOR = '\n',    
-		FIRSTROW = 2            
+		FIRSTROW = 2,
+		CODEPAGE = '65001'            
 	)
 END
 GO
