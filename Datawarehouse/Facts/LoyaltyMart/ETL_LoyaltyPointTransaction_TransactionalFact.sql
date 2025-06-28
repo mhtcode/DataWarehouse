@@ -24,7 +24,7 @@ BEGIN
     END
 
     IF @StartDate IS NULL
-        SET @StartDate = @EndDate; -
+        SET @StartDate = @EndDate;
 
     IF @StartDate >= @EndDate
     BEGIN
