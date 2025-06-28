@@ -8,7 +8,6 @@ BEGIN
         @RowsAffected  INT,
         @LogID         BIGINT;
 
-    -- 1) Assume fatal: insert initial log entry
     INSERT INTO [SA].[ETL_Log] (
         ProcedureName,
         SourceTable,
@@ -28,12 +27,10 @@ BEGIN
     SET @LogID = SCOPE_IDENTITY();
 
     BEGIN TRY
-        -- 2) Perform the merge
         MERGE [SA].[TravelClass] AS TARGET
         USING [Source].[TravelClass] AS SOURCE
           ON TARGET.TravelClassID = SOURCE.TravelClassID
 
-        -- Update existing records if any field has changed (SCD1)
         WHEN MATCHED AND EXISTS (
             SELECT
                 SOURCE.ClassName,
@@ -51,7 +48,6 @@ BEGIN
                 TARGET.BaseCost                     = SOURCE.BaseCost,
                 TARGET.StagingLastUpdateTimestampUTC = GETUTCDATE()
 
-        -- Insert new records
         WHEN NOT MATCHED BY TARGET THEN
             INSERT (
                 TravelClassID,
@@ -72,7 +68,6 @@ BEGIN
 
         SET @RowsAffected = @@ROWCOUNT;
 
-        -- 3) Update log to Success
         UPDATE [SA].[ETL_Log]
         SET
             ChangeDescription = CONCAT('Merge complete: rows affected=', @RowsAffected),
@@ -82,7 +77,6 @@ BEGIN
         WHERE LogID = @LogID;
     END TRY
     BEGIN CATCH
-        -- 4) Update log to Error
         UPDATE [SA].[ETL_Log]
         SET
             ChangeDescription = 'Merge failed',

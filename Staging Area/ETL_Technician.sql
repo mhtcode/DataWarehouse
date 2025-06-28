@@ -8,7 +8,6 @@ BEGIN
         @RowsAffected INT,
         @LogID        BIGINT;
 
-    -- 1) Insert initial log entry (assume fatal until completion)
     INSERT INTO [SA].[ETL_Log] (
         ProcedureName,
         SourceTable,
@@ -27,12 +26,10 @@ BEGIN
     SET @LogID = SCOPE_IDENTITY();
 
     BEGIN TRY
-        -- 2) MERGE operation: insert/update [SA].[Technician] from [Source].[Technician]
         MERGE [SA].[Technician] AS TARGET
         USING [Source].[Technician] AS SOURCE
           ON TARGET.TechnicianID = SOURCE.TechnicianID
 
-        -- UPDATE if any mapped column is different
         WHEN MATCHED AND EXISTS (
             SELECT 
                 SOURCE.PersonID,
@@ -48,7 +45,6 @@ BEGIN
                 TARGET.StagingLastUpdateTimestampUTC = GETUTCDATE(),
                 TARGET.SourceSystem = 'OperationalDB'
 
-        -- INSERT new records
         WHEN NOT MATCHED BY TARGET THEN
             INSERT (
                 TechnicianID,
@@ -66,7 +62,6 @@ BEGIN
 
         SET @RowsAffected = @@ROWCOUNT;
 
-        -- 3) Update log to Success
         UPDATE [SA].[ETL_Log]
         SET
             ChangeDescription = CONCAT('Merge complete: rows affected=', @RowsAffected),
@@ -77,7 +72,6 @@ BEGIN
 
     END TRY
     BEGIN CATCH
-        -- 4) Update log to Error
         UPDATE [SA].[ETL_Log]
         SET
             ChangeDescription = 'Merge failed',
