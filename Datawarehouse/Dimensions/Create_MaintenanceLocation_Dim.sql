@@ -1,6 +1,6 @@
 CREATE TABLE [DW].[DimMaintenanceLocation] (
-  [Location_NK] nvarchar(255) UNIQUE,
-  [Location_Surrogate_ID] integer PRIMARY KEY,
+  [MaintenanceLocationKey] integer IDENTITY(1,1) PRIMARY KEY,
+  [MaintenanceLocationID] nvarchar(255),
   [Name] nvarchar(255),
   [City] nvarchar(255),
   [Country] nvarchar(255),
@@ -12,7 +12,7 @@ CREATE TABLE [DW].[DimMaintenanceLocation] (
 GO
 
 CREATE NONCLUSTERED INDEX IX_DimMaintenanceLocation_BusinessKey_SCD
-ON [DW].[DimMaintenanceLocation] (Location_NK, Effective_Date, Expiry_Date);
+ON [DW].[DimMaintenanceLocation] ([MaintenanceLocationID], [Effective_Date], [Expiry_Date]);
 GO
 
 -- Index on Country and City
