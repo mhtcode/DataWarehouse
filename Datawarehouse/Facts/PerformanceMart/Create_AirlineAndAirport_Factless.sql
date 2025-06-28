@@ -1,4 +1,4 @@
-CREATE TABLE [AirlineAndAirport_Factless] (
+CREATE TABLE [DW].[AirlineAndAirport_Factless] (
   [AirlineID] int,
   [AirportID] int
 )
