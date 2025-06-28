@@ -16,6 +16,7 @@ DROP TABLE IF EXISTS [DW].[PartReplacement_TransactionalFact];
 DROP TABLE IF EXISTS [DW].[FlightPerformance_TransactionalFact];
 DROP TABLE IF EXISTS [DW].[FlightPerformance_DailyFact];
 DROP TABLE IF EXISTS [DW].[FlightPerformance_ACCFact];
+DROP TABLE IF EXISTS [DW].[AirlineAndAirport_Factless];
 
 -- RevenueMart
 DROP TABLE IF EXISTS [DW].[FlightOperation_Factless];
@@ -170,6 +171,9 @@ IF OBJECT_ID('[DW].[Initial_FlightPerformance_DailyFact]', 'P') IS NOT NULL DROP
 
 IF OBJECT_ID('[DW].[Load_FlightPerformance_ACCFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Load_FlightPerformance_ACCFact];
 IF OBJECT_ID('[DW].[Initial_FlightPerformance_ACCFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Initial_FlightPerformance_ACCFact];
+
+IF OBJECT_ID('[DW].[Load_AirlineAndAirport_Factless]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Load_AirlineAndAirport_Factless];
+IF OBJECT_ID('[DW].[Initial_AirlineAndAirport_Factless]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Initial_AirlineAndAirport_Factless];
 
 -- MaintenanceMart
 -- IF OBJECT_ID('[DW].[LoadFactAircraftHealthSnapshot_PeriodicSnapshot]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFactAircraftHealthSnapshot_PeriodicSnapshot];

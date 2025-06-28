@@ -21,6 +21,7 @@ BEGIN
         (N'Initial_FlightPerformance_TransactionalFact'),
         (N'Initial_FlightPerformance_DailyFact'),
         (N'Initial_FlightPerformance_ACCFact'),
+        (N'Initial_AirlineAndAirport_Factless'),
 
         -- RevenueMart
         (N'Initial_FlightOperation_Factless'),
