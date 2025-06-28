@@ -1,5 +1,5 @@
 CREATE TABLE [DW].[DimPart] (
-  [ID] integer PRIMARY KEY,
+  [PartID] integer PRIMARY KEY,
   [Name] nvarchar(255),
   [PartNumber] nvarchar(255),
   [Manufacturer] nvarchar(255),
