@@ -27,7 +27,7 @@ BEGIN
   BEGIN TRY
     -- 2) Insert new aircraft into dimension directly (no staging table)
     INSERT INTO DW.DimAircraft (
-      AircraftKey,
+      AircraftID,
       Model,
       Type,
       ManufacturerDate,
@@ -45,7 +45,7 @@ BEGIN
     WHERE NOT EXISTS (
       SELECT 1
       FROM DW.DimAircraft AS d
-      WHERE d.AircraftKey = a.AircraftID
+      WHERE d.AircraftID = a.AircraftID
     );
     SET @RowsInserted = @@ROWCOUNT;
 
