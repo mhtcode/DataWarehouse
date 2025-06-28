@@ -69,12 +69,12 @@ BEGIN
       d.Price            = t.Price
     FROM DW.DimAircraft AS d
     JOIN DW.Temp_Aircraft_table AS t
-      ON d.AircraftKey = t.AircraftID;
+      ON d.AircraftID = t.AircraftID;
     SET @RowsUpdated = @@ROWCOUNT;
 
     -- 6) Insert new aircrafts into dimension
     INSERT INTO DW.DimAircraft (
-      AircraftKey,
+      AircraftID,
       Model,
       Type,
       ManufacturerDate,
@@ -92,7 +92,7 @@ BEGIN
     WHERE NOT EXISTS (
       SELECT 1
       FROM DW.DimAircraft AS d
-      WHERE d.AircraftKey = t.AircraftID
+      WHERE d.AircraftID = t.AircraftID
     );
     SET @RowsInserted = @@ROWCOUNT;
 
