@@ -8,7 +8,6 @@ BEGIN
     @RowsInserted      INT,
     @LogID                   BIGINT;
 
-    -- 1. Insert initial (fatal) log entry
     INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
     ) VALUES (
@@ -21,24 +20,21 @@ BEGIN
     SET @LogID = SCOPE_IDENTITY();
 
     BEGIN TRY
-    -- 2. Truncate dimension for full initial load
     TRUNCATE TABLE DW.DimTravelClass;
 
-    -- 3. Insert all travel classes from the source
     INSERT INTO DW.DimTravelClass (
         TravelClassKey,
         ClassName,
-        Capacity -- ADDED
+        Capacity 
     )
     SELECT
         tc.TravelClassID,
         tc.ClassName,
-        tc.Capacity -- ADDED
+        tc.Capacity 
     FROM SA.TravelClass AS tc;
 
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 4. Update log entry to Success
     UPDATE DW.ETL_Log
     SET
         ChangeDescription = 'Initial full load complete',
@@ -50,7 +46,6 @@ BEGIN
     END TRY
     BEGIN CATCH
     DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
-    -- 5. Update log entry to Error
     UPDATE DW.ETL_Log
     SET
         ChangeDescription = 'Initial load failed',

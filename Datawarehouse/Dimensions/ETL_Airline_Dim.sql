@@ -10,7 +10,6 @@ BEGIN
     @RowsInserted  INT = 0,
     @LogID         BIGINT;
 
-  -- 1. Insert initial (fatal) log entry
   INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
@@ -23,14 +22,12 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2. Determine last successful run time
     SELECT
       @LastRunTime = COALESCE(MAX(ActionTime), '1900-01-01')
     FROM DW.ETL_Log
     WHERE ProcedureName = 'ETL_Airline_Dim'
       AND Status = 'Success';
 
-    -- 3. Type 1 updates (simple attributes except IATA code)
     UPDATE d
     SET
       d.Name         = s.Name,
@@ -50,7 +47,6 @@ BEGIN
 
     SET @RowsUpdated = @@ROWCOUNT;
 
-    -- 4. Type 3 SCD logic: IATA code change
     UPDATE d
     SET
       d.Previous_IATA_Code      = d.Current_IATA_Code,
@@ -64,7 +60,6 @@ BEGIN
 
     SET @RowsUpdated = @RowsUpdated + @@ROWCOUNT;
 
-    -- 5. Insert new airlines
     INSERT INTO DW.DimAirline (
       AirlineID,
       Name,
@@ -93,7 +88,6 @@ BEGIN
 
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 6. Update log entry to Success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = CONCAT(
@@ -108,7 +102,6 @@ BEGIN
   END TRY
   BEGIN CATCH
     DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
-    -- 7. Update log entry to Error
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Incremental load failed',

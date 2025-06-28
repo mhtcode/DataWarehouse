@@ -8,7 +8,6 @@ BEGIN
     @RowsInserted INT,
     @LogID        BIGINT;
 
-  -- 1) Log procedure start
   INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
@@ -21,10 +20,8 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2) Truncate dimension table (optional: if you want a full reload)
     TRUNCATE TABLE DW.DimAirport;
 
-    -- 3) Insert all airports from SA
     INSERT INTO DW.DimAirport (
       AirportID,
       City,
@@ -36,7 +33,6 @@ BEGIN
       AnnualPassengerTraffic,
       Latitude,
       Longitude
-      -- , ManagerName
     )
     SELECT
       a.AirportID,
@@ -49,12 +45,10 @@ BEGIN
       a.AnnualPassengerTraffic,
       a.Latitude,
       a.Longitude
-      -- , a.ManagerName
     FROM SA.Airport AS a;
 
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 4) Mark log as success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Initial full load complete',
@@ -66,7 +60,6 @@ BEGIN
   END TRY
   BEGIN CATCH
     DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
-    -- 5) Log error
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Initial load failed',

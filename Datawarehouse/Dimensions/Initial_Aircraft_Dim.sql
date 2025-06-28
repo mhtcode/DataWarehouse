@@ -8,7 +8,6 @@ BEGIN
     @RowsInserted INT,
     @LogID        BIGINT;
 
-  -- 1) Assume fatal: insert initial log entry
   INSERT INTO DW.ETL_Log (
     ProcedureName,
     TargetTable,
@@ -25,7 +24,6 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2) Insert new aircraft into dimension directly (no staging table)
     INSERT INTO DW.DimAircraft (
       AircraftID,
       Model,
@@ -49,7 +47,6 @@ BEGIN
     );
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 3) Update log entry to Success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Initial full load complete',
@@ -61,7 +58,6 @@ BEGIN
   END TRY
   BEGIN CATCH
     DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
-    -- 4) Update log entry to Error
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Initial load failed',

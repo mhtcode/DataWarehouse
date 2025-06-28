@@ -10,7 +10,6 @@ BEGIN
     @RowsInserted  INT = 0,
     @LogID         BIGINT;
 
-  -- 1. Insert initial (fatal) log entry
   INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
@@ -23,14 +22,12 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2. Get last successful run time
     SELECT
       @LastRunTime = COALESCE(MAX(ActionTime), '1900-01-01')
     FROM DW.ETL_Log
     WHERE ProcedureName = 'ETL_LoyaltyTransactionType_Dim'
       AND Status = 'Success';
 
-    -- 3. Update existing types (Type 1: update changed names)
     UPDATE d
     SET d.TypeName = s.TypeName
     FROM DW.DimLoyaltyTransactionType d
@@ -40,7 +37,6 @@ BEGIN
       AND ISNULL(d.TypeName, '') <> ISNULL(s.TypeName, '');
     SET @RowsUpdated = @@ROWCOUNT;
 
-    -- 4. Insert new types
     INSERT INTO DW.DimLoyaltyTransactionType (
       LoyaltyTransactionTypeID,
       TypeName
@@ -55,7 +51,6 @@ BEGIN
       AND s.StagingLastUpdateTimestampUTC > @LastRunTime;
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 5. Mark log as success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = CONCAT(
@@ -70,7 +65,6 @@ BEGIN
   END TRY
   BEGIN CATCH
     DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
-    -- 6. Mark log as error
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Incremental load failed',

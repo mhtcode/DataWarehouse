@@ -10,7 +10,6 @@ BEGIN
     @RowsInserted  INT,
     @LogID         BIGINT;
 
-  -- 1) Insert initial "Fatal" log entry
   INSERT INTO DW.ETL_Log (
     ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
   ) VALUES (
@@ -23,7 +22,6 @@ BEGIN
   SET @LogID = SCOPE_IDENTITY();
 
   BEGIN TRY
-    -- 2) Determine last successful run
     SELECT @LastRunTime = COALESCE(
       MAX(ActionTime),
       '1900-01-01'
@@ -32,10 +30,8 @@ BEGIN
     WHERE ProcedureName = 'ETL_Person_Dim'
       AND Status = 'Success';
 
-    -- 3) Clean staging
     TRUNCATE TABLE [DW].[Temp_Person_table];
 
-    -- 4) Populate staging with changed/new source rows
     INSERT INTO [DW].[Temp_Person_table] (
       PersonID, NationalCode, PassportNumber, Name,
       Gender, DateOfBirth, City, Country,
@@ -61,7 +57,6 @@ BEGIN
       p.StagingLastUpdateTimestampUTC > @LastRunTime
       OR pas.StagingLastUpdateTimestampUTC > @LastRunTime;
 
-    -- 5) Expire current dimension rows for those keys
     UPDATE d
     SET
       d.PassportNumberIsCurrent = 0,
@@ -75,7 +70,6 @@ BEGIN
       );
     SET @RowsExpired = @@ROWCOUNT;
 
-    -- 6) Insert new SCD2 versions
     INSERT INTO DW.DimPerson (
       PersonID, NationalCode, PassportNumber, Name,
       Gender, DateOfBirth, City, Country,
@@ -101,7 +95,6 @@ BEGIN
     FROM DW.Temp_Person_table AS t;
     SET @RowsInserted = @@ROWCOUNT;
 
-    -- 7) Update log to Success
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = CONCAT(
@@ -116,7 +109,6 @@ BEGIN
   END TRY
   BEGIN CATCH
     DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
-    -- 8) Update log to Error
     UPDATE DW.ETL_Log
     SET
       ChangeDescription = 'Incremental SCD2 load failed',
