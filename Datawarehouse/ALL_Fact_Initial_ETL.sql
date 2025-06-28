@@ -9,6 +9,7 @@ BEGIN
         -- LoyaltyMart
         (N'Initial_LoyaltyPoint_TransactionalFact'),
         (N'Initial_CrewAssignmentEvent_Factless'),
+        (N'Initial_PersonPointTransactions_MonthlyFact'),
 
         -- MaintenanceMart
         (N'Initial_AircraftHealth_MonthlyFact'),

@@ -13,9 +13,6 @@ BEGIN
 	SET @LogID = SCOPE_IDENTITY();
 
 	BEGIN TRY
-		-- Truncate the table for a full reload.
-		TRUNCATE TABLE [DW].[CrewAssignmentEvent_Factless];
-
 		-- Perform a simple insert for the initial load.
 		INSERT INTO [DW].[CrewAssignmentEvent_Factless] (
 			FlightID,

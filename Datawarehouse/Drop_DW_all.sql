@@ -3,6 +3,7 @@
 -- LoyaltyMart
 DROP TABLE IF EXISTS [DW].[LoyaltyPointTransaction_TransactionalFact];
 DROP TABLE IF EXISTS [DW].[CrewAssignmentEvent_Factless];
+DROP TABLE IF EXISTS [DW].[PersonPointTransactions_MonthlyFact];
 
 
 -- MaintenanceMart
@@ -134,6 +135,8 @@ IF OBJECT_ID('[DW].[Load_LoyaltyPoint_TransactionalFact]', 'P') IS NOT NULL DROP
 IF OBJECT_ID('[DW].[Initial_LoyaltyPoint_TransactionalFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Initial_LoyaltyPoint_TransactionalFact];
 IF OBJECT_ID('[DW].[Load_CrewAssignmentEvent_Factless]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Load_CrewAssignmentEvent_Factless];
 IF OBJECT_ID('[DW].[Initial_CrewAssignmentEvent_Factless]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Initial_CrewAssignmentEvent_Factless];
+IF OBJECT_ID('[DW].[Load_PersonPointTransactions_MonthlyFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Load_PersonPointTransactions_MonthlyFact];
+IF OBJECT_ID('[DW].[Initial_PersonPointTransactions_MonthlyFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Initial_PersonPointTransactions_MonthlyFact];
 
 
 

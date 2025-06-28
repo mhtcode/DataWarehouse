@@ -93,7 +93,10 @@
         "Datawarehouse/Facts/LoyaltyMart/ETL_LoyaltyPointTransaction_TransactionalFact.sql",
         "Datawarehouse/Facts/LoyaltyMart/Create_CrewAssignmentEvent_Factless.sql",
         "Datawarehouse/Facts/LoyaltyMart/Initial_CrewAssignmentEvent_Factless.sql",
-        "Datawarehouse/Facts/LoyaltyMart/ETL_CrewAssignmentEvent_Factless.sql"
+        "Datawarehouse/Facts/LoyaltyMart/ETL_CrewAssignmentEvent_Factless.sql",
+        "Datawarehouse/Facts/LoyaltyMart/Create_PersonPointTransactions_MonthlyFact.sql",
+        "Datawarehouse/Facts/LoyaltyMart/Initial_PersonPointTransactions_MonthlyFact.sql",
+        "Datawarehouse/Facts/LoyaltyMart/ETL_PersonPointTransactions_MonthlyFact.sql"
       ],
       "MaintenanceMart": [
         "Datawarehouse/Facts/MaintenanceMart/Create_AircraftHealth_MonthlyFact.sql",
