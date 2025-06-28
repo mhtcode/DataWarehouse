@@ -3,31 +3,27 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- List of all Initial Fact ETL procedures (add/remove as needed)
+    -- List of all Initial Fact ETL procedures
     DECLARE @procs TABLE (ProcName NVARCHAR(128));
     INSERT INTO @procs (ProcName) VALUES
-        -- LoyaltyMart
+        (N'Initial_FlightOperation_Factless'),
+        (N'Initial_PassengerActivity_ACCFact'),
+        (N'Initial_PassengerTicket_TransactionalFact'),
+        (N'Initial_PassengerActivity_YearlyFact'),
+
         (N'Initial_LoyaltyPoint_TransactionalFact'),
         (N'Initial_CrewAssignmentEvent_Factless'),
         (N'Initial_PersonPointTransactions_MonthlyFact'),
         (N'Initial_PersonPointTransactions_ACCFact'),
 
-        -- MaintenanceMart
         (N'Initial_AircraftHealth_MonthlyFact'),
         (N'Initial_MaintenanceEvent_TransactionalFact'),
         (N'Initial_PartReplacement_TransactionalFact'),
 
-        -- PerformanceMart
         (N'Initial_FlightPerformance_TransactionalFact'),
         (N'Initial_FlightDelay_DailyFact'),
         (N'Initial_FlightDelay_ACCFact'),
-        (N'Initial_AirlineAndAirport_Factless'),
-
-        -- RevenueMart
-        (N'Initial_FlightOperation_Factless'),
-        (N'Initial_PassengerTicket_ACCFact'),
-        (N'Initial_PassengerTicket_TransactionalFact'),
-        (N'Initial_PassengerTicket_YearlyFact');
+        (N'Initial_AirlineAndAirport_Factless');
 
     DECLARE @ProcName NVARCHAR(128), @sql NVARCHAR(300);
 
