@@ -51,6 +51,7 @@ IF OBJECT_ID('[SA].[ETL_MaintenanceType]', 'P') IS NOT NULL DROP PROCEDURE [SA].
 IF OBJECT_ID('[SA].[ETL_MaintenanceLocation]', 'P') IS NOT NULL DROP PROCEDURE [SA].[ETL_MaintenanceLocation];
 IF OBJECT_ID('[SA].[ETL_PartReplacement]', 'P') IS NOT NULL DROP PROCEDURE [SA].[ETL_PartReplacement];
 IF OBJECT_ID('[SA].[ETL_Main_ETL]', 'P') IS NOT NULL DROP PROCEDURE [SA].[Main_ETL];
+IF OBJECT_ID('[SA].[ETL_Part]', 'P') IS NOT NULL DROP PROCEDURE [SA].[ETL_Part];
 IF OBJECT_ID('[SA].[ETL_Passenger]', 'P') IS NOT NULL DROP PROCEDURE [SA].[ETL_Passenger];
 IF OBJECT_ID('[SA].[ETL_Payment]', 'P') IS NOT NULL DROP PROCEDURE [SA].[ETL_Payment];
 IF OBJECT_ID('[SA].[ETL_Person]', 'P') IS NOT NULL DROP PROCEDURE [SA].[ETL_Person];
