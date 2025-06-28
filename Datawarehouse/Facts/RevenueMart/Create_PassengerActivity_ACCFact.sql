@@ -12,7 +12,3 @@ CREATE TABLE [DW].[PassengerActivity_ACCFact] (
     [MinFlightDistance]      DECIMAL(18, 2) NULL
 );
 GO 
-
-CREATE NONCLUSTERED INDEX IX_PassengerActivity_ACCFact_PersonKey
-ON [DW].[PassengerActivity_ACCFact] (PersonKey);
-GO
