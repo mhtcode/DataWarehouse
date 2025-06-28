@@ -282,3 +282,34 @@ CREATE TABLE [Source].[TravelClass] (
   [BaseCost] DECIMAL(18,2)
 )
 GO
+
+-- Maintenance Data Mart
+CREATE TABLE [Source].[MaintenanceEvent] (
+  MaintenanceEventID INT PRIMARY KEY,
+  AircraftID INT NOT NULL,
+  MaintenanceTypeID INT NOT NULL,
+  MaintenanceLocationID NVARCHAR(100) NOT NULL,
+  TechnicianID INT NOT NULL,
+  MaintenanceDate DATE NOT NULL,
+  DowntimeHours FLOAT,
+  LaborHours FLOAT,
+  LaborCost DECIMAL(18,2),
+  TotalPartsCost DECIMAL(18,2),
+  TotalMaintenanceCost DECIMAL(18,2),
+  DistinctIssuesSolved INT,
+  Description NVARCHAR(500)
+);
+GO
+
+-- Maintenance Data Mart
+CREATE TABLE [Source].[PartReplacement] (
+  PartReplacementID INT PRIMARY KEY,
+  AircraftID INT NOT NULL,
+  PartID INT NOT NULL,
+  MaintenanceLocationID NVARCHAR(100) NOT NULL,
+  ReplacementDate DATE NOT NULL,
+  Quantity INT NOT NULL,
+  PartCost DECIMAL(18,2),
+  TotalPartCost DECIMAL(18,2)
+);
+GO
