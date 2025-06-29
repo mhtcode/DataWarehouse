@@ -2,7 +2,7 @@
   "make": {
     "source": [
       "Source/Create_Source_all.sql",
-      "Source/Sample_Source_all.sql"
+      "Scripts/populate_source.py"
     ],
     "staging": [
       "Staging Area/Create_SA_all.sql",
@@ -102,9 +102,8 @@
         "Datawarehouse/Facts/LoyaltyMart/ETL_PersonPointTransactions_ACCFact.sql"
       ],
       "MaintenanceMart": [
-        "Datawarehouse/Facts/MaintenanceMart/Create_AircraftHealth_MonthlyFact.sql",
         "Datawarehouse/Facts/MaintenanceMart/Create_MaintenanceEvent_TransactionalFact.sql",
-        "Datawarehouse/Facts/MaintenanceMart/Create_PartReplacement_TransactionalFact.sql"
+        "Datawarehouse/Facts/MaintenanceMart/Initial_MaintenanceEvent_TransactionalFact.sql"
       ],
       "PerformanceMart": [
         "Datawarehouse/Facts/PerformanceMart/Create_FlightPerformance_TransactionalFact.sql",
@@ -133,8 +132,6 @@
         "Datawarehouse/Facts/RevenueMart/Create_PassengerActivity_YearlyFact.sql",
         "Datawarehouse/Facts/RevenueMart/Initial_PassengerActivity_YearlyFact.sql",
         "Datawarehouse/Facts/RevenueMart/ETL_PassengerActivity_YearlyFact.sql",
-
-        "Datawarehouse/Facts/MaintenanceMart/Initial_MaintenanceEvent_TransactionalFact.sql",
 
         "Datawarehouse/ALL_Fact_Initial_ETL.sql"
       ]

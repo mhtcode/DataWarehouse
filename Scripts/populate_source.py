@@ -1,3 +1,50 @@
+import pyodbc
+from faker import Faker
+import random
+from datetime import datetime, timedelta
+
+# ──────────────────────────────────────────────────────────────────────────────
+# CONFIGURATION
+# ──────────────────────────────────────────────────────────────────────────────
+CONN_STR = (
+    r"DRIVER={ODBC Driver 18 for SQL Server};"
+    r"SERVER=localhost;"
+    r"DATABASE=DB2_Project;"
+    r"Trusted_Connection=yes;"
+    r"TrustServerCertificate=yes;"
+)
+
+# How many to generate
+NUM_AIRLINES   = 10
+NUM_AIRPORTS   = 15
+NUM_AIRCRAFT   = 12
+NUM_FLIGHTS    = 1000000
+BATCH_SIZE     = 10000
+
+# Date bounds for flights
+DATE_START     = datetime(2009, 3, 21)
+DATE_END       = datetime(2015, 1, 1)
+TOTAL_SECONDS  = int((DATE_END - DATE_START).total_seconds())
+
+# ──────────────────────────────────────────────────────────────────────────────
+# CONNECT
+# ──────────────────────────────────────────────────────────────────────────────
+conn = pyodbc.connect(CONN_STR)
+cursor = conn.cursor()
+cursor.fast_executemany = True
+faker = Faker()
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 0) SAMPLE FIXED INSERTS FOR LOOKUPS & DIMENSIONS
+# ──────────────────────────────────────────────────────────────────────────────
+def load_fixed_sql(sql):
+    for stmt in sql.split(';'):
+        stmt = stmt.strip()
+        if stmt:
+            cursor.execute(stmt)
+    conn.commit()
+
+fixed_sql = r"""
 
 INSERT INTO Source.Airline 
   (AirlineID, Name, Country, FoundedDate, HeadquartersNumber, FleetSize, Website, Current_IATA_Code) VALUES
@@ -184,9 +231,9 @@ INSERT INTO Source.ServiceOffering (ServiceOfferingID, TravelClassID, OfferingNa
 (1, 1, 'Standard Meal', 'Basic meal for Economy Class', 15.00),
 (2, 2, 'Premium Meal', 'Premium meal for Premium Economy', 30.00),
 (3, 3, 'Gourmet Meal', 'Gourmet meal for Business Class', 60.00),
-(4, NULL, 'Extra Baggage (23kg)', 'Add-on baggage for all classes', 50.00),
-(5, NULL, 'Priority Boarding', 'Skip the queue at boarding', 20.00),
-(6, NULL, 'Lounge Access', 'Access to business lounges', 60.00),
+(4, 3, 'Extra Baggage (23kg)', 'Add-on baggage for all classes', 50.00),
+(5, 2, 'Priority Boarding', 'Skip the queue at boarding', 20.00),
+(6, 4, 'Lounge Access', 'Access to business lounges', 60.00),
 (7, 4, 'Chauffeur Service', 'Limousine transfer for First Class', 100.00),
 (8, 1, 'Seat Selection', 'Preferred seat booking', 10.00),
 (9, 2, 'Advanced Seat Selection', 'Advanced seat for Premium Economy', 25.00),
@@ -216,24 +263,6 @@ INSERT INTO Source.ServiceOfferingItem (ServiceOfferingID, ItemID, Quantity) VAL
 (5, 5, 1),
 (6, 6, 1),
 (7, 7, 1);
-
-
-INSERT INTO Source.FlightDetail (FlightDetailID, DepartureAirportID, DestinationAirportID, DistanceKM, DepartureDateTime, ArrivalDateTime, AircraftID, FlightCapacity, TotalCost) VALUES
-(1, 1, 2, 200, '2014-06-01 08:00:00', '2014-06-01 12:00:00', 1, 396, 50000.00),
-(2, 2, 3, 300, '2014-06-01 14:00:00', '2014-06-01 18:30:00', 3, 364, 45000.00),
-(3, 3, 4, 400, '2014-06-02 09:00:00', '2014-06-02 15:00:00', 5, 290, 48000.00),
-(4, 4, 5, 500, '2014-06-02 11:00:00', '2014-06-02 20:00:00', 7, 178, 42000.00),
-(5, 5, 1, 300, '2014-06-03 10:00:00', '2014-06-03 16:00:00', 9, 287, 46000.00),
-(6, 6, 7, 700, '2014-06-03 13:00:00', '2014-06-03 17:30:00', 11, 180, 38000.00),
-(7, 7, 8, 1000, '2014-06-04 07:00:00', '2014-06-04 10:00:00', 2, 517, 52000.00),
-(8, 8, 9, 900, '2014-06-04 15:00:00', '2014-06-04 22:00:00', 4, 315, 55000.00),
-(9, 9, 10, 800, '2014-06-05 12:00:00', '2014-06-05 18:00:00', 6, 180, 40000.00),
-(10, 10, 6, 500, '2014-06-05 16:00:00', '2014-06-06 06:00:00', 8, 120, 35000.00),
-(11, 11, 12, 400, '2014-06-06 09:30:00', '2014-06-06 13:00:00', 10, 301, 44000.00),
-(12, 12, 13, 200, '2014-06-06 14:00:00', '2014-06-06 18:45:00', 12, 330, 47000.00),
-(13, 13, 14, 300, '2014-06-07 08:45:00', '2014-06-07 12:15:00', 1, 396, 41000.00),
-(14, 14, 15, 400, '2014-06-07 11:30:00', '2014-06-07 16:00:00', 3, 364, 43000.00),
-(15, 15, 11, 500, '2014-06-08 10:15:00', '2014-06-08 14:30:00', 5, 290, 39000.00);
 
 
 INSERT INTO Source.SeatDetail (SeatDetailID, AircraftID, SeatNo, SeatType, TravelClassID, ReservationID) VALUES
@@ -342,24 +371,6 @@ INSERT INTO Source.CrewAssignment (CrewAssignmentID, FlightDetailID, CrewMemberI
 (15, 11, 5);
 
 
-INSERT INTO Source.FlightOperation (FlightOperationID, FlightDetailID, ActualDepartureDateTime, ActualArrivalDateTime, DelayMinutes, CancelFlag) VALUES
-(1, 1, '2014-06-01 08:15:00', '2014-06-01 12:10:00', 15, 0),
-(2, 2, '2014-06-01 14:00:00', '2014-06-01 18:20:00', 0, 0),
-(3, 3, '2014-06-02 09:30:00', '2014-06-02 15:45:00', 30, 0),
-(4, 4, '2014-06-02 11:00:00', '2014-06-02 20:00:00', 0, 0),
-(5, 5, '2014-06-03 10:00:00', '2014-06-03 15:45:00', 0, 0),
-(6, 6, '2014-06-03 13:20:00', '2014-06-03 17:50:00', 20, 0),
-(7, 7, '2014-06-04 07:00:00', '2014-06-04 09:45:00', 0, 0),
-(8, 8, '2014-06-04 15:00:00', '2014-06-04 22:30:00', 30, 0),
-(9, 9, '2014-06-05 12:00:00', '2014-06-05 18:15:00', 15, 0),
-(10, 10, '2014-06-05 16:05:00', '2014-06-06 06:20:00', 5, 0),
-(11, 11, '2014-06-06 09:30:00', '2014-06-06 13:00:00', 0, 0),
-(12, 12, '2014-06-06 14:30:00', '2014-06-06 19:20:00', 30, 0),
-(13, 13, '2014-06-07 08:45:00', '2014-06-07 12:00:00', 0, 0),
-(14, 14, '2014-06-07 11:30:00', '2014-06-07 16:45:00', 45, 0),
-(15, 15, '2014-06-08 10:15:00', '2014-06-08 14:30:00', 0, 0);
-
-
 
 INSERT INTO [Source].[MaintenanceType] (MaintenanceTypeID, Name, Category, Description) VALUES
 (1, 'Engine Check', 'Routine', 'Regular engine maintenance and safety check'),
@@ -448,3 +459,84 @@ VALUES
 ('CARGO', 'INTL', 'Cargo Handling', 'International', '2011-03-15', '2020-12-31', 1200.00, 30.00),
 ('FUEL', 'DOM', 'Fuel Service', 'Domestic', '2014-06-01', NULL, 350.00, 7.50),
 ('MAINT', 'INTL', 'Maintenance Support', 'International', '2013-10-10', NULL, 1500.00, 50.00);
+
+"""
+# Replace (...) blocks with your full insert statements above
+load_fixed_sql(fixed_sql)
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 1) DYNAMIC GENERATION: Airlines, Airports, Aircraft (if desired)
+# ──────────────────────────────────────────────────────────────────────────────
+# (Omitted here: your Python loops for airlines, airports, aircraft if needed)
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 2) FLIGHTDETAIL & FLIGHTOPERATION BATCHED
+# ──────────────────────────────────────────────────────────────────────────────
+
+def score_component(d):
+    if d <= 15:    return 1
+    elif d <= 60:  return d * 1.5
+    else:          return d * 2
+
+fd_sql = """
+INSERT INTO Source.FlightDetail
+ (FlightDetailID, DepartureAirportID, DestinationAirportID,
+  DistanceKM, DepartureDateTime, ArrivalDateTime,
+  AircraftID, FlightCapacity, TotalCost)
+ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+"""
+fo_sql = """
+INSERT INTO Source.FlightOperation
+ (FlightOperationID, FlightDetailID,
+  ActualDepartureDateTime, ActualArrivalDateTime,
+  DelayMinutes, CancelFlag, LoadFactor, DelaySeverityScore)
+ VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+"""
+
+fd_batch = []
+fo_batch = []
+fd_id = 1
+fo_id = 1
+
+print(f"Generating {NUM_FLIGHTS} flights in batches of {BATCH_SIZE}...")
+while fd_id <= NUM_FLIGHTS:
+    fd_batch.clear()
+    fo_batch.clear()
+    for _ in range(min(BATCH_SIZE, NUM_FLIGHTS - fd_id + 1)):
+        dep_airport = random.randint(1, NUM_AIRPORTS)
+        arr_airport = random.randint(1, NUM_AIRPORTS)
+        dist_km     = random.randint(100, 10200)
+        offset_sec  = random.randint(0, TOTAL_SECONDS)
+        sched_dep   = DATE_START + timedelta(seconds=offset_sec)
+        dur_minutes = random.randint(30, 600)
+        sched_arr   = sched_dep + timedelta(minutes=dur_minutes)
+        aircraft_id = random.randint(1, NUM_AIRCRAFT)
+        capacity    = random.randint(50, 350)
+        cost        = round(random.uniform(100, 50000), 2)
+
+        fd_batch.append((fd_id, dep_airport, arr_airport,
+                         dist_km, sched_dep, sched_arr,
+                         aircraft_id, capacity, cost))
+
+        dep_delay   = random.randint(-30, 30)
+        act_dep     = sched_dep + timedelta(minutes=dep_delay)
+        arr_delay   = random.randint(-30, 30)
+        act_arr     = act_dep + timedelta(minutes=dur_minutes + arr_delay)
+        severity    = score_component(dep_delay) + score_component(arr_delay)
+        seats_sold  = random.randint(int(capacity*0.5), capacity)
+        load_factor = seats_sold / capacity * 100
+
+        fo_batch.append((fo_id, fd_id,
+                         act_dep, act_arr,
+                         dep_delay, 0,
+                         load_factor, severity))
+
+        fd_id += 1
+        fo_id += 1
+
+    cursor.executemany(fd_sql, fd_batch)
+    cursor.executemany(fo_sql, fo_batch)
+    conn.commit()
+    print(f"Inserted flights up to ID {fd_id-1}")
+
+print("Done: all data populated.")

@@ -738,7 +738,7 @@ where [refTable].[FullDateAlternateKey] = ?</property>
                       cachedDataType="wstr"
                       cachedLength="100"
                       cachedName="LocationID"
-                      externalMetadataColumnId="Package\Load Fact PartReplacement\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[MaintenanceLocationKey]"
+                      externalMetadataColumnId="Package\Load Fact PartReplacement\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[LocationKey]"
                       lineageId="Package\Load Fact PartReplacement\OLE DB Source.Outputs[OLE DB Source Output].Columns[LocationID]" />
                     <inputColumn
                       refId="Package\Load Fact PartReplacement\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[ReplacementDate]"
@@ -758,9 +758,9 @@ where [refTable].[FullDateAlternateKey] = ?</property>
                       dataType="i4"
                       name="PartID" />
                     <externalMetadataColumn
-                      refId="Package\Load Fact PartReplacement\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[MaintenanceLocationKey]"
+                      refId="Package\Load Fact PartReplacement\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[LocationKey]"
                       dataType="i4"
-                      name="MaintenanceLocationKey" />
+                      name="LocationKey" />
                     <externalMetadataColumn
                       refId="Package\Load Fact PartReplacement\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ReplacementDateKey]"
                       dataType="dbDate"
