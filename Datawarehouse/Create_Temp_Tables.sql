@@ -332,3 +332,22 @@ CREATE TABLE [DW].[Temp_LifetimeSourceData] (
 );
 END;
 GO
+
+IF OBJECT_ID('[DW].[Temp_MaintenanceEvent_Batch]', 'U') IS NULL
+BEGIN
+  CREATE TABLE [DW].[Temp_MaintenanceEvent_Batch] (
+    MaintenanceEventID INT,
+    AircraftID INT,
+    MaintenanceTypeID INT,
+    LocationID NVARCHAR(100),
+    TechnicianID INT,
+    MaintenanceDate DATE,
+    DowntimeHours FLOAT,
+    LaborHours FLOAT,
+    LaborCost DECIMAL(18,2),
+    TotalPartsCost DECIMAL(18,2),
+    TotalMaintenanceCost DECIMAL(18,2),
+    DistinctIssuesSolved INT
+);
+END;
+GO

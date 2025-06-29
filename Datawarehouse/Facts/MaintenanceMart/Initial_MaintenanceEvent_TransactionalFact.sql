@@ -3,83 +3,122 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    DECLARE 
-        @StartTime  DATETIME2(3) = SYSUTCDATETIME(),
-        @RowCount   INT,
-        @LogID      BIGINT;
+    DECLARE @CurrentDate DATE;
 
-    -- 1. Log procedure start
-    INSERT INTO [DW].[ETL_Log] (
-        ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
-    ) VALUES (
-        'Initial_MaintenanceEvent_TransactionalFact',
-        'MaintenanceEvent_TransactionalFact',
-        'Starting full initial load',
-        @StartTime,
-        'Running'
-    );
-    SET @LogID = SCOPE_IDENTITY();
+    -- Use a cursor to process only distinct event dates present in the data
+    DECLARE date_cursor CURSOR FOR
+        SELECT DISTINCT MaintenanceDate FROM [SA].[MaintenanceEvent] ORDER BY MaintenanceDate;
 
-    BEGIN TRY
-        -- 2. Truncate the fact table for a clean load
-        TRUNCATE TABLE [DW].[MaintenanceEvent_TransactionalFact];
+    OPEN date_cursor;
+    FETCH NEXT FROM date_cursor INTO @CurrentDate;
 
-        -- 3. Insert from SA.MaintenanceEvent + SCD2 Dim lookups
-        INSERT INTO [DW].[MaintenanceEvent_TransactionalFact] (
-            AircraftID,
-            MaintenanceTypeID,
-            LocationKey,   -- <-- This now matches [LocationKey]
-            TechnicianID,
-            MaintenanceDateKey,
-            DowntimeHours,
-            LaborHours,
-            LaborCost,
-            TotalPartsCost,
-            TotalMaintenanceCost,
-            DistinctIssuesSolved
-        )
-        SELECT
-            SA.AircraftID,
-            SA.MaintenanceTypeID,
-            DL.LocationKey,    -- <-- Fixed column name!
-            SA.TechnicianID,
-            DT.DateTimeKey,
-            SA.DowntimeHours,
-            SA.LaborHours,
-            SA.LaborCost,
-            SA.TotalPartsCost,
-            SA.TotalMaintenanceCost,
-            SA.DistinctIssuesSolved
-        FROM [SA].[MaintenanceEvent] SA
-        -- SCD2 lookup for LocationKey (current at MaintenanceDate)
-        INNER JOIN [DW].[DimMaintenanceLocation] DL
-            ON DL.LocationID = SA.LocationID
-            AND SA.MaintenanceDate >= DL.EffectiveFrom
-            AND (SA.MaintenanceDate < DL.EffectiveTo OR DL.EffectiveTo IS NULL)
-        -- Date dimension lookup for MaintenanceDateKey
-        INNER JOIN [DW].[DimDateTime] DT
-            ON CAST(DT.DateTimeKey AS DATE) = SA.MaintenanceDate;
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        DECLARE @LogID BIGINT;
+        DECLARE @StartTime DATETIME2(3) = SYSUTCDATETIME();
+        DECLARE @RowCount INT;
 
-        SET @RowCount = @@ROWCOUNT;
+        INSERT INTO DW.ETL_Log (
+            ProcedureName, TargetTable, ChangeDescription, ActionTime, Status
+        ) VALUES (
+            'Initial_MaintenanceEvent_TransactionalFact',
+            'MaintenanceEvent_TransactionalFact',
+            'Procedure started for date: ' + CONVERT(varchar, @CurrentDate, 101),
+            @StartTime,
+            'Running'
+        );
+        SET @LogID = SCOPE_IDENTITY();
 
-        -- 4. Log success
-        UPDATE [DW].[ETL_Log]
-        SET ChangeDescription = CONCAT('Loaded ', @RowCount, ' rows into MaintenanceEvent_TransactionalFact'),
-            RowsAffected      = @RowCount,
-            DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
-            Status            = 'Success'
-        WHERE LogID = @LogID;
+        BEGIN TRY
+            TRUNCATE TABLE DW.Temp_MaintenanceEvent_Batch;
 
-    END TRY
-    BEGIN CATCH
-        DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
-        UPDATE [DW].[ETL_Log]
-        SET ChangeDescription = 'Load failed: ' + @ErrMsg,
-            DurationSec       = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
-            Status            = 'Error',
-            Message           = @ErrMsg
-        WHERE LogID = @LogID;
-        THROW;
-    END CATCH
+            INSERT INTO DW.Temp_MaintenanceEvent_Batch (
+                MaintenanceEventID, AircraftID, MaintenanceTypeID, LocationID, TechnicianID, MaintenanceDate, 
+                DowntimeHours, LaborHours, LaborCost, TotalPartsCost, TotalMaintenanceCost, DistinctIssuesSolved
+            )
+            SELECT
+                MaintenanceEventID, AircraftID, MaintenanceTypeID, LocationID, TechnicianID, MaintenanceDate, 
+                DowntimeHours, LaborHours, LaborCost, TotalPartsCost, TotalMaintenanceCost, DistinctIssuesSolved
+            FROM [SA].[MaintenanceEvent]
+            WHERE MaintenanceDate = @CurrentDate;
+
+            IF @@ROWCOUNT = 0
+            BEGIN
+                -- This branch should rarely be hit now, since we're looping only over dates with data.
+                UPDATE DW.ETL_Log
+                SET ChangeDescription = 'No maintenance events found for date: ' + CONVERT(varchar, @CurrentDate, 101),
+                    RowsAffected = 0,
+                    DurationSec = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
+                    Status = 'Success'
+                WHERE LogID = @LogID;
+
+                FETCH NEXT FROM date_cursor INTO @CurrentDate;
+                CONTINUE;
+            END
+
+            INSERT INTO [DW].[MaintenanceEvent_TransactionalFact] (
+                AircraftID,
+                MaintenanceTypeID,
+                LocationKey,
+                TechnicianID,
+                MaintenanceDateKey,
+                DowntimeHours,
+                LaborHours,
+                LaborCost,
+                TotalPartsCost,
+                TotalMaintenanceCost,
+                DistinctIssuesSolved
+            )
+            SELECT
+                t.AircraftID,
+                t.MaintenanceTypeID,
+                dl.LocationKey,
+                t.TechnicianID,
+                dt.DateTimeKey,
+                t.DowntimeHours,
+                t.LaborHours,
+                t.LaborCost,
+                t.TotalPartsCost,
+                t.TotalMaintenanceCost,
+                t.DistinctIssuesSolved
+            FROM [DW].[Temp_MaintenanceEvent_Batch] t
+            INNER JOIN [DW].[DimMaintenanceLocation] dl
+                ON dl.LocationID = t.LocationID
+                AND t.MaintenanceDate >= dl.EffectiveFrom
+                AND (t.MaintenanceDate < dl.EffectiveTo OR dl.EffectiveTo IS NULL)
+            INNER JOIN [DW].[DimDateTime] dt
+                ON CAST(dt.DateTimeKey AS DATE) = t.MaintenanceDate;
+
+            SET @RowCount = @@ROWCOUNT;
+
+            TRUNCATE TABLE DW.Temp_MaintenanceEvent_Batch;
+
+            UPDATE DW.ETL_Log
+            SET ChangeDescription = 'Load complete for date: ' + CONVERT(varchar, @CurrentDate, 101),
+                RowsAffected = @RowCount,
+                DurationSec = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
+                Status = 'Success'
+            WHERE LogID = @LogID;
+
+        END TRY
+        BEGIN CATCH
+            DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
+            UPDATE DW.ETL_Log
+            SET ChangeDescription = 'Load failed for date: ' + CONVERT(varchar, @CurrentDate, 101),
+                DurationSec = DATEDIFF(SECOND, @StartTime, SYSUTCDATETIME()),
+                Status = 'Error',
+                Message = @ErrMsg
+            WHERE LogID = @LogID;
+            THROW;
+        END CATCH
+
+        FETCH NEXT FROM date_cursor INTO @CurrentDate;
+    END
+
+    CLOSE date_cursor;
+    DEALLOCATE date_cursor;
+
+    RAISERROR('Initial MaintenanceEvent_TransactionalFact loading process has completed.', 0, 1) WITH NOWAIT;
+    SET NOCOUNT OFF;
 END
 GO

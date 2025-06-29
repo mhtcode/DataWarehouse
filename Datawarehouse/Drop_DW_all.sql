@@ -77,6 +77,8 @@ DROP TABLE IF EXISTS [DW].[Temp_DailyFlightOperations];
 DROP TABLE IF EXISTS [DW].[Temp_EnrichedFlightPerformanceData];
 DROP TABLE IF EXISTS [DW].[Temp_LifetimeSourceData];
 DROP TABLE IF EXISTS [DW].[Temp_TravelClass_Dim];
+DROP TABLE IF EXISTS [DW].[Temp_MaintenanceEvent_Batch];
+
 
 -- ========== DROP ETL LOG ==========
 DROP TABLE IF EXISTS [DW].[ETL_Log];
@@ -179,7 +181,7 @@ IF OBJECT_ID('[DW].[Initial_AirlineAndAirport_Factless]', 'P') IS NOT NULL DROP 
 -- IF OBJECT_ID('[DW].[LoadFactAircraftHealthSnapshot_PeriodicSnapshot]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFactAircraftHealthSnapshot_PeriodicSnapshot];
 -- IF OBJECT_ID('[DW].[InitialFactAircraftHealthSnapshot_PeriodicSnapshot]', 'P') IS NOT NULL DROP PROCEDURE [DW].[InitialFactAircraftHealthSnapshot_PeriodicSnapshot];
 
--- IF OBJECT_ID('[DW].[LoadFactMaintenanceEvent_Transactional]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFactMaintenanceEvent_Transactional];
+IF OBJECT_ID('[DW].[Initial_MaintenanceEvent_TransactionalFact]', 'P') IS NOT NULL DROP PROCEDURE [DW].[Initial_MaintenanceEvent_TransactionalFact];
 -- IF OBJECT_ID('[DW].[InitialFactMaintenanceEvent_Transactional]', 'P') IS NOT NULL DROP PROCEDURE [DW].[InitialFactMaintenanceEvent_Transactional];
 
 -- IF OBJECT_ID('[DW].[LoadFactPartReplacement_Transactional]', 'P') IS NOT NULL DROP PROCEDURE [DW].[LoadFactPartReplacement_Transactional];
